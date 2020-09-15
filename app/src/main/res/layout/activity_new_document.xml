@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_background"
+    tools:context=".ui.document.NewDocumentActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_top_bar"
+        android:elevation="6dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/contractor_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_edit_background_dark"
+            android:gravity="center_vertical"
+            android:hint="Kontrahent"
+            android:onClick="onContractorSelectClick"
+            android:paddingLeft="24dp"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/hintGray"
+            android:textSize="18sp"
+            app:drawableTint="#000000" />
+
+        <RadioGroup
+            android:id="@+id/document_type_droup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:foregroundGravity="center"
+            android:orientation="horizontal"
+            app:checkedChip="@id/chip7"
+            app:singleSelection="true">
+
+            <RadioButton
+                android:id="@+id/chip7"
+                style="@style/round_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:button="@null"
+                android:checkable="false"
+                android:checked="true"
+                android:padding="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Zamówienie"
+                android:textAlignment="center"
+                app:checkedIconEnabled="false" />
+
+            <RadioButton
+                android:id="@+id/chip6"
+                style="@style/round_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:button="@null"
+                android:checkable="false"
+                android:checked="false"
+                android:padding="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Rezerwacja"
+                android:textAlignment="center"
+                app:checkedIconEnabled="false" />
+
+            <RadioButton
+                android:id="@+id/chip5"
+                style="@style/round_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:button="@null"
+                android:checkable="false"
+                android:checked="false"
+                android:padding="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Wydanie"
+                android:textAlignment="center"
+                app:checkedIconEnabled="false" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wares_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_bottom_bar"
+        android:elevation="6dp"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/scan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_half_round_colored"
+            android:onClick="onScanClick"
+            android:text="Skanuj"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/search_list_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_half_round_outline"
+            android:onClick="onWareFromListClick"
+            android:text="Lista"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@+id/scan_button"
+            app:layout_constraintStart_toEndOf="@+id/scan_button"
+            app:layout_constraintTop_toTopOf="@+id/scan_button" />
+
+        <Button
+            android:id="@+id/save_button"
+            style="@style/round_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|end"
+            android:enabled="false"
+            android:gravity="center|center_vertical"
+            android:text="Zapisz"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

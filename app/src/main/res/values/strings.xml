@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Magg</string>
+    <string name="title_activity_login">Logowanie</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="action_sign_in">Zaloguj</string>
+    <string name="action_sign_in_short">Zaloguj</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Niepoprawna nazwa użytkownika</string>
+    <string name="invalid_password">Niepoprawne hasło</string>
+    <string name="login_failed">Nie udało się zalogować</string>
+    <string name="picture_required_order">Należy zrobić zdjęcie</string>
+    <string name="err_contractors_download">Nie udało się pobrać kontrahentów</string>
+</resources>
