@@ -39,6 +39,8 @@ open class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSelected
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
 
+        recyclerView.addItemDecoration(RecyclerMarginDecorator())
+
     }
 
     override fun onItemSelected(item: ICatalogable?) {

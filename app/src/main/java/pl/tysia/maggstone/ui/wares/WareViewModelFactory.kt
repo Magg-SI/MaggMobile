@@ -2,7 +2,8 @@ package pl.tysia.maggstone.ui.wares
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import pl.tysia.maggstone.data.*
+import pl.tysia.maggstone.data.source.WareDataSource
+import pl.tysia.maggstone.data.source.WareRepository
 
 class WareViewModelFactory : ViewModelProvider.Factory {
 
@@ -11,7 +12,7 @@ class WareViewModelFactory : ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(WareViewModel::class.java)) {
             return WareViewModel(
                 wareRepository = WareRepository(
-                    dataSource = WareDataSourceMock()
+                    dataSource = WareDataSource()
                 )
             ) as T
         }

@@ -1,32 +1,51 @@
-package pl.tysia.maggstone.ui.orders
+package pl.tysia.maggstone.ui.ware_ordering
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_ordering.*
+import kotlinx.android.synthetic.main.activity_ware_ordering.form
+import kotlinx.android.synthetic.main.activity_ware_ordering.progressBar
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.model.DocumentItem
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
-import java.io.IOException
+import pl.tysia.maggstone.ui.ViewModelFactory
 
 class WareOrderingActivity : AppCompatActivity(), TextWatcher {
-    private lateinit var orderedWare: DocumentItem.OrderedWareItem
+    private lateinit var orderedWare: OrderedWare
+
+    private lateinit var wareOrderingViewModel: WareOrderingViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ware_ordering)
 
-        orderedWare = intent.getSerializableExtra(Ware.WARE_EXTRA) as DocumentItem.OrderedWareItem
+        orderedWare = intent.getSerializableExtra(Ware.WARE_EXTRA) as OrderedWare
+
+        wareOrderingViewModel = ViewModelProvider(this,
+            ViewModelFactory(this)
+        ).get(WareOrderingViewModel::class.java)
+
+
+        wareOrderingViewModel.packResult.observe(this@WareOrderingActivity, Observer {
+
+            showProgress(false)
+            finish()
+        })
+
 
         displayWare()
 
@@ -36,12 +55,10 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun displayWare(){
-        (orderedWare.item as Ware).also {
-            index_tv.text = it.index
-            name_tv.text = it.name
-            location_tv.text = it.location
-        }
 
+        index_tv.text = orderedWare.index
+        name_tv.text = orderedWare.name
+        location_tv.text = orderedWare.location
 
         ordered_tv.text = orderedWare.orderedNumber.toString()
         available_tv.text = orderedWare.availability.toString()
@@ -65,7 +82,7 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
         val sum = cancelled + next + packed
         total_tv.text = sum.toString()
 
-        if (sum > orderedWare.availability || sum < orderedWare.orderedNumber){
+        if (sum > orderedWare.availability!! || sum < orderedWare.orderedNumber!!){
             total_tv.setTextColor(Color.RED)
             save_button.isEnabled = false
         }else{
@@ -74,26 +91,38 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    public fun onPackAllClicked(view: View){
+    fun onPackAllClicked(view: View){
         packed_et.setText(orderedWare.orderedNumber.toString())
         cancelled_et.setText(0.toString())
         next_et.setText(0.toString())
 
     }
-    public fun onOrderAllClicked(view: View){
+    fun onOrderAllClicked(view: View){
         next_et.setText(orderedWare.orderedNumber.toString())
         packed_et.setText(0.toString())
         cancelled_et.setText(0.toString())
 
     }
-    public fun onCancelAllClicked(view: View){
+    fun onCancelAllClicked(view: View){
         cancelled_et.setText(orderedWare.orderedNumber.toString())
         packed_et.setText(0.toString())
         next_et.setText(0.toString())
 
     }
 
-    private fun getOrderedWare() : DocumentItem.OrderedWareItem{
+    fun onFinishClicked(view: View){
+        val token = LoginRepository(
+            LoginDataSource(),
+            this
+        ).user!!.token
+
+        val ware = getOrderedWare()
+        wareOrderingViewModel.packWare(token,ware.id!!, ware.packedNumber!!, ware.postponedNumber!!, ware.cancelledNumber!!)
+
+        showProgress(true)
+    }
+
+    private fun getOrderedWare() : OrderedWare{
         val cancelled = cancelled_et.text.let { if (it.isNullOrEmpty())  0.0 else it.toString().toDouble() }
         val next = next_et.text.let { if (it.isNullOrEmpty())  0.0 else it.toString().toDouble() }
         val packed = packed_et.text.let { if (it.isNullOrEmpty())  0.0 else it.toString().toDouble() }

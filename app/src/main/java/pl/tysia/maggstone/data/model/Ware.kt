@@ -1,38 +1,54 @@
 package pl.tysia.maggstone.data.model
 
 import android.graphics.Bitmap
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.google.gson.annotations.SerializedName
+import pl.tysia.maggstone.data.api.model.APIResponse
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
 
 @Entity
-data class Ware(@ColumnInfo(name = "name") var name: String) : Serializable, ICatalogable {
+open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICatalogable,
+    APIResponse() {
     companion object{
         const val WARE_EXTRA = "pl.tysia.maggstone.ware_extra"
     }
 
+    @SerializedName("towID", alternate = ["pozyID"])
     @PrimaryKey
     var id : Int? = null
-    @ColumnInfo(name = "photoPath")
-    var photoPath : String? = null
-    @ColumnInfo(name = "qrCode")
+
+    @SerializedName("licznikVer")
+    var counter : Int? = null
+
+    @SerializedName("kodQR ")
     var qrCode : String? = null
-    @ColumnInfo(name = "index")
+
+    @SerializedName("indeks")
     var index : String? = "index"
-    @ColumnInfo(name = "location")
+
+    @SerializedName("lokalizacja")
     var location : String? = null
-    @ColumnInfo(name = "price")
+
+    @SerializedName("cena")
     var price : Double? = null
-    //@ColumnInfo(name = "availabilities")
-    // var availabilities : List<Availability>? = null
-    @ColumnInfo(name = "hasPhoto")
+
+    @SerializedName("stanyMagaz")
+    @Ignore
+    var availabilities : List<Availability>? = null
+
+    @SerializedName("isFoto")
     var hasPhoto = false
 
     @Ignore
-    var imageBitmap : Bitmap? = null;
+    @Transient
+    var image : Bitmap? = null
+
+    var photoString : String? = null
+
+    @Ignore
+    var photoPath : String? = null
+
 
     constructor(qrCode : String, id : Int, index : String, name: String, hasPhoto : Boolean,  location : String, price : Double) : this(name){
         this.qrCode = qrCode

@@ -5,10 +5,22 @@
     <string name="prompt_password">Hasło</string>
     <string name="action_sign_in">Zaloguj</string>
     <string name="action_sign_in_short">Zaloguj</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Zalogowano, "</string>
     <string name="invalid_username">Niepoprawna nazwa użytkownika</string>
     <string name="invalid_password">Niepoprawne hasło</string>
     <string name="login_failed">Nie udało się zalogować</string>
     <string name="picture_required_order">Należy zrobić zdjęcie</string>
     <string name="err_contractors_download">Nie udało się pobrać kontrahentów</string>
+    <string name="err_picture_upload">Nie udało się zaktualizować zdjęcia</string>
+    <string name="err_orders_download">Nie udało się pobrać zamówień</string>
+    <string name="err_wares_download">Nie udało się pobrać towarów</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

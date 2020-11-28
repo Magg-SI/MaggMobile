@@ -4,6 +4,6 @@
         android:drawable="@drawable/round_button_background" />
 
     <item android:state_checked="false"
-        android:drawable="@drawable/round_edit_background_dark" />
+        android:drawable="@drawable/round_chip_background_dark" />
 
 </selector>

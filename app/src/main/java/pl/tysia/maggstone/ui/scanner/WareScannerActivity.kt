@@ -6,9 +6,10 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.Result
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.okDialog
-import pl.tysia.maggstone.ui.contractors.ContractorsViewModelFactory
 import pl.tysia.maggstone.ui.wares.WareViewModel
 import pl.tysia.maggstone.ui.wares.WareViewModelFactory
 
@@ -39,7 +40,12 @@ class WareScannerActivity : ScannerActivity() {
             okDialog("Błąd", message, this)
         })
 
-        viewModel.getWare(code)
+        val token = LoginRepository(
+            LoginDataSource(),
+            this
+        ).user!!.token
+
+        viewModel.getWare(code, token)
         showSendingState(true)
     }
 }
