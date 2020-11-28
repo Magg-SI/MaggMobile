@@ -7,19 +7,20 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_new_document.*
+import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.data.model.DocumentItem
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
+import pl.tysia.maggstone.ui.presentation_logic.RecyclerMarginDecorator
 import pl.tysia.maggstone.ui.wares.WareListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 import java.util.*
 
-private const val CONTRACTORS_DIALOG_TAG  = "pl.tysia.maggstone.contractors_dialog"
 private const val WARE_REQUEST_CODE  = 1337
-private const val CONTRACTOR_REQUEST_CODE  = 84265
+private const val CONTRACTOR_REQUEST_CODE  = 842
 
 abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyListListener {
     private var contractor : Contractor? = null
@@ -32,9 +33,17 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
         adapter = DocumentAdapter(ArrayList())
 
         wares_recycler.adapter = adapter
+        wares_recycler.addItemDecoration(
+            RecyclerMarginDecorator(
+            mTopFirst = (resources.getDimension(R.dimen.document_top_bar).toInt())))
 
-        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         wares_recycler.layoutManager = linearLayoutManager
+
+    }
+
+    fun onSaveClick(view: View){
+
     }
 
     fun onScanClick(view: View){

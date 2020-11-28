@@ -15,9 +15,11 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.activity_login.*
 import pl.tysia.maggstone.ui.MainActivity
 
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.ui.ViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
 
@@ -33,8 +35,16 @@ class LoginActivity : AppCompatActivity() {
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+        loginViewModel = ViewModelProvider(this,
+            ViewModelFactory(this)
+        )
             .get(LoginViewModel::class.java)
+
+
+        if(loginViewModel.loginRepository.isLoggedIn) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -50,21 +60,25 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
+
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
 
-            //Complete and destroy login activity once successful
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+                setResult(Activity.RESULT_OK)
+
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+
+            showProgress(false)
+
         })
 
         username.afterTextChanged {
@@ -94,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
-                loading.visibility = View.VISIBLE
+                showProgress(true)
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
@@ -113,6 +127,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showProgress(show : Boolean){
+        username.isEnabled = !show
+        password.isEnabled = !show
+        login.isEnabled = !show
+
+        imageView.visibility = if (show) View.INVISIBLE else View.VISIBLE
+        loading.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 }
 

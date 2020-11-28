@@ -141,21 +141,19 @@ public class DocumentAdapter extends CatalogAdapter<DocumentItem, DocumentAdapte
 
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
 
-        DocumentViewHolder vh = new DocumentViewHolder(v);
-        return vh;
+        return new DocumentViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DocumentViewHolder holder, int position) {
         DocumentItem item = shownItems.get(position);
 
-        DocumentViewHolder wareViewHolder = holder;
-        wareViewHolder.title.setText(item.getTitle());
+        holder.title.setText(item.getTitle());
 
         if (item instanceof DocumentItem.WareItem){
             DocumentItem.WareItem wareItem = (DocumentItem.WareItem) item;
 
-            wareViewHolder.numberET.setText(Double.toString(wareItem.getQuantity()));
+            holder.numberET.setText(Double.toString(wareItem.getQuantity()));
 
 
         }else if (item instanceof DocumentItem.OrderedWareItem){

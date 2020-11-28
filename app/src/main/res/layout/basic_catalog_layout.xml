@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context=".ui.contractors.ContractorsDialogFragment">
 
@@ -11,7 +12,6 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/round_top_bar"
         android:elevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@drawable/round_edit_background_dark"
+            android:background="@drawable/edit_text"
+            android:backgroundTint="@color/design_default_color_background"
+            android:drawableLeft="@drawable/round_search_24"
+            android:drawablePadding="6dp"
             android:ems="10"
+            android:gravity="center_vertical"
             android:hint="Wyszukaj..."
             android:inputType="textPersonName"
             android:textColor="@color/colorAccent"
@@ -39,33 +43,31 @@
         android:paddingLeft="8dp"
         android:paddingEnd="8dp"
         android:paddingRight="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/list_item_simple">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <FrameLayout
         android:id="@+id/frameLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_bottom_bar"
         android:elevation="6dp"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Button
             android:id="@+id/ok_button"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
+            style="@style/round_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:gravity="center_vertical|end"
+            android:gravity="center"
             android:padding="16dp"
-            android:paddingEnd="24dp"
             android:text="Ok" />
     </FrameLayout>
 

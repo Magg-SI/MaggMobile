@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/design_default_color_background"
     tools:context=".ui.document.NewDocumentActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_top_bar"
+        android:background="@color/colorPrimaryDark"
         android:elevation="6dp"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_min="@dimen/document_top_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -24,6 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/round_edit_background_dark"
+            android:backgroundTint="@color/colorPrimary"
+            android:drawableLeft="@drawable/round_search_24"
+            android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:hint="Kontrahent"
             android:onClick="onContractorSelectClick"
@@ -31,10 +34,10 @@
             android:textColor="@color/colorAccent"
             android:textColorHint="@color/hintGray"
             android:textSize="18sp"
-            app:drawableTint="#000000" />
+            app:drawableTint="@color/hintGray" />
 
         <RadioGroup
-            android:id="@+id/document_type_droup"
+            android:id="@+id/document_type_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -50,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:layout_weight="1"
                 android:button="@null"
                 android:checkable="false"
                 android:checked="true"
@@ -66,6 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:layout_weight="1"
                 android:button="@null"
                 android:checkable="false"
                 android:checked="false"
@@ -82,6 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:layout_weight="1"
                 android:button="@null"
                 android:checkable="false"
                 android:checked="false"
@@ -99,16 +105,16 @@
         android:id="@+id/wares_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:listitem="@layout/list_item_document" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_bottom_bar"
         android:elevation="6dp"
         android:orientation="horizontal"
         android:padding="16dp"
@@ -131,7 +137,8 @@
             android:id="@+id/search_list_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_half_round_outline"
+            android:background="@drawable/button_half_round_dark_right"
+            android:backgroundTint="@color/colorPrimary"
             android:onClick="onWareFromListClick"
             android:text="Lista"
             android:textColor="@color/colorAccent"

@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.ContractorsRepository
+import pl.tysia.maggstone.data.source.ContractorsRepository
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.model.Contractor
-import pl.tysia.maggstone.ui.login.LoginResult
 
 class ContractorsViewModel(private val contractorsRepository: ContractorsRepository) : ViewModel() {
     private val _contractorsResult = MutableLiveData<Int>()
@@ -23,7 +22,7 @@ class ContractorsViewModel(private val contractorsRepository: ContractorsReposit
             _contractors.value = result.data
         } else {
             _contractorsResult.value = R.string.err_contractors_download
-    }
+        }
     }
 
 
