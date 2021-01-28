@@ -69,13 +69,13 @@ public class BasicCatalogAdapter extends CatalogAdapter<ICatalogable, BasicCatal
         BasicViewHolder wareViewHolder = (BasicViewHolder) catalogItemViewHolder;
 
         wareViewHolder.title.setText(item.getTitle());
+        wareViewHolder.description.setText(item.getDescription());
 
         if (item == selectedItem){
             wareViewHolder.back.setBackgroundResource(R.drawable.list_item_background_selected);
         }else{
             wareViewHolder.back.setBackgroundResource(R.drawable.list_item_background);
         }
-
 
     }
 }

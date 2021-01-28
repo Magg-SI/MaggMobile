@@ -5,21 +5,23 @@ import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import pl.tysia.maggstone.data.*
+import pl.tysia.maggstone.data.model.Error
 import pl.tysia.maggstone.data.source.ContractorsDataSource
-import pl.tysia.maggstone.data.source.ContractorsDataSourceMock
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
+import java.io.IOException
+import java.lang.Exception
 
-private const val COUNTER_PREFERENCES = "pl.tysia.maggstone.contractors_counter_preferences"
-private const val COUNTER = "pl.tysia.maggstone.counter"
+private const val ERROR_SOURCE = "pl.tysia.maggstone.error_source_contractors"
 
 class ContractorsDownloadService : Service() {
     var progress: MutableLiveData<Int> = MutableLiveData()
     private var binder = SendingBinder()
+
+    private lateinit var db : Database
 
     override fun onBind(p0: Intent?): IBinder? {
         return binder
@@ -33,6 +35,14 @@ class ContractorsDownloadService : Service() {
         var isRunning = false
     }
 
+    fun synchronise(){
+        progress.postValue(0)
+
+        serviceHandler?.obtainMessage()?.also { msg ->
+            msg.arg1 = -1
+            serviceHandler?.sendMessage(msg)
+        }
+    }
 
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
@@ -41,30 +51,26 @@ class ContractorsDownloadService : Service() {
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
 
         override fun handleMessage(msg: Message) {
+            val errorsDAO = db.errorsDAO()
+
+            errorsDAO.clearSource(ERROR_SOURCE)
+
             try {
                 val dataSource =
-                    ContractorsDataSource()
+                    ContractorsDataSource(NetAddressManager(this@ContractorsDownloadService))
 
-                val counter= getSharedPreferences(COUNTER_PREFERENCES, Context.MODE_PRIVATE).getInt(COUNTER, 0)
                 val token = LoginRepository(
-                    LoginDataSource(),
+                    LoginDataSource(NetAddressManager(this@ContractorsDownloadService)),
                     this@ContractorsDownloadService
                 ).user!!.token
 
-                val result = dataSource.getContractors(token, counter)
+                val dao = db.contractorsDao()
+
+                val maxCounter = dao.getMaxCounter()
+
+                val result = dataSource.getContractors(token, maxCounter)
                 if (result is Result.Success) {
                     val page = result.data
-
-                    var maxCounter = 0
-
-                    val db = Room.databaseBuilder(
-                        this@ContractorsDownloadService,
-                        Database::class.java, "pl.tysia.database"
-                    ).build()
-
-                    val dao = db.contractorsDao()
-
-                    dao.deleteAll()
 
                     var pagesDownloaded = 0
 
@@ -74,41 +80,43 @@ class ContractorsDownloadService : Service() {
                         if (waresPage is Result.Success){
                             val wares = waresPage.data.list!!
 
-                            wares.forEach {
-                                maxCounter = maxCounter.coerceAtLeast(it.counter!!)
-                            }
-
                             pagesDownloaded += wares.size
 
-                            dao.insertAll(wares)
+                            val inserted = dao.insertAll(wares)
+                            wares.removeAll { inserted.contains(it.id.toLong()) }
+                            dao.updateAll(wares)
 
-                            progress.postValue((pagesDownloaded * 100f/ page.pageCount!!).toInt())
+                            progress.postValue(((pagesDownloaded * 100f)/ page.pageCount!!).toInt())
 
+                        }else if (result is Result.Error){
+                            errorsDAO.insert(Error(Error.TYPE_DOWNLOAD, ERROR_SOURCE,"Pobieranie kontrahentów nie powiodło się", result.exception.message!!))
+                            break
                         }
 
                     }
 
                     progress.postValue(100)
 
-
-                    getSharedPreferences(COUNTER_PREFERENCES, Context.MODE_PRIVATE)
-                        .edit()
-                        .putInt(COUNTER, maxCounter)
-                        .apply()
-
-
-
+                }else if (result is Result.Error){
+                    errorsDAO.insert(Error(Error.TYPE_DOWNLOAD, ERROR_SOURCE,"Pobieranie kontrahentów nie powiodło się", result.exception.message!!))
                 }
 
-            } catch (e: InterruptedException) {
-                Thread.currentThread().interrupt()
-            }
+            } catch (e: IOException) {
+                errorsDAO.insert(Error(Error.TYPE_DOWNLOAD, ERROR_SOURCE,"Pobieranie kontrahentów nie powiodło się","Brak połączenia z internetem."))
 
-            stopSelf(msg.arg1)
+                Toast.makeText(this@ContractorsDownloadService, "Pobieranie kontrahentów nie powiodło się", Toast.LENGTH_LONG).show()
+            }finally {
+                if (msg.arg1 != -1)
+                    stopSelf(msg.arg1)
+            }
         }
     }
 
     override fun onCreate() {
+        db = Room.databaseBuilder(
+            this@ContractorsDownloadService,
+            Database::class.java, "pl.tysia.database"
+        ).build()
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
@@ -124,7 +132,6 @@ class ContractorsDownloadService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         isRunning = true
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show()
 
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
@@ -138,7 +145,6 @@ class ContractorsDownloadService : Service() {
     }
 
     override fun onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
 
         isRunning = false
     }

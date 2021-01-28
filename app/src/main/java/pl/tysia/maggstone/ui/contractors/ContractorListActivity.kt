@@ -9,18 +9,18 @@ import kotlinx.android.synthetic.main.basic_catalog_layout.*
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
-import pl.tysia.maggstone.ui.SimpleListActivity
+import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
 
 class ContractorListActivity : SimpleListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ok_button.setOnClickListener {
+       /* ok_button.setOnClickListener {
             val returnIntent = Intent()
             returnIntent.putExtra(Contractor.CONTRACTOR_EXTRA, adapter.selectedItem as Contractor)
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
-        }
+        }*/
 
         val db = Room.databaseBuilder(
             this,
@@ -34,5 +34,12 @@ class ContractorListActivity : SimpleListActivity() {
             adapter.notifyDataSetChanged()
         })
 
+    }
+
+    override fun onItemSelected(item: ICatalogable?) {
+        val returnIntent = Intent()
+        returnIntent.putExtra(Contractor.CONTRACTOR_EXTRA, adapter.selectedItem as Contractor)
+        setResult(Activity.RESULT_OK, returnIntent)
+        finish()
     }
 }

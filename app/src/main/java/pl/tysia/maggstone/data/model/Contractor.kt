@@ -8,9 +8,11 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
 
 @Entity
-data class Contractor(@PrimaryKey var id : Int,
-                      @ColumnInfo(name = "index") var index : String,
-                      @ColumnInfo(name = "name") var name : String) : ICatalogable, Serializable {
+data class Contractor(@SerializedName("ktrID") @PrimaryKey var id : Int,
+                      @SerializedName("symbol") @ColumnInfo(name = "index") var index : String,
+                      @SerializedName("nazwa") @ColumnInfo(name = "name") var name : String?,
+                      @SerializedName("adres") @ColumnInfo(name = "address") var address : String?,
+                      @SerializedName("nip") @ColumnInfo(name = "nip") var nip : String?) : ICatalogable, Serializable {
 
     @SerializedName("licznikVer")
     var counter : Int? = null
@@ -24,8 +26,8 @@ data class Contractor(@PrimaryKey var id : Int,
         return index
     }
 
-    override fun getShortDescription(): String {
-       return name
+    override fun getDescription(): String {
+       return if (name != null) name!! else ""
     }
 
 

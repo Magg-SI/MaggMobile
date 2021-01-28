@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -16,9 +17,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.DownloadStateActivity"></activity>
+        <activity android:name=".ui.error.ErrorsActivity"></activity>
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:theme="@style/AppThemeBlue"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".ui.DownloadStateActivity" />
         <activity android:name=".ui.SendingStateActivity" />
-        <activity android:name=".ui.HoseActivity" />
+        <activity android:name=".ui.scanner.ShelfScannerActivity"
+            android:theme="@style/AppThemeRed"/>
+        <activity android:name=".ui.scanner.WaresShelfScannerActivity"
+            android:theme="@style/AppThemeRed"/>
+        <activity android:name=".ui.hose.HoseActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -37,12 +47,23 @@
         <activity android:name=".ui.orders.OrdersActivity" />
         <activity android:name=".ui.ware_ordering.OrderedWaresActivity" />
         <activity android:name=".ui.ware_ordering.WareOrderingActivity" />
-        <activity android:name=".ui.wares.WareInfoActivity" />
-        <activity android:name=".ui.scanner.WareScannerActivity" />
-        <activity android:name=".ui.wares.WareListActivity" />
-        <activity android:name=".ui.contractors.ContractorListActivity" />
-        <activity android:name=".ui.document.BasicNewDocumentActivity" />
-        <activity android:name=".ui.picture.PictureEditorActivity" />
+        <activity
+            android:name=".ui.wares.WareInfoActivity"
+            android:theme="@style/AppThemeOrange" />
+        <activity
+            android:name=".ui.scanner.WareScannerActivity"
+            android:theme="@style/AppThemeOrange" />
+        <activity
+            android:name=".ui.wares.WareListActivity"
+            android:theme="@style/AppThemeOrange" />
+        <activity
+            android:name=".ui.contractors.ContractorListActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity
+            android:name=".ui.document.BasicNewDocumentActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity android:name=".ui.picture.PictureEditorActivity"
+            android:theme="@style/AppThemeOrange"/>
         <activity android:name=".ui.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +71,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.main.MainActivity" />
     </application>
 
 </manifest>

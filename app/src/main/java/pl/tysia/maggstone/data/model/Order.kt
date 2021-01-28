@@ -18,16 +18,18 @@ data class Order(
     var comments: String)
     : ICatalogable, Serializable{
 
+    @Transient
     var packed = false
 
     companion object{
         const val ORDER_EXTRA = "pl.tysia.maggstone.order"
     }
 
-    override fun getTitle() = "Zamówienie nr $documentNr \nz dnia $documentDate"
+    override fun getTitle() = "Magazyn: $warehouse"
 
-    override fun getShortDescription(): String {
-        var res =  "Magazyn: $warehouse\n"
+    override fun getDescription(): String {
+        var res =  "Numer: $documentNr\n" +
+                "Data: $documentDate\n"
         if (comments != "null") res += "\nUwagi: "+ comments
 
         return res

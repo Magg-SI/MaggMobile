@@ -6,7 +6,7 @@ import android.graphics.Matrix
 fun rotateBitmap(bitmap : Bitmap?) : Bitmap?{
     if (bitmap!=null){
         val matrix = Matrix()
-        matrix.postRotate(90f)
+        matrix.postRotate(270f)
 
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 

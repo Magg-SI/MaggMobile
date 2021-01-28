@@ -8,10 +8,13 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
 
 @Entity
-open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICatalogable,
-    APIResponse() {
+open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICatalogable, APIResponse() {
     companion object{
         const val WARE_EXTRA = "pl.tysia.maggstone.ware_extra"
+
+        const val HOSE_TYPE_CORD = "P"
+        const val HOSE_TYPE_SLEEVE = "T"
+        const val HOSE_TYPE_TIP = "K"
     }
 
     @SerializedName("towID", alternate = ["pozyID"])
@@ -31,9 +34,8 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     var location : String? = null
 
     @SerializedName("cena")
-    var price : Double? = null
+    var price : String? = null
 
-    @SerializedName("stanyMagaz")
     @Ignore
     var availabilities : List<Availability>? = null
 
@@ -41,16 +43,18 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     var hasPhoto = false
 
     @Ignore
-    @Transient
-    var image : Bitmap? = null
-
-    var photoString : String? = null
-
-    @Ignore
     var photoPath : String? = null
 
+    @SerializedName("typ", alternate = ["wazTyp"])
+    var hoseType : String? = null
 
-    constructor(qrCode : String, id : Int, index : String, name: String, hasPhoto : Boolean,  location : String, price : Double) : this(name){
+    @SerializedName("wazFi")
+    var hoseFi : String? = null
+
+    @SerializedName("wazIdx")
+    var hoseIdx : String? = null
+
+/*    constructor(qrCode : String, id : Int, index : String, name: String, hasPhoto : Boolean,  location : String, price : Double) : this(name){
         this.qrCode = qrCode
         this.id = id
         this.index = index
@@ -58,14 +62,15 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
         this.price = price
 
         this.hasPhoto = hasPhoto
-    }
+    }*/
 
     override fun getTitle(): String {
        return name
     }
 
-    override fun getShortDescription(): String {
-        return index!!
+    override fun getDescription(): String {
+        return if (!hoseType.isNullOrEmpty()) "Index: ${index}\nFi: $hoseFi"
+        else "Index: $index"
     }
 
 

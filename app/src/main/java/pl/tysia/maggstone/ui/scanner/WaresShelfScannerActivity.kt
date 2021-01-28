@@ -1,0 +1,73 @@
+package pl.tysia.maggstone.ui.scanner
+
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
+import com.google.mlkit.vision.barcode.Barcode
+import com.google.zxing.Result
+import kotlinx.android.synthetic.main.activity_products_scanner.*
+import me.dm7.barcodescanner.zxing.ZXingScannerView
+import me.dm7.barcodescanner.zxing.ZXingScannerView.ResultHandler
+import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.okDialog
+import pl.tysia.maggstone.ui.ViewModelFactory
+class WaresShelfScannerActivity : ScanningActivity() {
+    override fun setContentView() {
+        setContentView(R.layout.activity_products_scanner)
+
+    }
+
+    override fun onSuccess(barcode: Barcode) {
+        val token = LoginRepository(
+            LoginDataSource(NetAddressManager(this@WaresShelfScannerActivity)),
+            this@WaresShelfScannerActivity
+        ).user!!.token
+
+        val code = barcode.rawValue
+        showSendingState(true)
+        viewModel.changeLocation(code, shelf, token)
+    }
+
+    private lateinit var shelf: String
+
+    private lateinit var viewModel : WaresShelfScannerViewModel
+
+    companion object{
+        const val SHELF_EXTRA = "pl.tysia.maggstone.shelf_extra"
+    }
+
+    public override fun onCreate(state: Bundle?) {
+        super.onCreate(state)
+
+        viewModel = ViewModelProvider(this, ViewModelFactory(this))
+            .get(WaresShelfScannerViewModel::class.java)
+
+        shelf = intent.getStringExtra(SHELF_EXTRA)!!
+
+        viewModel.locationError.observe(this, Observer {
+            okDialog("Błąd", it, this)
+            showSendingState(false)
+        })
+
+        viewModel.locationResult.observe(this, Observer {
+            added_product_tv.text = it
+            showSendingState(false)
+
+        })
+    }
+
+
+    fun onFinishClicked(view: View?) {
+        finish()
+    }
+
+
+}

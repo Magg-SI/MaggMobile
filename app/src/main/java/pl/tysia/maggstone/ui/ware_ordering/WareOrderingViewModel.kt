@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.source.OrdersRepository
 import pl.tysia.maggstone.data.Result
+import java.io.IOException
 
 class WareOrderingViewModel(var repository: OrdersRepository) : ViewModel() {
     private val _packResult = MutableLiveData<Boolean>()
@@ -24,14 +25,21 @@ class WareOrderingViewModel(var repository: OrdersRepository) : ViewModel() {
                  cancelledNumber : Double) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result =
-                repository.packWare(token, id, packedNumber, postponedNumber, cancelledNumber)
 
-            if (result is Result.Success) {
-                _packResult.postValue(result.data)
-            } else {
-                _waresResult.postValue(R.string.err_wares_download)
+            try {
+                val result =
+                    repository.packWare(token, id, packedNumber, postponedNumber, cancelledNumber)
+
+                if (result is Result.Success) {
+                    _packResult.postValue(result.data)
+                } else {
+                    _waresResult.postValue(R.string.err_wares_download)
+                }
+            }catch (e : IOException){
+                _waresResult.postValue(R.string.connection_error)
+
             }
+
         }
     }
 

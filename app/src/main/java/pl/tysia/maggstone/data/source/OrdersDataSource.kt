@@ -1,5 +1,6 @@
 package pl.tysia.maggstone.data.source
 
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.model.*
 import pl.tysia.maggstone.data.api.service.OrdersService
@@ -9,9 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 
-private const val BASE_URL = "http://martech.magg.pl/"
 
-class OrdersDataSource {
+class OrdersDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
     fun getOrders(token : String) : Result<ArrayList<Order>> {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)

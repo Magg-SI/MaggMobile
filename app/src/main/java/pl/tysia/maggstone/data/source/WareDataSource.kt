@@ -1,21 +1,21 @@
 package pl.tysia.maggstone.data.source
 
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.model.*
 import pl.tysia.maggstone.data.api.service.PagesService
 import pl.tysia.maggstone.data.api.service.WareService
+import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "http://martech.magg.pl/"
 
-class WareDataSource {
+class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
 
     fun getWare(qrCode: String, token: String) : Result<Ware> {
         val service = retrofit.create(WareService::class.java)
@@ -26,6 +26,32 @@ class WareDataSource {
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
             Result.Success(result.body()!!)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
+
+    fun addHose(hose: Hose, token: String) : Result<Hose> {
+        val service = retrofit.create(WareService::class.java)
+
+        val items = ArrayList<AddHoseRequest.RequestItem>()
+
+        items.add(AddHoseRequest.RequestItem(hose.cord!!.hoseType!!, hose.cord!!.id!!, hose.length!!))
+        items.add(AddHoseRequest.RequestItem(hose.tip1!!.hoseType!!, hose.tip1!!.id!!, AddHoseRequest.TIP_QUANTITY))
+        items.add(AddHoseRequest.RequestItem(hose.tip2!!.hoseType!!, hose.tip2!!.id!!, AddHoseRequest.TIP_QUANTITY))
+        items.add(AddHoseRequest.RequestItem(hose.sleeve!!.hoseType!!, hose.sleeve!!.id!!, AddHoseRequest.SLEEVE_QUANTITY))
+
+        val result = service.addHose(
+            AddHoseRequest(token, hose.code!!, hose.creator!!, hose.angle!!, items)
+        ).execute()
+
+        return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            val hoseResult = result.body()
+            hose.name = hoseResult!!.nazwa
+            hose.id = hoseResult.wazID
+            hose.priceN = hoseResult.cenaN
+            hose.priceB = hoseResult.cenaB
+            Result.Success(hose)
         }else{
             Result.Error(Exception(result.body()!!.retMessage))
         }

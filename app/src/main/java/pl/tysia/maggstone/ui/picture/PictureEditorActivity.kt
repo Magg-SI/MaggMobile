@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,16 +30,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_picture_editor.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.SendingService
+import pl.tysia.maggstone.data.service.WaresDownloadService
 import pl.tysia.maggstone.resizeBitmap
 import pl.tysia.maggstone.rotateBitmap
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.presentation_logic.EditPictureView
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,19 +59,7 @@ class PictureEditorActivity : AppCompatActivity() {
     companion object{
         private const val MY_CAMERA_REQUEST_CODE = 100
         private const val REQUEST_TAKE_PHOTO = 1
-        private const val PICTURE_EXTRA = "pl.tysia.maggstone.picture"
-        private const val WARE_ID_EXTRA = "pl.tysia.maggstone.ware_id"
-
-        private fun getPictureSize(context: Context) : Float{
-
-            return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString("picture_size", "0.1")!!.toFloat()
-        }
-
     }
-
-
 
     /** Defines callbacks for service binding, passed to bindService()  */
     private val connection = object : ServiceConnection {
@@ -83,8 +75,6 @@ class PictureEditorActivity : AppCompatActivity() {
             mBound = false
         }
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,22 +94,44 @@ class PictureEditorActivity : AppCompatActivity() {
 
 
         viewModel.pictureResult.observe(this@PictureEditorActivity, Observer {
-          //todo
+            Toast.makeText(this, getString(it), Toast.LENGTH_LONG).show()
+            imageProgressBar.visibility = View.INVISIBLE
+            edit_button.isEnabled = true
         })
 
 
         viewModel.picture.observe(this@PictureEditorActivity, Observer {
             product_image.bitmap = it
-
+            imageProgressBar.visibility = View.INVISIBLE
+            edit_button.isEnabled = true
         })
 
         val token = LoginRepository(
-            LoginDataSource(),
+            LoginDataSource(NetAddressManager(this)),
             this
         ).user!!.token
 
         viewModel.getPicture(ware.id!!, token)
 
+    }
+
+    fun onEditClicked(view: View){
+        editingEnabled(true)
+    }
+
+    private fun editingEnabled(enabled : Boolean){
+        if (enabled){
+            editor_buttons.visibility = View.VISIBLE
+            editor_layout.visibility = View.VISIBLE
+            edit_button.visibility = View.GONE
+        }else{
+            editor_buttons.visibility = View.GONE
+            editor_layout.visibility = View.GONE
+            edit_button.visibility = View.VISIBLE
+
+            //TODO: pozbyć się magicznych cyferek
+            product_image.setMode(1)
+        }
     }
 
     override fun onStop() {
@@ -129,6 +141,12 @@ class PictureEditorActivity : AppCompatActivity() {
             mBound = false
         }
 
+    }
+
+    fun onRotateClicked(view: View){
+        val bitmap = product_image.bitmap
+        val rotated = rotateBitmap(bitmap)
+        product_image.bitmap = rotated
     }
 
     fun setCrop(view : View){
@@ -155,12 +173,14 @@ class PictureEditorActivity : AppCompatActivity() {
 
     private fun setProductImageBitmap(path : String?){
         val file = File(path)
-        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
+        val uri = Uri.fromFile(file)
 
-        val rotatedBitmap = rotateBitmap(bitmap)
+        val bitmap = MediaStore.Images.Media.getBitmap(
+            this.contentResolver,
+            uri
+        )
 
-        product_image.bitmap = rotatedBitmap
-        // product_image.setImageBitmap(rotatedBitmap)
+        product_image.bitmap = bitmap
 
     }
 
@@ -173,7 +193,6 @@ class PictureEditorActivity : AppCompatActivity() {
         }else{
             dispatchTakePictureIntent()
             //cameraTest()
-
         }
     }
 
@@ -194,8 +213,8 @@ class PictureEditorActivity : AppCompatActivity() {
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         return File.createTempFile(
-            "png_${timeStamp}_", /* prefix */
-            ".png", /* suffix */
+            "jpeg_${timeStamp}_", /* prefix */
+            ".jpeg", /* suffix */
             storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
@@ -243,6 +262,8 @@ class PictureEditorActivity : AppCompatActivity() {
 
 
     fun attemptSave(view : View) {
+        showProgress(true)
+
         var bitmap : Bitmap? = null
         if (product_image.bitmap != null)
             bitmap  = product_image.bitmap
@@ -255,39 +276,32 @@ class PictureEditorActivity : AppCompatActivity() {
             cancel = true
         }
 
-        if (cancel) {
-            focusView?.requestFocus()
-        } else {
-            showProgress(true)
+        if (!cancel) {
+
+            if(currentPhotoPath == null) createImageFile()
+
+            val file = File(currentPhotoPath!!)
+            val out = FileOutputStream(file, false)
+            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, out)
 
             ware.photoPath = currentPhotoPath
-            ware.image = bitmap
-            ware.photoString = getPhotoString(bitmap!!)
 
+            if (!mService.isRunning) startService(Intent(this, SendingService::class.java))
 
-            if (!SendingService.isRunning){
-                val intent = Intent(this, SendingService::class.java)
-                intent.putExtra(Ware.WARE_EXTRA, ware)
-                startService(intent)
-                finish()
+            mService.addToQueue(ware).percentSent.observe(this, Observer {
+                sending_progress_bar.progress = it
+            })
 
-            }else{
-                mService.addToQueue(ware)
-                showProgress(false)
-                finish()
-            }
+            product_image.bitmap = bitmap
+
+            editingEnabled(false)
 
         }
+        showProgress(false)
+
     }
 
 
-    private fun getPhotoString(bitmap :Bitmap) : String{
-        val stream = ByteArrayOutputStream()
-        val resized = resizeBitmap(bitmap, getPictureSize(this))
-        resized.compress(Bitmap.CompressFormat.PNG, 90, stream)
-        val image = stream.toByteArray()
-        return Base64.encodeToString(image, Base64.DEFAULT)
-    }
 
     override fun onStart() {
         super.onStart()
@@ -297,9 +311,6 @@ class PictureEditorActivity : AppCompatActivity() {
     }
 
 
-
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private fun showProgress(show: Boolean) {
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
 

@@ -48,10 +48,18 @@ class DownloadStateActivity : AppCompatActivity() {
         }
     }
 
+    fun onSynchroniseAllClicked(view : View){
+        contractorsService.synchronise()
+        waresService.synchronise()
+    }
+
     override fun onStart() {
         super.onStart()
         // Bind to LocalService
-        Intent(this, SendingService::class.java).also { intent ->
+        Intent(this, ContractorsDownloadService::class.java).also { intent ->
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+        Intent(this, WaresDownloadService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }

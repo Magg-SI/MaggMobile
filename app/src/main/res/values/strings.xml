@@ -23,4 +23,21 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="correct_document_send">Dokument wysłany</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <string name="connectoin_error_long_message">Nastąpił błąd połączenia. Sprwawdź połączenie z internetem i adres
+        podany w ustawieniach.
+    </string>
+    <string name="connection_error">Brak połączenia z internetem.</string>
+
+    <string name="length_error">Należy podać długość</string>
+    <string name="number_error">Należy podać numer</string>
+    <string name="cord_not_found">Nie znaleziono takiego węża</string>
+    <string name="code_error">Należy podac kod</string>
+    <string name="sleeve_not_found">Nie znaleziono takiej tulejki</string>
+    <string name="tip_not_found">Nie znaleziono takiej kocówki</string>
+    <string name="hose_error_check_connection">Nie udało się dodac węża. Sprawdź połączenie z internetem i spróbuj ponownie.</string>
+    <string name="no_picture">Brak zdjęcia</string>
+    <string name="availability_err">Nie udało się pobrac dostępnsci.</string>
 </resources>

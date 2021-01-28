@@ -1,8 +1,9 @@
 package pl.tysia.maggstone.data.api.model
 
-import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
 import pl.tysia.maggstone.data.model.*
+import retrofit2.Retrofit
+
 
 open class APIResponse {
     companion object{
@@ -47,7 +48,7 @@ open class APIResponse {
 
     class Picture : APIResponse(){
         @SerializedName("foto")
-        var picture: Bitmap? = null
+        var picture: String? = null
     }
 
     class Availabilities : APIResponse(){
@@ -55,6 +56,16 @@ open class APIResponse {
         var availabilities : ArrayList<Availability>? = null
     }
 
+    class Hose : APIResponse(){
+        var nazwa: String? = null
+        var wazID: Int? = null
+        var cenaN: Double? = null
+        var cenaB: Double? = null
+    }
+
+    class Photo : APIResponse(){
+        var fotoID: Int? = null
+    }
 
     class Login : APIResponse() {
         @SerializedName("userID")

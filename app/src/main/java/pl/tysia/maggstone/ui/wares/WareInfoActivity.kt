@@ -11,7 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_info.*
 import pl.tysia.maggstone.ui.picture.PictureEditorActivity
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Ware
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.ui.ViewModelFactory
 
 class WareInfoActivity : AppCompatActivity() {
     private lateinit var ware : Ware
@@ -23,26 +27,33 @@ class WareInfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ware_info)
 
 
-        viewModel = ViewModelProvider(this, WareViewModelFactory())
+        viewModel = ViewModelProvider(this, ViewModelFactory(this))
             .get(WareInfoViewModel::class.java)
 
         viewModel.availability.observe(this, Observer {
             ware.availabilities = it
             displayAvailability()
-            //TODO: showSendingState(false)
         })
 
         ware = intent.getSerializableExtra(Ware.WARE_EXTRA) as Ware
 
         displayWare()
+
+
+        val token = LoginRepository(
+            LoginDataSource(NetAddressManager(this)),
+            this
+        ).user!!.token
+
+        viewModel.getAvailabilities(ware.index!!, token)
     }
 
     private fun displayWare(){
         index_tv.text = ware.index
         name_tv.text = ware.name
         location_tv.text = ware.location
-        price_tv.text = ware.price.toString()
-
+        if (ware.price != null)
+            price_tv.text = ware.price.toString()
 
     }
 

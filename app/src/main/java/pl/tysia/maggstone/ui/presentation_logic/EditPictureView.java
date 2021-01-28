@@ -10,9 +10,11 @@ import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.PixelCopy;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
@@ -104,8 +106,10 @@ public class EditPictureView extends View {
         }
         wynikRect = new Rect(0,0, bmpRectSel.width(), bmpRectSel.height());
         bitmapOut = Bitmap.createBitmap(bmpRectSel.width(), bmpRectSel.height(), Bitmap.Config.ARGB_8888);
+
         Canvas canvas = new Canvas(bitmapOut);
         canvas.drawBitmap(bitmapIn, bmpRectSel, wynikRect, null);
+
 
         if(isTestMode) {
             mode = 0;

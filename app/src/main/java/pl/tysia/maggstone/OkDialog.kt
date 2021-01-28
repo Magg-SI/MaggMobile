@@ -14,3 +14,15 @@ fun okDialog(title: String, message: String, context: Context) {
     val alert: android.app.AlertDialog? = builder.create()
     alert?.show()
 }
+
+fun okDialog(title: String, message: String, context: Context, action: () -> Unit) {
+    val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+    builder.setTitle(title)
+    builder.setMessage(message)
+        .setCancelable(false)
+        .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
+            action()
+        })
+    val alert: android.app.AlertDialog? = builder.create()
+    alert?.show()
+}

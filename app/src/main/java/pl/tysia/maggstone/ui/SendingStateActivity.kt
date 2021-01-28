@@ -31,9 +31,13 @@ class SendingStateActivity : AppCompatActivity() {
             mService = binder.getService()
             mBound = true
 
-            adapter.addAll(mService.getQueue().value)
-            adapter.filter()
-            adapter.notifyDataSetChanged()
+            mService.getQueue().observe(this@SendingStateActivity, androidx.lifecycle.Observer {
+                adapter.allItems.clear()
+                adapter.addAll(it)
+                adapter.filter()
+                adapter.notifyDataSetChanged()
+            })
+
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -48,7 +52,6 @@ class SendingStateActivity : AppCompatActivity() {
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

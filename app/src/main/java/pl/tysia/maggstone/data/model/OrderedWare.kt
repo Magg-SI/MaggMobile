@@ -4,14 +4,16 @@ import com.google.gson.annotations.SerializedName
 
 class OrderedWare(name: String) : Ware(name) {
     @SerializedName("ilZamow")
-    var orderedNumber : Double? = null
+    var orderedNumber : Double = 0.0
     @SerializedName("ilZapak")
-    var packedNumber : Double? = null
+    var packedNumber : Double = 0.0
     @SerializedName("ilNext")
-    var postponedNumber : Double? = null
+    var postponedNumber : Double = 0.0
     @SerializedName("ilAnul")
-    var cancelledNumber : Double? = null
+    var cancelledNumber : Double = 0.0
     @SerializedName("stanMag")
     var availability : Double? = null
+
+    var packed = orderedNumber <= ( packedNumber + postponedNumber + cancelledNumber)
 
 }

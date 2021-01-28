@@ -5,21 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".ui.HoseActivity">
+    tools:context=".ui.hose.HoseActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="128dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hose_form"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/save_button"
         style="@style/round_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:enabled="false"
+        android:onClick="addHose"
         android:text="Zapisz"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
-        android:id="@+id/save_et"
+        android:id="@+id/hose_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,183 +47,220 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:id="@+id/textInputLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:padding="0dp"
-                android:textColorHint="@color/hintGray">
+                android:background="@color/colorPrimaryDark"
+                android:elevation="6dp"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingLeft="12dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/pipe_et"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_half_round_dark_left"
                     android:hint="Przewód"
-                    android:textColor="@color/lightGray"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textColorHint="@color/hintGray" />
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:padding="0dp"
-                android:textColorHint="@color/hintGray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/length_et"
+                <ImageButton
+                    android:id="@+id/cord_search_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
-                    android:ems="6"
-                    android:hint="Długość"
-                    android:textColor="@color/lightGray" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="@drawable/button_half_round_dark_right"
+                    android:backgroundTint="?colorAccent"
+                    android:onClick="onSearchClicked"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:src="@drawable/round_search_24" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_weight="1"
-                    android:padding="0dp"
-                    android:textColorHint="@color/hintGray">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/end1_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_text"
-                        android:hint="Końcówka"
-                        android:textColor="@color/lightGray" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_weight="1"
-                    android:padding="0dp"
-                    android:textColorHint="@color/hintGray">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/end2_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_text"
-                        android:hint="Końcówka"
-                        android:textColor="@color/lightGray" />
-                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout9"
+            <LinearLayout
+                android:id="@+id/tips_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:padding="0dp"
-                android:textColorHint="@color/hintGray">
+                android:background="@color/colorPrimaryDark"
+                android:elevation="6dp"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingLeft="12dp"
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/end1_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_half_round_dark_left"
+                    android:enabled="true"
+                    android:hint="Końcówka"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textColorHint="@color/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/tip_search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/button_half_round_dark_right"
+                    android:backgroundTint="?colorAccent"
+                    android:clickable="true"
+                    android:onClick="onSearchClicked"
+                    app:srcCompat="@drawable/round_search_24" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/end2_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_half_round_dark_left"
+                    android:enabled="true"
+                    android:hint="Końcówka"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textColorHint="@color/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/tip_search_button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="@drawable/button_half_round_dark_right"
+                    android:backgroundTint="?colorAccent"
+                    android:clickable="true"
+                    android:onClick="onSearchClicked"
+                    app:srcCompat="@drawable/round_search_24" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sleeve_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:elevation="6dp"
+                android:paddingStart="12dp"
+                android:paddingLeft="12dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="16dp"
+                android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/sleeve_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_half_round_dark_left"
+                    android:enabled="true"
                     android:hint="Tulejki"
-                    android:textColor="@color/lightGray" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textColorHint="@color/colorPrimary" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:textColorHint="@color/hintGray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/count_et"
+                <ImageButton
+                    android:id="@+id/sleeve_search_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
-                    android:ems="6"
-                    android:hint="Liczba"
-                    android:textColor="@color/lightGray" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="@drawable/button_half_round_dark_right"
+                    android:backgroundTint="?colorAccent"
+                    android:clickable="true"
+                    android:onClick="onSearchClicked"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:srcCompat="@drawable/round_search_24" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/length_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text"
+                android:backgroundTint="@color/lightGray"
+                android:ems="6"
+                android:hint="Długość"
+                android:inputType="number"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/hintGray" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/number_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text"
+                android:backgroundTint="@color/lightGray"
+                android:ems="6"
+                android:hint="Liczba"
+                android:inputType="number"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/hintGray" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hose_code_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
-                android:textColorHint="@color/hintGray">
+                android:layout_marginRight="12dp"
+                android:background="@drawable/edit_text"
+                android:backgroundTint="@color/lightGray"
+                android:hint="Kod węża"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/hintGray" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/hose_code_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
-                    android:hint="Kod węża"
-                    android:textColor="@color/lightGray" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/twist_angle_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text"
+                android:backgroundTint="@color/lightGray"
+                android:hint="Kąt skręcenia końc. "
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/hintGray" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/creator_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
-                android:textColorHint="@color/hintGray">
+                android:layout_marginRight="12dp"
+                android:background="@drawable/edit_text"
+                android:backgroundTint="@color/lightGray"
+                android:hint="Wykonawca"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/hintGray" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/twist_angle_et"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
-                    android:ems="6"
-                    android:hint="Kąt skręcenia końc. "
-                    android:textColor="@color/lightGray" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:textColorHint="@color/hintGray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/creator_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text"
-                    android:hint="Wykonawca"
-                    android:textColor="@color/lightGray" />
-            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </ScrollView>
 

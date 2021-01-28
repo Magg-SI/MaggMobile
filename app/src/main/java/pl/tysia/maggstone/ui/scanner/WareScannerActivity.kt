@@ -5,26 +5,41 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.mlkit.vision.barcode.Barcode
 import com.google.zxing.Result
+import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.okDialog
+import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.wares.WareViewModel
-import pl.tysia.maggstone.ui.wares.WareViewModelFactory
 
-class WareScannerActivity : ScannerActivity() {
+class WareScannerActivity : ScanningActivity() {
     private lateinit var viewModel : WareViewModel
+
+    override fun setContentView() {
+        setContentView(R.layout.activity_scanning)
+    }
+
+    override fun onSuccess(barcode: Barcode) {
+        val code = barcode.rawValue
+
+        val token = LoginRepository(
+            LoginDataSource(NetAddressManager(this)),
+            this
+        ).user!!.token
+
+        viewModel.getWare(code, token)
+        showSendingState(true)
+    }
 
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
 
-        viewModel = ViewModelProvider(this, WareViewModelFactory())
+        viewModel = ViewModelProvider(this, ViewModelFactory(this))
         .get(WareViewModel::class.java)
-    }
-
-    override fun handleResult(rawResult: Result) {
-        val code = rawResult.text
 
         viewModel.ware.observe(this, Observer {
             val returnIntent = Intent()
@@ -35,17 +50,9 @@ class WareScannerActivity : ScannerActivity() {
         })
 
         viewModel.wareResult.observe(this, Observer {
-            val message = getString(viewModel.wareResult.value!!)
             showSendingState(false)
-            okDialog("Błąd", message, this)
+            okDialog("Błąd", it, this)
         })
-
-        val token = LoginRepository(
-            LoginDataSource(),
-            this
-        ).user!!.token
-
-        viewModel.getWare(code, token)
-        showSendingState(true)
     }
+
 }

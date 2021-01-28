@@ -16,9 +16,10 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_login.*
-import pl.tysia.maggstone.ui.MainActivity
+import pl.tysia.maggstone.ui.main.MainActivity
 
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.ui.ViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
@@ -35,16 +36,26 @@ class LoginActivity : AppCompatActivity() {
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
+        NetworkChangeReceiver().enable(this)
+
         loginViewModel = ViewModelProvider(this,
             ViewModelFactory(this)
         )
             .get(LoginViewModel::class.java)
 
+        NetworkChangeReceiver.internetConnection.observe(this, Observer {
+            if (it && loginViewModel.loginRepository.isLoggedIn){
+                showProgress(true)
+                loginViewModel.testToken()
+            }
+        })
 
-        if(loginViewModel.loginRepository.isLoggedIn) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
+        loginViewModel.result.observe(this@LoginActivity, Observer {
+            if (it) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else showProgress(false)
+        })
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -98,11 +109,14 @@ class LoginActivity : AppCompatActivity() {
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
+                    EditorInfo.IME_ACTION_DONE ->{
+                        showProgress(true)
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
                         )
+                    }
+
                 }
                 false
             }
@@ -117,7 +131,6 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
-        // TODO : initiate successful logged in experience
         Toast.makeText(
             applicationContext,
             "$welcome $displayName",

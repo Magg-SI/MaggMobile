@@ -10,6 +10,7 @@ import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.source.OrdersRepository
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.model.Order
+import java.io.IOException
 
 class OrdersViewModel(var repository: OrdersRepository) : ViewModel() {
     private val _ordersResult = MutableLiveData<Int>()
@@ -20,13 +21,18 @@ class OrdersViewModel(var repository: OrdersRepository) : ViewModel() {
 
     fun getOrders(token: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.getOrders(token)
+            try {
+                val result = repository.getOrders(token)
 
-            if (result is Result.Success) {
-                _orders.postValue(result.data)
-            } else {
-                _ordersResult.postValue(R.string.err_orders_download)
+                if (result is Result.Success) {
+                    _orders.postValue(result.data)
+                } else {
+                    _ordersResult.postValue(R.string.err_orders_download)
+                }
+            }catch (ex : IOException){
+                _ordersResult.postValue(R.string.connection_error)
             }
+
         }
     }
 

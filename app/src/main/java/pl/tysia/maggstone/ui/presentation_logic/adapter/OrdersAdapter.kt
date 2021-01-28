@@ -39,11 +39,11 @@ class OrdersAdapter(items : ArrayList<Order>) : CatalogAdapter<Order, OrdersAdap
         return OrderViewHolder(v)
     }
 
-
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         val item = shownItems[position]
 
         holder.title.text = item.title
+        holder.description.text = item.description
 
         if (item.packed) {
             holder.title.isEnabled = false

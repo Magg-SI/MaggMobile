@@ -9,9 +9,7 @@
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:background="@drawable/list_item_background"
-        android:elevation="3dp">
+        android:layout_margin="8dp">
 
         <ImageView
             android:id="@+id/check_image2"
@@ -31,7 +29,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="TextView"
-            android:textColor="@color/colorAccent"
+            android:textColor="?colorAccent"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/description_tv"
@@ -46,6 +44,7 @@
             android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:text="TextView"
+            android:textColor="@color/lightGray"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/less_button"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +61,7 @@
             android:minEms="2"
             android:padding="12dp"
             android:selectAllOnFocus="false"
+            android:textColor="@color/lightGray"
             app:layout_constraintEnd_toStartOf="@+id/more_button"
             app:layout_constraintTop_toTopOf="@+id/description_tv" />
 
@@ -75,7 +75,7 @@
             app:layout_constraintEnd_toStartOf="@+id/number_et"
             app:layout_constraintTop_toTopOf="@+id/number_et"
             app:srcCompat="@drawable/round_remove_24"
-            app:tint="@color/colorPrimary" />
+            app:tint="@color/lightGray" />
 
         <ImageView
             android:id="@+id/more_button"
@@ -88,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/number_et"
             app:srcCompat="@drawable/round_add_24"
-            app:tint="@color/colorPrimary" />
+            app:tint="@color/lightGray" />
 
         <ImageButton
             android:id="@+id/delete_button"
@@ -97,7 +97,7 @@
             android:layout_marginEnd="8dp"
             android:background="@null"
             android:padding="8dp"
-            android:tint="@color/colorPrimary"
+            android:tint="@color/lightGray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_delete_outline_24" />
@@ -109,10 +109,10 @@
             android:layout_marginEnd="8dp"
             android:background="@null"
             android:padding="8dp"
+            android:tint="@color/lightGray"
             app:layout_constraintEnd_toStartOf="@+id/delete_button"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/round_info_24"
-            android:tint="@color/colorPrimary" />
+            app:srcCompat="@drawable/round_info_24" />
 
         <TextView
             android:id="@+id/name_tv"
@@ -121,9 +121,12 @@
             android:layout_marginTop="16dp"
             android:padding="8dp"
             android:text="This is the path that is defined in the TMDB api for getting popular movies. After that we create a function called getmovies that we will return a call object containing data which is in the form of PopulaMovies object of the PopulaMovies"
+            android:textColor="@color/lightGray"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_tv" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -10,6 +10,7 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.Result
 
 import pl.tysia.maggstone.R
+import java.io.IOException
 
 class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
 
@@ -19,18 +20,45 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
+    private val _result = MutableLiveData<Boolean>()
+    val result: LiveData<Boolean> = _result
+
+
+    fun testToken(){
+        val token = loginRepository.user!!.token
+
         viewModelScope.launch(Dispatchers.IO) {
+            try{
+                val result = loginRepository.testToken(token)
 
-            val result = loginRepository.login(username, password)
-
-            if (result is Result.Success) {
-                _loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = result.data.displayName)))
-            } else {
-                _loginResult.postValue(LoginResult(error = R.string.login_failed))
+                if (result is Result.Success) {
+                    _result.postValue(result.data)
+                } else {
+                    _result.postValue(false)
+                }
+            }catch (ex : IOException){
+                _result.postValue(false)
             }
+        }
+    }
 
+    fun logout(){
+        loginRepository.logout()
+    }
+
+    fun login(username: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try{
+                val result = loginRepository.login(username, password)
+
+                if (result is Result.Success) {
+                    _loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = result.data.displayName)))
+                } else {
+                    _loginResult.postValue(LoginResult(error = R.string.login_failed))
+                }
+            }catch (ex : IOException){
+                _loginResult.postValue(LoginResult(error = R.string.connection_error))
+            }
         }
     }
 
@@ -44,18 +72,10 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         }
     }
 
-    // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
-/*        return if (username.contains('@')) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }*/
-
         return true
     }
 
-    // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return true
     }

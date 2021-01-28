@@ -1,0 +1,41 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Sieć">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="private_net_usage"
+            android:title="Korzystaj z sieci prywatnej" />
+        <EditTextPreference
+            android:key="net_address_global"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Adres sieci globalnej"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:defaultValue="Nie ustawiono"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:key="net_address_private"
+            app:title="Adres sieci prywatnej"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Obrazy">
+
+        <ListPreference
+            app:entries="@array/size_entries"
+            app:entryValues="@array/size_values"
+            app:key="picture_size"
+            app:title="Rozmiar wysyłanego obrazu"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="scan_on_demand"
+            android:title="Skanowanie na żądanie" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

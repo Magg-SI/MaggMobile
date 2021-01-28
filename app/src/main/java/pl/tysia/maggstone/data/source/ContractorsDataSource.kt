@@ -1,5 +1,6 @@
 package pl.tysia.maggstone.data.source
 
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.model.APIResponse
 import pl.tysia.maggstone.data.api.model.GetPageRequest
@@ -8,9 +9,8 @@ import pl.tysia.maggstone.data.api.service.PagesService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "http://martech.magg.pl/"
 
-class ContractorsDataSource {
+class ContractorsDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())

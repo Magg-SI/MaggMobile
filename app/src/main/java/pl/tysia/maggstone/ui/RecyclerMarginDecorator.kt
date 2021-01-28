@@ -4,28 +4,34 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-private const val TOP_FIRST = 300
-private const val BOTTOM_LAST = 300
+private const val TOP_FIRST = 128
+private const val BOTTOM_LAST = 128
 private const val TOP = 16
 private const val BOTTOM = 16
 private const val LEFT = 0
 private const val RIGHT = 0
 
-class RecyclerMarginDecorator() : RecyclerView.ItemDecoration() {
+class RecyclerMarginDecorator(var mTopFirst : Int = TOP_FIRST,
+                              var mBottomLast : Int = BOTTOM_LAST,
+                              var mTop : Int = TOP,
+                              var mBottom : Int = BOTTOM,
+                              var mLeft : Int = LEFT,
+                              var mRight : Int = RIGHT,
+                              var numberInRow : Int = 1 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View,
                                 parent: RecyclerView, state: RecyclerView.State) {
         with(outRect) {
 
-            left = LEFT
-            right = RIGHT
-            bottom = BOTTOM
-            top = TOP
+            left = mLeft
+            right = mRight
+            bottom = mBottom
+            top = mTop
 
             if (parent.getChildAdapterPosition(view) == 0) {
-                top = TOP_FIRST
-            }else if (parent.getChildAdapterPosition(view) == parent.adapter!!.itemCount-1) {
-                bottom = BOTTOM_LAST
+                top = mTopFirst
+            }else if (parent.getChildAdapterPosition(view) >= parent.adapter!!.itemCount - (parent.adapter!!.itemCount % numberInRow) - 1) {
+                bottom = mBottomLast
             }
 
         }

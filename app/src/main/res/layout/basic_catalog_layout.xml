@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:orientation="vertical"
-    tools:context=".ui.contractors.ContractorsDialogFragment">
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -22,15 +20,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@drawable/edit_text"
-            android:backgroundTint="@color/design_default_color_background"
+            android:background="@drawable/round_edit_background"
+            android:backgroundTint="@color/lightGray"
             android:drawableLeft="@drawable/round_search_24"
             android:drawablePadding="6dp"
+            android:elevation="6dp"
             android:ems="10"
+            android:foregroundTint="@color/colorPrimary"
             android:gravity="center_vertical"
             android:hint="Wyszukaj..."
             android:inputType="textPersonName"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:textColorHint="#7A7979"
             android:textSize="16sp" />
     </FrameLayout>
@@ -68,7 +68,8 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="16dp"
-            android:text="Ok" />
+            android:text="Ok"
+            android:visibility="gone" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

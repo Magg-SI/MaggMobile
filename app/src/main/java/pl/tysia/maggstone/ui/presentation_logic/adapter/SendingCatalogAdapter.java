@@ -48,11 +48,13 @@ public class SendingCatalogAdapter extends CatalogAdapter<QueueItem, SendingCata
         }
 
         public void setObserver() {
-            allItems.get(getAdapterPosition()).getPercentSent().observeForever(observer);
+            if (getAdapterPosition() >= 0)
+                allItems.get(getAdapterPosition()).getPercentSent().observeForever(observer);
         }
 
         public void removeObserver(){
-            allItems.get(getAdapterPosition()).getPercentSent().removeObserver(observer);
+            if (getAdapterPosition() >= 0)
+                allItems.get(getAdapterPosition()).getPercentSent().removeObserver(observer);
         }
 
         @Override
@@ -87,6 +89,7 @@ public class SendingCatalogAdapter extends CatalogAdapter<QueueItem, SendingCata
         wareViewHolder.setObserver();
 
     }
+
 
     @Override
     public void onViewDetachedFromWindow(@NonNull SendingViewHolder holder) {

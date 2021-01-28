@@ -3,6 +3,8 @@ package pl.tysia.maggstone.ui.ware_ordering
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_ware_ordering.*
 import kotlinx.android.synthetic.main.activity_ware_ordering.form
 import kotlinx.android.synthetic.main.activity_ware_ordering.progressBar
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.OrderedWare
@@ -41,7 +45,8 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
 
 
         wareOrderingViewModel.packResult.observe(this@WareOrderingActivity, Observer {
-
+            val returnIntent = Intent()
+            setResult(Activity.RESULT_OK, returnIntent)
             showProgress(false)
             finish()
         })
@@ -112,7 +117,7 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
 
     fun onFinishClicked(view: View){
         val token = LoginRepository(
-            LoginDataSource(),
+            LoginDataSource(NetAddressManager(this)),
             this
         ).user!!.token
 

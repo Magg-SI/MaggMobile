@@ -6,7 +6,7 @@
         android:left="16dp"
         android:right="16dp"
         android:top="16dp" />
-    <stroke android:color="@color/design_default_color_on_secondary" android:width="2dp"/>
+<!--    <stroke android:color="@color/design_default_color_on_secondary" android:width="2dp"/>-->
     <solid android:color="@color/colorPrimary" />
 
 </shape>

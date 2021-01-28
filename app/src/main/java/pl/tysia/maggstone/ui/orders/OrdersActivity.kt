@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_orders.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Order
@@ -53,7 +54,7 @@ class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<
         })
 
         ordersViewModel.getOrders( LoginRepository(
-            LoginDataSource(),
+            LoginDataSource(NetAddressManager(this)),
             this
         ).user!!.token)
     }

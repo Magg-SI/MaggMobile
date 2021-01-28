@@ -43,6 +43,10 @@ class LoginRepository(val dataSource: LoginDataSource, val context: Context) {
 
     }
 
+    fun testToken(token : String) : Result<Boolean>{
+        return dataSource.testToken(token)
+    }
+
     fun logout() {
         val preferences = context.getSharedPreferences(LOGGED_USER_PREFERENCES, MODE_PRIVATE)
         val editor = preferences.edit()

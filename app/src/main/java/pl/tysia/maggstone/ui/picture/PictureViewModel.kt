@@ -4,8 +4,14 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.source.PictureDataSource
 import pl.tysia.maggstone.data.Result
+import java.io.IOException
+import java.lang.Exception
 
 class PictureViewModel(var pictureDataSource: PictureDataSource) : ViewModel() {
     private val _pictureResult = MutableLiveData<Int>()
@@ -14,17 +20,21 @@ class PictureViewModel(var pictureDataSource: PictureDataSource) : ViewModel() {
     private val _picture = MutableLiveData<Bitmap>()
     val picture: LiveData<Bitmap> = _picture
 
-
     fun getPicture(wareID: Int, token : String) {
-        val result = pictureDataSource.getPicture(wareID, token)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = pictureDataSource.getPicture(wareID, token)
 
-        if (result is Result.Success) {
-            _picture.value = result.data
-        } else {
-            //TODO:
-            // _wareResult.value = R.string.err_contractors_download
+                if (result is Result.Success) {
+                    _picture.postValue(result.data)
+                } else {
+                    _pictureResult.postValue(R.string.no_picture)
+                }
+            }catch (ex : IOException){
+                _pictureResult.postValue(R.string.connection_error)
+            }
+
         }
     }
-
 
 }

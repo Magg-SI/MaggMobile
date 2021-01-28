@@ -17,15 +17,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_ordered_wares.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
-import pl.tysia.maggstone.data.model.DocumentItem
 import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.orders.OrderedWaresViewModel
-import pl.tysia.maggstone.ui.presentation_logic.adapter.BasicCatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
+import pl.tysia.maggstone.ui.presentation_logic.adapter.OrderedItemsAdapter
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 import java.util.ArrayList
@@ -34,7 +34,7 @@ import java.util.ArrayList
 
 class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedListener<Ware>,
     TextWatcher {
-    private lateinit var adapter:  BasicCatalogAdapter
+    private lateinit var adapter:  OrderedItemsAdapter
     private var filter: StringFilter? = null
 
     private lateinit var recyclerView: RecyclerView
@@ -61,9 +61,10 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
 
 
         adapter =
-            BasicCatalogAdapter(
+            OrderedItemsAdapter(
                 ArrayList()
             )
+
         adapter.addItemSelectedListener(this)
 
         val filterer = adapter.filterer
@@ -77,7 +78,7 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
 
-        order_desc_tv.text = order.shortDescription
+        order_desc_tv.text = order.description
         order_title_tv.text = order.title
 
         orderedWaresViewModel.wares.observe(this@OrderedWaresActivity, Observer {
@@ -88,7 +89,7 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         })
 
         orderedWaresViewModel.getOrder( LoginRepository(
-            LoginDataSource(),
+            LoginDataSource(NetAddressManager(this)),
             this
         ).user!!.token, order.id)
         showProgress(true)
@@ -131,12 +132,11 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
             val ware = data!!.getSerializableExtra(Ware.WARE_EXTRA) as Ware
 
             adapter.allItems.forEach { orderedWare ->
-                val iWare = (orderedWare as DocumentItem.OrderedWareItem).item as Ware
-                if (iWare.qrCode == ware.qrCode)
-                    onItemSelected(iWare)
+                if (orderedWare.qrCode == ware.qrCode)
+                    onItemSelected(orderedWare)
             }
         }else if (resultCode == Activity.RESULT_OK && requestCode == PACK_REQUEST){
-            (adapter.selectedItem as DocumentItem.OrderedWareItem).packed = true
+            adapter.selectedItem.packed = true
             adapter.notifyDataSetChanged()
 
         }
