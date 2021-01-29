@@ -1,6 +1,8 @@
 package pl.tysia.maggstone.ui.scanner
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,6 +12,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.google.common.util.concurrent.ListenableFuture
@@ -57,7 +60,18 @@ abstract class ScanningActivity : AppCompatActivity(),  ImageAnalysis.Analyzer {
         }else{
             scanButton.visibility = View.GONE
         }
+
+        checkPermission()
     }
+
+    private fun checkPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_DENIED){
+            val arr = arrayOf(Manifest.permission.CAMERA)
+            ActivityCompat.requestPermissions(this, arr , 6)
+        }
+    }
+
 
     private fun bindPreview(cameraProvider : ProcessCameraProvider) {
         val preview : Preview = Preview.Builder()

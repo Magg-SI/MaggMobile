@@ -113,7 +113,17 @@ class PictureEditorActivity : AppCompatActivity() {
 
         viewModel.getPicture(ware.id!!, token)
 
+        checkPermission()
     }
+
+    private fun checkPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            == PackageManager.PERMISSION_DENIED){
+            val arr = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            ActivityCompat.requestPermissions(this, arr , 6)
+        }
+    }
+
 
     fun onEditClicked(view: View){
         editingEnabled(true)
