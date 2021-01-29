@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.mlkit.vision.barcode.Barcode
-import com.google.zxing.Result
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource

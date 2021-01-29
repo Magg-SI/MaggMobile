@@ -9,10 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.google.mlkit.vision.barcode.Barcode
-import com.google.zxing.Result
 import kotlinx.android.synthetic.main.activity_products_scanner.*
-import me.dm7.barcodescanner.zxing.ZXingScannerView
-import me.dm7.barcodescanner.zxing.ZXingScannerView.ResultHandler
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
