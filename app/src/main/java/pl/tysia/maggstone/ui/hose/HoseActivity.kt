@@ -54,14 +54,10 @@ class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwn
 
         pipe_et.onFocusChange { focused ->
             run {
-                sleeve_et.setText("")
-                end2_et.setText("")
-                end1_et.setText("")
 
-                viewModel.hose.tip1 = null
-                viewModel.hose.tip2 = null
-                viewModel.hose.sleeve = null
-                if (!focused) viewModel.onCordChanged(pipe_et.text.toString())
+                if (!focused){
+                    viewModel.onCordChanged(pipe_et.text.toString())
+                }
             }
         }
         end1_et.onFocusChange { focused -> if (!focused) viewModel.onTip1Changed(end1_et.text.toString()) }
@@ -81,6 +77,14 @@ class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwn
                 tips_layout.visibility = View.VISIBLE
                 sleeve_layout.visibility = View.VISIBLE
             }else{
+                sleeve_et.setText("")
+                end2_et.setText("")
+                end1_et.setText("")
+
+                viewModel.hose.tip1 = null
+                viewModel.hose.tip2 = null
+                viewModel.hose.sleeve = null
+
                 tips_layout.visibility = View.GONE
                 sleeve_layout.visibility = View.GONE
             }
@@ -160,13 +164,6 @@ class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwn
         item as Ware
         when (tag){
             FRAGMENT_TAG_CORD -> {
-                sleeve_et.setText("")
-                end2_et.setText("")
-                end1_et.setText("")
-
-                viewModel.hose.tip1 = null
-                viewModel.hose.tip2 = null
-                viewModel.hose.sleeve = null
                 viewModel.onCordChanged(item)
                 pipe_et.setText(item.index)
             }

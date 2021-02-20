@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/list_item_background"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorPrimaryBackground"
         android:paddingBottom="36dp">
 
         <Button

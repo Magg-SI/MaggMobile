@@ -2,6 +2,7 @@ package pl.tysia.maggstone.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import org.jetbrains.annotations.NotNull
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.QueueItem
 
@@ -13,8 +14,8 @@ interface QueueDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addAll(items : List<QueueItem>)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun add(item : QueueItem)
+    @Insert
+    fun add(item : QueueItem) : Long
 
     @Delete
     fun delete(item : QueueItem)

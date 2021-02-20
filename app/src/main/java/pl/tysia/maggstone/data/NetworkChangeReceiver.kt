@@ -17,7 +17,7 @@ private const val ERROR_SOURCE = "pl.tysia.maggstone.error_source_internet_conne
 
 class NetworkChangeReceiver : ConnectivityManager.NetworkCallback() {
     companion object{
-        private val _internetConnection = MutableLiveData<Boolean>()
+        private val _internetConnection = MutableLiveData<Boolean>(false)
         val internetConnection : LiveData<Boolean> = _internetConnection
     }
 

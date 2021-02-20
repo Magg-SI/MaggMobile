@@ -61,6 +61,7 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
             val ware = getWareByID(cordId)
             if (ware == null || !isCord(ware)) {
                 hoseFormState.cordError = R.string.cord_not_found
+                hose.cord = null
                 _hoseForm.postValue(hoseFormState)
             } else onCordChanged(ware)
         }
@@ -78,6 +79,7 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
             val ware = getWareByID(sleeveId)
             if (ware == null || !isSleeve(ware)) {
                 hoseFormState.sleeveError = R.string.sleeve_not_found
+                hose.sleeve = null
                 _hoseForm.postValue(hoseFormState)
             } else onSleeveChanged(ware)
         }
@@ -95,6 +97,7 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
             val ware = getWareByID(tipId)
             if (ware == null || !isTip(ware)) {
                 hoseFormState.tip1Error = R.string.tip_not_found
+                hose.tip1 = null
                 _hoseForm.postValue(hoseFormState)
             } else onTip1Changed(ware)
         }
@@ -112,6 +115,7 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
             val ware = getWareByID(tipId)
             if (ware == null || !isTip(ware)) {
                 hoseFormState.tip2Error = R.string.tip_not_found
+                hose.tip2 = null
                 _hoseForm.postValue(hoseFormState)
             } else onTip2Changed(ware)
         }

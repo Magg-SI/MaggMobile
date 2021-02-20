@@ -1,8 +1,10 @@
 package pl.tysia.maggstone.data.service
 
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Binder
@@ -10,9 +12,13 @@ import android.os.Build
 import android.os.IBinder
 import android.provider.MediaStore
 import android.util.Base64
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
@@ -24,6 +30,7 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.source.PictureDataSource
 import pl.tysia.maggstone.resizeBitmap
 import pl.tysia.maggstone.rotateBitmap
+import pl.tysia.maggstone.ui.SendingStateActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -32,6 +39,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.collections.ArrayList
 
 const val BATCH_SIZE = 5000
+const val NOTIFICATION_ID = 101
 
 class SendingService : Service(){
     private var binder = SendingBinder()
@@ -44,13 +52,10 @@ class SendingService : Service(){
 
     var isRunning = false
 
-    private fun saveQueue(){
-        SavingThread().start()
-    }
-
     private fun readQueue(){
         db.queueDAO().getAll().observeForever {
-            addToQueue(it)
+            queue.value!!.addAll(it)
+            queue.notifyObserver()
         }
     }
 
@@ -64,8 +69,8 @@ class SendingService : Service(){
 
     fun addToQueue(ware: Ware) : QueueItem{
         val item = QueueItem(ware.name, ware.index!!, ware.id!!, ware.photoPath!!)
-        queue.value!!.add(item)
-        queue.notifyObserver()
+
+        addToQueue(item)
 
         return item
     }
@@ -75,10 +80,6 @@ class SendingService : Service(){
         queue.notifyObserver()
     }
 
-    fun addToQueue(items: List<QueueItem>){
-        queue.value!!.addAll(items)
-        queue.notifyObserver()
-    }
 
     private fun getPictureSize() : Float{
         return PreferenceManager
@@ -144,9 +145,51 @@ class SendingService : Service(){
 
     }
 
+    private fun startForeground() {
+        val pendingIntent: PendingIntent =
+            Intent(this, SendingStateActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(this, 0, notificationIntent, 0)
+            }
+
+        val channelId =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel("my_service", "Magg Background Service")
+            } else {
+               ""
+            }
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId )
+        val notification = notificationBuilder.setOngoing(true)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(getText(R.string.notification_title))
+            .setPriority(PRIORITY_MIN)
+            .setContentIntent(pendingIntent)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .build()
+
+        startForeground(NOTIFICATION_ID, notification)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(channelId: String, channelName: String): String{
+        val chan = NotificationChannel(channelId,
+            channelName, NotificationManager.IMPORTANCE_NONE)
+        chan.lightColor = Color.BLUE
+        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        service.createNotificationChannel(chan)
+        return channelId
+    }
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         isRunning = true
 
+        startForeground()
+
+        db.queueDAO().getAll().observeForever {
+            queue.value!!.addAll(it)
+            queue.notifyObserver()
+        }
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
 
@@ -240,34 +283,27 @@ class SendingService : Service(){
                     if (item.allSent())
                         item.finished = sendPictureFin(item, token)
 
-                    if(item.finished)
+                    if(item.finished) {
                         deletePhoto(item.photoPath)
+                    }
 
                     queue.value!!.remove()
                     queue.notifyObserver()
                     db.queueDAO().delete(item)
+
                 }catch (e : IOException){
+                    db.queueDAO().addAll(ArrayList(queue.value!!))
                 }
             }
 
             thread = null
             isRunning = false
+            stopForeground(true)
             stopSelf()
         }
     }
 
-    inner class SavingThread : Thread() {
-        override fun run() {
-            super.run()
 
-            db.queueDAO().addAll(ArrayList(queue.value))
-
-        }
-    }
-
-    override fun onDestroy() {
-        saveQueue()
-    }
 }
 
 fun <T> MutableLiveData<T>.notifyObserver() {

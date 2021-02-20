@@ -40,4 +40,5 @@
     <string name="hose_error_check_connection">Nie udało się dodac węża. Sprawdź połączenie z internetem i spróbuj ponownie.</string>
     <string name="no_picture">Brak zdjęcia</string>
     <string name="availability_err">Nie udało się pobrac dostępnsci.</string>
+    <string name="notification_title">Trwa wysyłanie</string>
 </resources>

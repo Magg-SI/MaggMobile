@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_info.*
@@ -58,6 +59,7 @@ class WareInfoActivity : AppCompatActivity() {
     }
 
     private fun displayAvailability(){
+        availability_ll.removeAllViews()
         val stringBuilder = StringBuilder()
 
         for (availability in ware.availabilities!!){

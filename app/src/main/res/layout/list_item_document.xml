@@ -9,7 +9,8 @@
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:background="@drawable/list_item_background">
 
         <ImageView
             android:id="@+id/check_image2"
@@ -62,6 +63,7 @@
             android:padding="12dp"
             android:selectAllOnFocus="false"
             android:textColor="@color/lightGray"
+            android:textColorHint="@color/hintGray"
             app:layout_constraintEnd_toStartOf="@+id/more_button"
             app:layout_constraintTop_toTopOf="@+id/description_tv" />
 

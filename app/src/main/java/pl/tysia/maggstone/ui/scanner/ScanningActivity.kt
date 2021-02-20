@@ -37,6 +37,9 @@ abstract class ScanningActivity : AppCompatActivity(),  ImageAnalysis.Analyzer {
     abstract fun onSuccess(barcode : Barcode)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme = intent.getIntExtra("theme", -1)
+        if (theme != -1) setTheme(theme)
+
         super.onCreate(savedInstanceState)
         setContentView()
 

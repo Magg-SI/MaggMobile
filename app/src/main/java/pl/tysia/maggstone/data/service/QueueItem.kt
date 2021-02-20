@@ -9,7 +9,7 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 @Entity
 class QueueItem(val name : String, val index : String, val wareID : Int, val photoPath : String) : ICatalogable {
     @PrimaryKey
-    var id : Long? = null
+    var id : Int? = null
 
     @Ignore
     var picture : List<String>? = null
@@ -29,7 +29,7 @@ class QueueItem(val name : String, val index : String, val wareID : Int, val pho
         countPercentSent()
     }
 
-    constructor(name : String, index : String, wareID : Int, path : String, id : Long) : this(name, index, wareID, path){
+    constructor(name : String, index : String, wareID : Int, path : String, id : Int) : this(name, index, wareID, path){
         this.id = id
     }
 

@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
 
     <application
         android:allowBackup="true"
@@ -23,11 +25,12 @@
             android:theme="@style/AppThemeBlue"
             android:label="@string/title_activity_settings" />
         <activity android:name=".ui.DownloadStateActivity" />
+        <activity android:name=".ui.picture.TakePictureActivity" />
         <activity android:name=".ui.SendingStateActivity" />
         <activity android:name=".ui.scanner.ShelfScannerActivity"
-            android:theme="@style/AppThemeRed"/>
+            android:theme="@style/AppThemeYellow"/>
         <activity android:name=".ui.scanner.WaresShelfScannerActivity"
-            android:theme="@style/AppThemeRed"/>
+            android:theme="@style/AppThemeYellow"/>
         <activity android:name=".ui.hose.HoseActivity" />
 
         <provider
@@ -42,7 +45,7 @@
 
         <service android:name=".data.service.WaresDownloadService" />
         <service android:name=".data.service.ContractorsDownloadService" />
-        <service android:name=".data.service.SendingService" />
+        <service android:name=".data.service.SendingService" android:foregroundServiceType="dataSync" />
 
         <activity android:name=".ui.orders.OrdersActivity" />
         <activity android:name=".ui.ware_ordering.OrderedWaresActivity" />

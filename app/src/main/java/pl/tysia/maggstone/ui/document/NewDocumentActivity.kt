@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_new_document.*
+import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.data.model.Contractor
@@ -47,7 +48,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
 
         wares_recycler.addItemDecoration(
             pl.tysia.maggstone.ui.RecyclerMarginDecorator(
-                mTopFirst = 16, mBottomLast = 128
+                mTopFirst = 16, mBottomLast = 128, mTop = 8, mBottom = 8
             )
         )
 
@@ -93,7 +94,9 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     }
 
     fun onScanClick(view: View){
-        startActivityForResult(Intent(this, WareScannerActivity::class.java), WARE_REQUEST_CODE)
+        val intent = Intent(this, WareScannerActivity::class.java)
+        intent.putExtra("theme", R.style.AppThemeYellow)
+        startActivityForResult(intent, WARE_REQUEST_CODE)
     }
 
     fun onWareFromListClick(view: View){

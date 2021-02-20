@@ -3,22 +3,17 @@ package pl.tysia.maggstone.ui.picture
 import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.TargetApi
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.IBinder
-import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.util.Base64
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -31,16 +26,13 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_picture_editor.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.SendingService
-import pl.tysia.maggstone.data.service.WaresDownloadService
-import pl.tysia.maggstone.resizeBitmap
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.rotateBitmap
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.presentation_logic.EditPictureView
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -133,10 +125,10 @@ class PictureEditorActivity : AppCompatActivity() {
         if (enabled){
             editor_buttons.visibility = View.VISIBLE
             editor_layout.visibility = View.VISIBLE
-            edit_button.visibility = View.GONE
+            edit_button.visibility = View.INVISIBLE
         }else{
-            editor_buttons.visibility = View.GONE
-            editor_layout.visibility = View.GONE
+            editor_buttons.visibility = View.INVISIBLE
+            editor_layout.visibility = View.INVISIBLE
             edit_button.visibility = View.VISIBLE
 
             //TODO: pozbyć się magicznych cyferek
@@ -201,7 +193,8 @@ class PictureEditorActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arr , 6)
 
         }else{
-            dispatchTakePictureIntent()
+            startActivityForResult(Intent(this@PictureEditorActivity, TakePictureActivity::class.java), REQUEST_TAKE_PHOTO)
+            //dispatchTakePictureIntent()
             //cameraTest()
         }
     }
@@ -222,14 +215,15 @@ class PictureEditorActivity : AppCompatActivity() {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-        return File.createTempFile(
+        val image = File.createTempFile(
             "jpeg_${timeStamp}_", /* prefix */
             ".jpeg", /* suffix */
             storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
-        }
+        )
+        currentPhotoPath = image.absolutePath
+        return image
+
+
     }
 
 
@@ -243,7 +237,7 @@ class PictureEditorActivity : AppCompatActivity() {
                 val photoFile: File? = try {
                     createImageFile()
                 } catch (ex: IOException) {
-                    // Error occurred while creating the File
+                    ex.printStackTrace()
                     null
                 }
                 // Continue only if the File was successfully created
@@ -254,6 +248,7 @@ class PictureEditorActivity : AppCompatActivity() {
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     startActivityForResult(takePictureIntent,
                         REQUEST_TAKE_PHOTO
                     )
@@ -266,7 +261,8 @@ class PictureEditorActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            setProductImageBitmap(currentPhotoPath)
+            val path = data!!.extras!!.getString("Photo_path")
+            setProductImageBitmap(path)
         }
     }
 
