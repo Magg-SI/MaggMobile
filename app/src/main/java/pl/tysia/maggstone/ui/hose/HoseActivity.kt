@@ -65,7 +65,6 @@ class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwn
         sleeve_et.onFocusChange { focused -> if (!focused) viewModel.onSleeveChanged(sleeve_et.text.toString()) }
 
         length_et.afterTextChanged { onFormEdited() }
-        number_et.afterTextChanged { onFormEdited() }
         hose_code_et.afterTextChanged { onFormEdited() }
         twist_angle_et.afterTextChanged { onFormEdited() }
         creator_et.afterTextChanged { onFormEdited() }
@@ -140,7 +139,6 @@ class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwn
     private fun onFormEdited(){
         viewModel.formChanged(
             length_et.text.toString(),
-            number_et.text.toString(),
             hose_code_et.text.toString(),
             twist_angle_et.text.toString(),
             creator_et.text.toString())

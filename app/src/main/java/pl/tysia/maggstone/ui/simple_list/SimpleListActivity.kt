@@ -17,7 +17,9 @@ import java.util.ArrayList
 
 abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable> {
     protected lateinit var adapter : BasicCatalogAdapter
-    private lateinit var filter: StringFilter
+    protected open var filter: StringFilter<*> = StringFilter<ICatalogable>(""){ filteredString, item ->
+        item.title.toLowerCase().contains(filteredString.toLowerCase())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +29,6 @@ abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSele
         adapter = BasicCatalogAdapter(ArrayList())
         adapter.addItemSelectedListener(this)
 
-        filter = StringFilter("")
         adapter.filterer.addFilter(filter)
 
         search_et.afterTextChanged {

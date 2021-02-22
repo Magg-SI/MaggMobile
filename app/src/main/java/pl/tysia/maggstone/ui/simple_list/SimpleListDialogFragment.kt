@@ -31,7 +31,7 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
     private lateinit var progressBar : ProgressBar
 
     private lateinit var adapter : BasicCatalogAdapter
-    private lateinit var filter: StringFilter
+    private lateinit var filter: StringFilter<ICatalogable>
 
     private var title: String? = null
 
@@ -54,7 +54,10 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
         adapter = BasicCatalogAdapter(ArrayList())
         adapter.addItemSelectedListener(this)
 
-        filter = StringFilter("")
+        filter = StringFilter(""){ filteredString, item ->
+            item.title.toLowerCase().contains(filteredString.toLowerCase())
+        }
+
         adapter.filterer.addFilter(filter)
 
         return dialog

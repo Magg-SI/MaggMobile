@@ -14,6 +14,7 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
+import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.presentation_logic.adapter.OrdersAdapter
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import pl.tysia.maggstone.ui.ware_ordering.OrderedWaresActivity
@@ -21,7 +22,7 @@ import java.util.ArrayList
 
 class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<Order>{
     private lateinit var adapter : OrdersAdapter
-    private lateinit var filter: StringFilter
+    private lateinit var filter: StringFilter<ICatalogable>
 
     private lateinit var ordersViewModel: OrdersViewModel
 
@@ -38,7 +39,10 @@ class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<
         adapter.addItemSelectedListener(this)
 
 
-        filter = StringFilter("")
+        filter = StringFilter(""){ filteredString, item ->
+            item.title.toLowerCase().contains(filteredString.toLowerCase())
+        }
+
         adapter.filterer.addFilter(filter)
 
         recycler.adapter = adapter

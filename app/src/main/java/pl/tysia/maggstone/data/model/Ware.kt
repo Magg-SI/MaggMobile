@@ -33,8 +33,11 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     @SerializedName("lokalizacja")
     var location : String? = null
 
-    @SerializedName("cena")
-    var price : String? = null
+    @SerializedName("cenaN")
+    var priceN : String? = null
+
+    @SerializedName("cenaB")
+    var priceB : String? = null
 
     @Ignore
     var availabilities : List<Availability>? = null
@@ -65,12 +68,16 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     }*/
 
     override fun getTitle(): String {
-       return name
+       return index!!
     }
 
     override fun getDescription(): String {
-        return if (!hoseType.isNullOrEmpty()) "Index: ${index}\nFi: $hoseFi"
-        else "Index: $index"
+        val desc = if (!hoseType.isNullOrEmpty()) "Nazwa: ${name}\nFi: $hoseFi"
+        else "Nazwa: $name"
+
+        return desc +
+                "\nCena brutto: $priceB\n" +
+                "Cena netto: $priceN"
     }
 
 

@@ -9,25 +9,25 @@ interface WaresDAO {
     @Query("SELECT max(counter) from ware")
     fun getMaxCounter() : Int
 
-    @Query("SELECT * FROM ware")
+    @Query("SELECT * FROM ware ORDER BY ware.`index`")
     fun getAll(): LiveData<List<Ware>>
 
-    @Query("SELECT * FROM ware WHERE ware.hoseType = '' OR  ware.hoseType = NULL")
+    @Query("SELECT * FROM ware WHERE ware.hoseType = '' OR  ware.hoseType = NULL ORDER BY ware.`index`")
     fun getAllNonHose(): LiveData<List<Ware>>
 
-    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_CORD}'")
+    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_CORD}' ORDER BY ware.`index`")
     fun getAllCords(): LiveData<List<Ware>>
 
-    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_TIP}'")
+    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_TIP}' ORDER BY ware.`index`")
     fun getAllTips(): LiveData<List<Ware>>
 
-    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_TIP}' AND ware.hoseFi = :fi")
+    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_TIP}' AND ware.hoseFi = :fi ORDER BY ware.`index`")
     fun getTipsFor(fi : String): LiveData<List<Ware>>
 
-    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_SLEEVE}'")
+    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_SLEEVE}' ORDER BY ware.`index`")
     fun getAllSleeves(): LiveData<List<Ware>>
 
-    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_SLEEVE}' AND ware.hoseFi = :fi AND hoseIdx LIKE '%'||:hoseIdx||'%' ")
+    @Query("SELECT * FROM ware WHERE ware.hoseType = '${Ware.HOSE_TYPE_SLEEVE}' AND ware.hoseFi = :fi AND hoseIdx LIKE '%'||:hoseIdx||'%' ORDER BY ware.`index`")
     fun getSleevesFor(fi : String, hoseIdx : String): LiveData<List<Ware>>
 
     @Query("SELECT * FROM ware WHERE id = :id")

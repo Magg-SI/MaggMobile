@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_info.*
@@ -53,8 +52,10 @@ class WareInfoActivity : AppCompatActivity() {
         index_tv.text = ware.index
         name_tv.text = ware.name
         location_tv.text = ware.location
-        if (ware.price != null)
-            price_tv.text = ware.price.toString()
+        if (ware.priceN != null && ware.priceB != null)
+            price_tv.text =
+                "Cena netto: ${ware.priceN.toString()}" +
+                    "Cena brutto: ${ware.priceB.toString()}"
 
     }
 

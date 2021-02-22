@@ -13,12 +13,8 @@ class HoseFormState {
     var tip2Valid : Boolean = false
     var sleeveValid : Boolean = false
     var lengthValid : Boolean = false
-    var numberValid : Boolean = false
-    var codeValid : Boolean = false
+    var codeValid : Boolean = true
 
-   /* var lengthError : Int? = null
-    var numberError : Int? = null
-    var codeError : Int? = null*/
 
     fun isFormValid():Boolean{
         return  cordError == null &&
@@ -29,7 +25,7 @@ class HoseFormState {
                 tip2Valid &&
                 sleeveError == null &&
                 sleeveValid &&
-                lengthValid && numberValid && codeValid
+                lengthValid && codeValid
     }
 
 }

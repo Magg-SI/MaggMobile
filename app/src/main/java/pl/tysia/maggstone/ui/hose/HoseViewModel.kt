@@ -27,21 +27,14 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
     private val hoseFormState =  HoseFormState()
     val hose =  Hose()
 
-    fun formChanged(length : String, number : String, code: String, angle : String, creator : String){
+    fun formChanged(length : String, code: String, angle : String, creator : String){
         if (!length.isBlank()) {
             hose.length = length.toInt()
         }
-        if (!number.isBlank()) {
-            hose.number = number.toInt()
-        }
-        if (!code.isBlank()) {
-            hose.code = code
-        }
 
-        hoseFormState.codeValid = code.isNotBlank()
-        hoseFormState.numberValid = number.isNotBlank()
         hoseFormState.lengthValid = length.isNotBlank()
 
+        hose.code = code
         hose.angle = angle
         hose.creator = creator
 

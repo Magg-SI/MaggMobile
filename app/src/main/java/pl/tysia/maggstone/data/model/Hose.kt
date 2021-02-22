@@ -9,7 +9,6 @@ class Hose : ICatalogable, Serializable {
     var tip2 : Ware? = null
     var sleeve : Ware? = null
     var length : Int? = null
-    var number : Int? = null
     var code : String? = null
     var angle : String? = null
     var creator : String? = null

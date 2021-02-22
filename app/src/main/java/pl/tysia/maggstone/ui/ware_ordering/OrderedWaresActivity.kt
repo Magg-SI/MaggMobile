@@ -25,6 +25,7 @@ import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.orders.OrderedWaresViewModel
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
+import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.presentation_logic.adapter.OrderedItemsAdapter
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
@@ -35,7 +36,7 @@ import java.util.ArrayList
 class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedListener<Ware>,
     TextWatcher {
     private lateinit var adapter:  OrderedItemsAdapter
-    private var filter: StringFilter? = null
+    private var filter: StringFilter<ICatalogable>? = null
 
     private lateinit var recyclerView: RecyclerView
 
@@ -68,7 +69,10 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         adapter.addItemSelectedListener(this)
 
         val filterer = adapter.filterer
-        filter = StringFilter(null)
+        filter = StringFilter(null){ filteredString, item ->
+            item.title.toLowerCase().contains(filteredString.toLowerCase())
+        }
+
         filterer.addFilter(filter!!)
 
         recyclerView = findViewById(R.id.wares_recycler)

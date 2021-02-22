@@ -42,9 +42,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:padding="8dp"
-            android:text="TextView"
+            android:text="This is the path that is defined in the TMDB api for getting popular movies. After that we create a function called getmovies that we will return a call object containing data which is in the form of PopulaMovies object of the PopulaMovies"
             android:textColor="@color/lightGray"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/less_button"
@@ -64,8 +64,10 @@
             android:selectAllOnFocus="false"
             android:textColor="@color/lightGray"
             android:textColorHint="@color/hintGray"
+            app:layout_constraintBottom_toBottomOf="@+id/description_tv"
             app:layout_constraintEnd_toStartOf="@+id/more_button"
-            app:layout_constraintTop_toTopOf="@+id/description_tv" />
+            app:layout_constraintTop_toTopOf="@+id/description_tv"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/less_button"

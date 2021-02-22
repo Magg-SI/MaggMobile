@@ -12,19 +12,17 @@ import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.RecyclerMarginDecorator
 import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
+import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 
 class WareListActivity : SimpleListActivity() {
+    override var filter : StringFilter<*> = StringFilter<Ware>(""){ filteredString, item ->
+        item.title.toLowerCase().contains(filteredString.toLowerCase()) ||
+        item.index!!.toLowerCase().contains(filteredString.toLowerCase())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-/*
-        ok_button.setOnClickListener {
-            val returnIntent = Intent()
-            returnIntent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
-            setResult(Activity.RESULT_OK, returnIntent)
-            finish()
-        }
-*/
 
         val db = Room.databaseBuilder(
             this,
