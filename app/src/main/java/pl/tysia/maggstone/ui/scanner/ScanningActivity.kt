@@ -33,8 +33,11 @@ abstract class ScanningActivity : AppCompatActivity(),  ImageAnalysis.Analyzer {
     private var scanOnDemand = false
     private var isScanning = false
 
+    protected var lastValue : Barcode? = null
+
     abstract fun setContentView()
     abstract fun onSuccess(barcode : Barcode)
+    abstract fun isValid(barcode : Barcode) : Boolean
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val theme = intent.getIntExtra("theme", -1)
@@ -107,10 +110,11 @@ abstract class ScanningActivity : AppCompatActivity(),  ImageAnalysis.Analyzer {
                         code_view.text = "Znaleziono więcej niż jeden kod"
                     }
                     else if (barcodes.size == 1) {
-                        code_view.text = barcodes[0].rawValue
-                        if (isScanning || !scanOnDemand) {
-                            onSuccess(barcodes[0])
-
+                        val barcode = barcodes[0]
+                        code_view.text = barcode.rawValue
+                        if ((isScanning || !scanOnDemand) && isValid(barcode)) {
+                            onSuccess(barcode)
+                            lastValue = barcode
                             isScanning = false
                         }
                     }

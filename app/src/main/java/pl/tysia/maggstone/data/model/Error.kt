@@ -44,7 +44,17 @@ class Error(val type : Int, val source : String, val errorName : String, val cau
         return cause
     }
 
+    override fun getAdditionalInfo() = null
+
+    override fun getFilteredValue(): String {
+        return source + errorName + cause
+    }
+
     override fun getTitle(): String {
+        return ""
+    }
+
+    override fun getSubtitle(): String {
         return errorName
     }
 }

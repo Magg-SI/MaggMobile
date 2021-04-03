@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_info.*
 import pl.tysia.maggstone.ui.picture.PictureEditorActivity
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
@@ -25,7 +26,6 @@ class WareInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ware_info)
-
 
         viewModel = ViewModelProvider(this, ViewModelFactory(this))
             .get(WareInfoViewModel::class.java)

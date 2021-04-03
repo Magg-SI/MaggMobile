@@ -39,8 +39,8 @@ class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<
         adapter.addItemSelectedListener(this)
 
 
-        filter = StringFilter(""){ filteredString, item ->
-            item.title.toLowerCase().contains(filteredString.toLowerCase())
+        filter = StringFilter(null){ filteredStrings, item ->
+            filteredStrings.count { item.getFilteredValue()!!.toLowerCase().contains(it.toLowerCase()) }
         }
 
         adapter.filterer.addFilter(filter)
@@ -63,7 +63,7 @@ class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<
         ).user!!.token)
     }
 
-    override fun onItemSelected(item: Order?) {
+    override fun onItemSelected(item: Order) {
         val intent = Intent(this, OrderedWaresActivity::class.java)
         intent.putExtra(Order.ORDER_EXTRA, item)
         startActivity(intent)

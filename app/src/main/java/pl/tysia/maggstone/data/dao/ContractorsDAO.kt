@@ -7,7 +7,7 @@ import pl.tysia.maggstone.data.model.Ware
 
 @Dao
 interface ContractorsDAO {
-    @Query("SELECT * FROM contractor ORDER BY contractor.name")
+    @Query("SELECT * FROM contractor ORDER BY contractor.`index`")
     fun getAll(): LiveData<List<Contractor>>
 
     @Query("SELECT max(counter) from contractor")

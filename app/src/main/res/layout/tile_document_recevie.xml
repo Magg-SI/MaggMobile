@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="124dp"
+    android:layout_height="124dp"
+    android:background="@drawable/list_item_gradient_blue"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tint="@color/selectionGray"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_round_receive" />
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="0"
+        android:gravity="center"
+        android:text="Przyjęcie"
+        android:textColor="@color/selectionGray"
+        android:textSize="16sp" />
+</LinearLayout>

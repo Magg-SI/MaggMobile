@@ -26,7 +26,7 @@ class WaresShelfScannerViewModel(val dataSource: ShelfDataSource) : ViewModel() 
                val result = dataSource.addToShelf(wareQr, shelfQr, token)
 
                if (result is Result.Success) {
-                   _locationResult.postValue(wareQr)
+                   _locationResult.postValue(result.data)
                } else if (result is Result.Error) {
                    _locationError.postValue(result.exception.message)
                }

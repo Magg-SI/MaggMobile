@@ -43,6 +43,16 @@ class QueueItem(val name : String, val index : String, val wareID : Int, val pho
     }
 
     override fun getTitle(): String = index
+    override fun getSubtitle(): String {
+        return ""
+    }
+
     override fun getDescription(): String = name
+
+    override fun getAdditionalInfo() = null
+
+    override fun getFilteredValue(): String {
+        return name+index+wareID
+    }
 }
 

@@ -1,9 +1,9 @@
 package pl.tysia.maggstone.ui.simple_list
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_new_document.*
 import kotlinx.android.synthetic.main.basic_catalog_layout.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.ui.RecyclerMarginDecorator
@@ -17,8 +17,8 @@ import java.util.ArrayList
 
 abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable> {
     protected lateinit var adapter : BasicCatalogAdapter
-    protected open var filter: StringFilter<*> = StringFilter<ICatalogable>(""){ filteredString, item ->
-        item.title.toLowerCase().contains(filteredString.toLowerCase())
+    protected open var filter: StringFilter<ICatalogable> = StringFilter<ICatalogable>(null){ filteredStrings, item ->
+        filteredStrings.count { item.getTitle()!!.toLowerCase().contains(it.toLowerCase()) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +26,15 @@ abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSele
 
         setContentView(R.layout.basic_catalog_layout)
 
+
         adapter = BasicCatalogAdapter(ArrayList())
+
         adapter.addItemSelectedListener(this)
 
         adapter.filterer.addFilter(filter)
 
         search_et.afterTextChanged {
-            filter.filteredString = search_et.text.toString()
+            filter.filteredStrings = search_et.text.toString().split(" ")
             adapter.filter()
             adapter.notifyDataSetChanged()
         }
@@ -42,13 +44,17 @@ abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSele
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
 
-        recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 128, mBottomLast = 64))
+        recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 150, mBottomLast = 64))
 
     }
 
-/*    override fun onItemSelected(item: ICatalogable?) {
-        ok_button.isEnabled = true
-    }*/
+    protected fun showProgress(show : Boolean){
+        if (show){
+            progressBar4.visibility = View.VISIBLE
+        }else{
+            progressBar4.visibility = View.GONE
+        }
+    }
 
 }
 

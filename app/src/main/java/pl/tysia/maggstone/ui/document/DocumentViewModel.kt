@@ -36,4 +36,22 @@ class DocumentViewModel(val dataSource : DocumentsDataSource) : ViewModel() {
 
         }
     }
+
+    fun sendShiftDocument(token: String, id : Int, items : List<DocumentItem>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = dataSource.sendShiftDocument(token, id, items)
+
+                if (result is Result.Success) {
+                    _documentsResult.postValue(R.string.correct_document_send)
+                } else {
+                    _documentsError.postValue((result as Result.Error).exception.message)
+                }
+            }catch (e : IOException){
+                _documentsError.postValue("Brak połączenia z internetem.")
+
+            }
+
+        }
+    }
 }

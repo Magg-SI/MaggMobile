@@ -2,7 +2,7 @@ package pl.tysia.maggstone.ui.presentation_logic.filterer
 
 import java.util.*
 
-abstract class Filterer<T : IFilterable>(var basicList: ArrayList<T>, var filteredList: ArrayList<T>) {
+abstract class Filterer<T : IFilterable>(var basicList: MutableList<T>, var filteredList: MutableList<T>) {
 
     private var filters: LinkedList<Filter<T>> = LinkedList()
 
@@ -20,12 +20,13 @@ abstract class Filterer<T : IFilterable>(var basicList: ArrayList<T>, var filter
         filter()
     }
 
-    fun filter(): ArrayList<T> {
+    fun filter() {
         filteredList.clear()
 
-        if (filters.isEmpty())
+        if (filters.isEmpty()) {
             filteredList.addAll(basicList)
-        else
+        }
+        else {
             for (filterable in basicList) {
                 var fits = true
 
@@ -39,7 +40,6 @@ abstract class Filterer<T : IFilterable>(var basicList: ArrayList<T>, var filter
                     filteredList.add(filterable)
 
             }
-
-        return filteredList
+        }
     }
 }

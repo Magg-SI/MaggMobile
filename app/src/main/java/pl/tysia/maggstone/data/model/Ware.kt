@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 import pl.tysia.maggstone.data.api.model.APIResponse
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
+import java.lang.StringBuilder
 
 @Entity
 open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICatalogable, APIResponse() {
@@ -24,7 +25,7 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     @SerializedName("licznikVer")
     var counter : Int? = null
 
-    @SerializedName("kodQR ")
+    @SerializedName("kodQR")
     var qrCode : String? = null
 
     @SerializedName("indeks")
@@ -57,29 +58,44 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     @SerializedName("wazIdx")
     var hoseIdx : String? = null
 
-/*    constructor(qrCode : String, id : Int, index : String, name: String, hasPhoto : Boolean,  location : String, price : Double) : this(name){
-        this.qrCode = qrCode
-        this.id = id
-        this.index = index
-        this.location = location
-        this.price = price
-
-        this.hasPhoto = hasPhoto
-    }*/
 
     override fun getTitle(): String {
-       return index!!
+        val sb = StringBuilder()
+
+        sb.append(index)
+
+        if (location != null){
+            sb.append(" - ")
+            sb.append(location)
+        }
+
+       return sb.toString()
+    }
+
+    override fun getSubtitle(): String {
+        return if (!hoseType.isNullOrEmpty()) "${name}, Fi: $hoseFi"
+        else name
     }
 
     override fun getDescription(): String {
-        val desc = if (!hoseType.isNullOrEmpty()) "Nazwa: ${name}\nFi: $hoseFi"
-        else "Nazwa: $name"
+        val sb = StringBuilder()
 
-        return desc +
-                "\nCena brutto: $priceB\n" +
-                "Cena netto: $priceN"
+        if (priceB != null){
+            sb.append("\nCena brutto: $priceB\n")
+        }
+
+        if (priceN != null){
+            sb.append("\nCena netto: $priceN\n")
+        }
+
+        return sb.toString()
     }
 
+    override fun getAdditionalInfo() = location
+
+    override fun getFilteredValue(): String {
+        return name+location+index
+    }
 
 
 }

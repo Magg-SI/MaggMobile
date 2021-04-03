@@ -32,7 +32,7 @@ class ShelfDataSource(netAddressManager: NetAddressManager) : APISource(netAddre
         }
     }
 
-    fun addToShelf(wareQr: String, shelfQr : String, token: String) : Result<Boolean> {
+    fun addToShelf(wareQr: String, shelfQr : String, token: String) : Result<String> {
         val service = retrofit.create(ShelfService::class.java)
 
         val result = service.addToShelf(
@@ -40,7 +40,7 @@ class ShelfDataSource(netAddressManager: NetAddressManager) : APISource(netAddre
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
-            Result.Success(true)
+            Result.Success(result.body()!!.index!!)
         }else{
             Result.Error(Exception(result.body()!!.retMessage))
         }

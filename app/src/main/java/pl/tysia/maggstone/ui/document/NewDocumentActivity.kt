@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.data.model.Contractor
@@ -29,14 +30,20 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 
 
-private const val WARE_REQUEST_CODE  = 1337
-private const val HOSE_REQUEST_CODE  = 1338
-private const val CONTRACTOR_REQUEST_CODE  = 842
-
 abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyListListener {
-    private var contractor : Contractor? = null
-    private lateinit var adapter : DocumentAdapter<DocumentItem>
-    private lateinit var viewModel: DocumentViewModel
+    protected lateinit var adapter : DocumentAdapter<DocumentItem>
+    protected lateinit var viewModel: DocumentViewModel
+
+    companion object{
+        private const val WARE_REQUEST_CODE  = 1337
+        private const val HOSE_REQUEST_CODE  = 1338
+        const val CONTRACTOR_REQUEST_CODE  = 842
+        const val WAREHOUSE_REQUEST_CODE  = 842
+    }
+
+    abstract fun save()
+    abstract fun onSearch()
+    abstract fun saveAllowed() : Boolean
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,12 +92,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     }
 
     fun onSaveClick(view: View){
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this@NewDocumentActivity
-        ).user!!.token
-
-        viewModel.sendDocument(token, contractor!!.id, adapter.allItems)
+       save()
     }
 
     fun onScanClick(view: View){
@@ -100,11 +102,13 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     }
 
     fun onWareFromListClick(view: View){
-        startActivityForResult(Intent(this, WareListActivity::class.java), WARE_REQUEST_CODE)
+        val intent = Intent(this, WareListActivity::class.java)
+        intent.putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.SELECT)
+        startActivityForResult(intent, WARE_REQUEST_CODE)
     }
 
-    private fun checkIfSaveAllowed(){
-        save_button.isEnabled = contractor != null && adapter.allItems.isNotEmpty()
+    protected fun checkIfSaveAllowed(){
+        save_button.isEnabled = saveAllowed()
     }
 
     fun onHoseClicked(view: View) {
@@ -125,9 +129,6 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
             adapter.addItem(DocumentItem(ware))
             adapter.filter()
             adapter.notifyDataSetChanged()
-        } else if (requestCode == CONTRACTOR_REQUEST_CODE && resultCode == Activity.RESULT_OK ){
-            contractor = data!!.getSerializableExtra(Contractor.CONTRACTOR_EXTRA) as Contractor
-            contractor_tv.text = contractor!!.name
         } else if (requestCode == HOSE_REQUEST_CODE && resultCode == Activity.RESULT_OK ){
             val hose = data!!.getSerializableExtra(Hose.HOSE_EXTRA) as Hose
             adapter.addItem(DocumentItem(hose))
@@ -139,14 +140,13 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     }
 
     fun onContractorSelectClick(view : View) {
-        startActivityForResult(Intent(this, ContractorListActivity::class.java), CONTRACTOR_REQUEST_CODE)
+        onSearch()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putSerializable("items", adapter.allItems)
-        outState.putSerializable("contractor", contractor)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -155,12 +155,6 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
         adapter.addAll(savedInstanceState.get("items") as List<DocumentItem>)
         adapter.filter()
         adapter.notifyDataSetChanged()
-
-        val contractor = savedInstanceState.get("contractor")
-        if (contractor != null){
-            this.contractor = contractor as Contractor
-            contractor_tv.text = this.contractor!!.name
-        }
     }
 
 }

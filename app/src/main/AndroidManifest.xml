@@ -28,9 +28,9 @@
         <activity android:name=".ui.picture.TakePictureActivity" />
         <activity android:name=".ui.SendingStateActivity" />
         <activity android:name=".ui.scanner.ShelfScannerActivity"
-            android:theme="@style/AppThemeYellow"/>
+            android:theme="@style/AppTheme"/>
         <activity android:name=".ui.scanner.WaresShelfScannerActivity"
-            android:theme="@style/AppThemeYellow"/>
+            android:theme="@style/AppTheme"/>
         <activity android:name=".ui.hose.HoseActivity" />
 
         <provider
@@ -61,6 +61,12 @@
             android:theme="@style/AppThemeOrange" />
         <activity
             android:name=".ui.contractors.ContractorListActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity
+            android:name=".ui.document.NewShiftDocumentActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity
+            android:name=".ui.warehouses.WarehousesListActivity"
             android:theme="@style/AppThemeBlue" />
         <activity
             android:name=".ui.document.BasicNewDocumentActivity"

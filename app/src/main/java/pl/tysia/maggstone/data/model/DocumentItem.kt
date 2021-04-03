@@ -11,7 +11,7 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
         return when (item) {
             is Hose -> item.cord!!.name
             is Ware -> item.name
-            else -> item.description
+            else -> item.getDescription()
         }
     }
 
@@ -19,8 +19,12 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
         return when (item) {
             is Hose -> item.cord!!.index!!
             is Ware -> item.index!!
-            else -> item.title
+            else -> item.getTitle()
         }
+    }
+
+    override fun getSubtitle(): String {
+        return ""
     }
 
     override fun getDescription(): String {
@@ -32,9 +36,16 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
                         "Cena brutto: ${item.priceB}\n" +
                         "Cena netto: ${item.priceN}"
 
-            is Ware -> item.description
-            else -> item.description
+            is Ware -> item.getDescription()
+            else -> item.getDescription()
         }
     }
+
+    override fun getAdditionalInfo() = null
+
+    override fun getFilteredValue(): String {
+        return item.getFilteredValue()
+    }
+
 
 }

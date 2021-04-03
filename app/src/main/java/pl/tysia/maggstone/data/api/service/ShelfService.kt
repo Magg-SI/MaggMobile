@@ -15,5 +15,5 @@ interface ShelfService {
 
 
     @POST("json.aspx")
-    fun addToShelf(@Body body : ChangeWareLocationRequest) : Call<APIResponse>
+    fun addToShelf(@Body body : ChangeWareLocationRequest) : Call<APIResponse.LocationChange>
 }

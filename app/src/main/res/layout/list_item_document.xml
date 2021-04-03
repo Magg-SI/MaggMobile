@@ -13,7 +13,7 @@
         android:background="@drawable/list_item_background">
 
         <ImageView
-            android:id="@+id/check_image2"
+            android:id="@+id/check_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:foregroundGravity="right"
@@ -33,12 +33,12 @@
             android:textColor="?colorAccent"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/description_tv"
+            app:layout_constraintEnd_toEndOf="@+id/subtitle_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/description_tv"
+            android:id="@+id/subtitle_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -64,9 +64,9 @@
             android:selectAllOnFocus="false"
             android:textColor="@color/lightGray"
             android:textColorHint="@color/hintGray"
-            app:layout_constraintBottom_toBottomOf="@+id/description_tv"
+            app:layout_constraintBottom_toBottomOf="@+id/subtitle_tv"
             app:layout_constraintEnd_toStartOf="@+id/more_button"
-            app:layout_constraintTop_toTopOf="@+id/description_tv"
+            app:layout_constraintTop_toTopOf="@+id/subtitle_tv"
             app:layout_constraintVertical_bias="1.0" />
 
         <ImageView

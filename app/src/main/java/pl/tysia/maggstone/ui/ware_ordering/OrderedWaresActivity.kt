@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Order
+import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.orders.OrderedWaresViewModel
@@ -33,7 +35,7 @@ import java.util.ArrayList
 
 
 
-class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedListener<Ware>,
+class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedListener<OrderedWare>,
     TextWatcher {
     private lateinit var adapter:  OrderedItemsAdapter
     private var filter: StringFilter<ICatalogable>? = null
@@ -69,8 +71,8 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         adapter.addItemSelectedListener(this)
 
         val filterer = adapter.filterer
-        filter = StringFilter(null){ filteredString, item ->
-            item.title.toLowerCase().contains(filteredString.toLowerCase())
+        filter = StringFilter(null){ filteredStrings, item ->
+            filteredStrings.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase()) }
         }
 
         filterer.addFilter(filter!!)
@@ -82,8 +84,8 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
 
-        order_desc_tv.text = order.description
-        order_title_tv.text = order.title
+        order_desc_tv.text = order.getDescription()
+        order_title_tv.text = order.getTitle()
 
         orderedWaresViewModel.wares.observe(this@OrderedWaresActivity, Observer {
             adapter.allItems.addAll(it)
@@ -99,7 +101,7 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         showProgress(true)
     }
 
-    override fun onItemSelected(item: Ware?) {
+    override fun onItemSelected(item: OrderedWare) {
         val intent = Intent(this@OrderedWaresActivity, WareOrderingActivity::class.java)
         intent.putExtra(Ware.WARE_EXTRA, item)
         startActivityForResult(intent,
@@ -116,13 +118,13 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
     }
 
     override fun afterTextChanged(s: Editable) {
-        filter?.filteredString = s.toString()
+        filter?.filteredStrings = s.toString().split(" ")
         adapter.filter()
         adapter.notifyDataSetChanged()
 
     }
 
-    public fun onScanWareClicked(view: View){
+    fun onScanWareClicked(view: View){
         val intent = Intent(this, WareScannerActivity::class.java)
         startActivityForResult(intent,
             WARE_REQUEST_CODE
@@ -135,12 +137,16 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
         if (resultCode == Activity.RESULT_OK && requestCode == WARE_REQUEST_CODE){
             val ware = data!!.getSerializableExtra(Ware.WARE_EXTRA) as Ware
 
-            adapter.allItems.forEach { orderedWare ->
-                if (orderedWare.qrCode == ware.qrCode)
-                    onItemSelected(orderedWare)
-            }
+            val foundWare = adapter.allItems.firstOrNull { it.qrCode == ware.qrCode }
+
+            if (foundWare != null)
+                onItemSelected(foundWare)
+            else
+                Toast.makeText(this, "Nie znaleziono takiego towaru na liście" , Toast.LENGTH_LONG)
+
         }else if (resultCode == Activity.RESULT_OK && requestCode == PACK_REQUEST){
-            adapter.selectedItem.packed = true
+            val ware = data!!.getSerializableExtra(Ware.WARE_EXTRA) as OrderedWare
+            adapter.selectedItem!!.copyNumbers(ware)
             adapter.notifyDataSetChanged()
 
         }

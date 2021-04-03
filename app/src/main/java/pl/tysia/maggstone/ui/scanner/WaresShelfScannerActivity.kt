@@ -17,6 +17,12 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.ViewModelFactory
 class WaresShelfScannerActivity : ScanningActivity() {
+    companion object{
+        const val SHELF_EXTRA = "pl.tysia.maggstone.shelf_extra"
+        const val BARCODE_PREFIX = "250"
+        const val BARCODE_LENGTH = 9
+    }
+
     override fun setContentView() {
         setContentView(R.layout.activity_products_scanner)
 
@@ -33,13 +39,18 @@ class WaresShelfScannerActivity : ScanningActivity() {
         viewModel.changeLocation(code, shelf, token)
     }
 
+    override fun isValid(barcode: Barcode): Boolean {
+        return barcode.rawValue != null
+                && barcode.rawValue.startsWith(BARCODE_PREFIX)
+                && barcode.rawValue.length == BARCODE_LENGTH
+                && (lastValue == null
+                || lastValue!= null && lastValue!!.rawValue != barcode.rawValue)
+    }
+
     private lateinit var shelf: String
 
     private lateinit var viewModel : WaresShelfScannerViewModel
 
-    companion object{
-        const val SHELF_EXTRA = "pl.tysia.maggstone.shelf_extra"
-    }
 
     public override fun onCreate(state: Bundle?) {
         super.onCreate(state)

@@ -13,6 +13,14 @@
         android:background="@drawable/list_item_background"
         android:elevation="3dp">
 
+        <ImageView
+            android:id="@+id/stateImage2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintBottom_toBottomOf="@+id/subtitle_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title_tv" />
+
         <TextView
             android:id="@+id/title_tv"
             style="@style/Widget.AppCompat.TextView"
@@ -21,15 +29,15 @@
             android:enabled="true"
             android:padding="8dp"
             android:text="TextView"
-            android:textColor="@color/text_accent_color"
+            android:textColor="@color/lightGray"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/stateImage2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/description_tv"
+            android:id="@+id/subtitle_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:enabled="true"
@@ -37,21 +45,9 @@
             android:text="TextView"
             android:textColor="@color/selectionGray"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/stateImage2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_tv" />
-
-        <ImageView
-            android:id="@+id/check_image"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:foregroundGravity="right"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/round_check_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -58,7 +58,7 @@ class ErrorsActivity : AppCompatActivity(), ErrorsAdapter.ErrorsListener {
         ).build()
 
         adapter = ErrorsAdapter(ArrayList())
-        adapter.setListener(this)
+        adapter.listener = this
 
         recyclerView.adapter = adapter
 

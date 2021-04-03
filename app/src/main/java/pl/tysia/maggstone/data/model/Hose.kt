@@ -24,6 +24,10 @@ class Hose : ICatalogable, Serializable {
 
     override fun getTitle(): String = name!!
 
+    override fun getSubtitle(): String {
+        return ""
+    }
+
     override fun getDescription(): String{
         return "Wąż: ${cord!!.index}\n" +
                 "Końcówki: ${tip1!!.index} / ${tip2!!.index}\n" +
@@ -31,4 +35,8 @@ class Hose : ICatalogable, Serializable {
                 "Długość: ${length}\n" +
                 "Kod węża: ${code}"
     }
+
+    override fun getAdditionalInfo() = null
+
+    override fun getFilteredValue(): String = name!!
 }

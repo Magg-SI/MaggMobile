@@ -18,22 +18,35 @@ import pl.tysia.maggstone.ui.ViewModelFactory
 
 
 class ShelfScannerActivity : ScanningActivity() {
+    companion object{
+        const val BARCODE_PREFIX = "206-"
+        const val BARCODE_LENGTH = 8
+    }
+
     private lateinit var viewModel: ShelfScannerViewModel
 
     override fun setContentView() {
         setContentView(R.layout.activity_shelf_scanner)
     }
 
+    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun onSuccess(barcode: Barcode) {
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this@ShelfScannerActivity)),
-            this@ShelfScannerActivity
-        ).user!!.token
 
-        qrCode = barcode.rawValue
-        showSendingState(true)
-        viewModel.testShelf(qrCode!!, token)
+            val token = LoginRepository(
+                LoginDataSource(NetAddressManager(this@ShelfScannerActivity)),
+                this@ShelfScannerActivity
+            ).user!!.token
 
+            qrCode = barcode.rawValue
+            showSendingState(true)
+            viewModel.testShelf(qrCode!!, token)
+
+    }
+
+    override fun isValid(barcode: Barcode): Boolean {
+        return barcode.rawValue != null
+                && barcode.rawValue.startsWith(BARCODE_PREFIX)
+                && barcode.rawValue.length == BARCODE_LENGTH
     }
 
     private var qrCode : String? = null

@@ -54,8 +54,8 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
         adapter = BasicCatalogAdapter(ArrayList())
         adapter.addItemSelectedListener(this)
 
-        filter = StringFilter(""){ filteredString, item ->
-            item.title.toLowerCase().contains(filteredString.toLowerCase())
+        filter = StringFilter(null){ filteredStrings, item ->
+            filteredStrings.count { item.getFilteredValue()!!.toLowerCase().contains(it.toLowerCase()) }
         }
 
         adapter.filterer.addFilter(filter)
@@ -74,7 +74,7 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
             progressBar = it.findViewById(R.id.progressBar2)
 
             searchET.afterTextChanged {
-                filter.filteredString = searchET.text.toString()
+                filter.filteredStrings = searchET.text.toString().split(" ")
                 adapter.filter()
                 adapter.notifyDataSetChanged()
             }
@@ -111,8 +111,8 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
         })
     }
 
-    override fun onItemSelected(item: ICatalogable?) {
-        owner.onItemSelected(adapter.selectedItem, tag!!)
+    override fun onItemSelected(item: ICatalogable) {
+        owner.onItemSelected(item, tag!!)
         dismiss()
     }
 

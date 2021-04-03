@@ -15,7 +15,13 @@ import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.wares.WareViewModel
 
+
 class WareScannerActivity : ScanningActivity() {
+    companion object{
+        const val BARCODE_PREFIX = "250"
+        const val BARCODE_LENGTH = 9
+    }
+
     private lateinit var viewModel : WareViewModel
 
     override fun setContentView() {
@@ -32,6 +38,14 @@ class WareScannerActivity : ScanningActivity() {
 
         viewModel.getWare(code, token)
         showSendingState(true)
+    }
+
+    override fun isValid(barcode: Barcode): Boolean {
+        return barcode.rawValue != null
+                && barcode.rawValue.startsWith(BARCODE_PREFIX)
+                && barcode.rawValue.length == BARCODE_LENGTH
+                && (lastValue == null
+                || lastValue!= null && lastValue!!.rawValue != barcode.rawValue)
     }
 
     override fun onCreate(state: Bundle?) {

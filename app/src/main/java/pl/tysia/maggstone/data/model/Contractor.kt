@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
+import java.lang.StringBuilder
 
 @Entity
 data class Contractor(@SerializedName("ktrID") @PrimaryKey var id : Int,
@@ -26,8 +27,31 @@ data class Contractor(@SerializedName("ktrID") @PrimaryKey var id : Int,
         return index
     }
 
+    override fun getSubtitle(): String {
+        return if (name != null) name!! else ""
+    }
+
     override fun getDescription(): String {
-       return if (name != null) name!! else ""
+        val sb = StringBuilder()
+
+        if (address != null){
+            sb.append("\nAdres: ")
+            sb.append(address)
+        }
+
+        if (nip != null){
+            sb.append("\nNIP: ")
+            sb.append(nip)
+        }
+
+
+        return sb.toString()
+    }
+
+    override fun getAdditionalInfo(): String? = null
+
+    override fun getFilteredValue(): String {
+        return index + name + address + nip
     }
 
 

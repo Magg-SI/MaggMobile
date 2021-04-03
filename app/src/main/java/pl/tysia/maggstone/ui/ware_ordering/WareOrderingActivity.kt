@@ -16,15 +16,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_ordering.*
-import kotlinx.android.synthetic.main.activity_ware_ordering.form
-import kotlinx.android.synthetic.main.activity_ware_ordering.progressBar
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.model.Contractor
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.ViewModelFactory
 
 class WareOrderingActivity : AppCompatActivity(), TextWatcher {
@@ -35,7 +32,7 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ware_ordering)
+        setContentView(R.layout.activity_ware_packing)
 
         orderedWare = intent.getSerializableExtra(Ware.WARE_EXTRA) as OrderedWare
 
@@ -46,6 +43,7 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
 
         wareOrderingViewModel.packResult.observe(this@WareOrderingActivity, Observer {
             val returnIntent = Intent()
+            returnIntent.putExtra(Ware.WARE_EXTRA, orderedWare)
             setResult(Activity.RESULT_OK, returnIntent)
             showProgress(false)
             finish()
@@ -60,17 +58,48 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun displayWare(){
-
         index_tv.text = orderedWare.index
         name_tv.text = orderedWare.name
         location_tv.text = orderedWare.location
 
-        ordered_tv.text = orderedWare.orderedNumber.toString()
-        available_tv.text = orderedWare.availability.toString()
+        var orderedNumber = orderedWare.orderedNumber
+        if (isInteger(orderedNumber)){
+            ordered_tv.setText(orderedNumber.toInt().toString())
+        }else{
+            ordered_tv.setText(orderedNumber.toString())
+        }
 
-        cancelled_et.setText(orderedWare.cancelledNumber.toString())
-        packed_et.setText(orderedWare.packedNumber.toString())
-        next_et.setText(orderedWare.postponedNumber.toString())
+        var availability = orderedWare.availability!!
+        if (isInteger(availability)){
+            available_tv.setText(availability.toInt().toString())
+        }else{
+            available_tv.setText(availability.toString())
+        }
+
+        var cancelledNumber = orderedWare.cancelledNumber
+        if (isInteger(cancelledNumber)){
+            cancelled_et.setText(cancelledNumber.toInt().toString())
+        }else{
+            cancelled_et.setText(cancelledNumber.toString())
+        }
+
+        var packedNumber = orderedWare.packedNumber
+        if (isInteger(packedNumber)){
+            packed_et.setText(packedNumber.toInt().toString())
+        }else{
+            packed_et.setText(packedNumber.toString())
+        }
+
+        var postponedNumber = orderedWare.postponedNumber
+        if (isInteger(postponedNumber)){
+            next_et.setText(postponedNumber.toInt().toString())
+        }else{
+            next_et.setText(postponedNumber.toString())
+        }
+    }
+
+    private fun isInteger(number: Double): Boolean {
+        return number % 1 == 0.0
     }
 
     override fun afterTextChanged(s: Editable?) {
@@ -97,22 +126,27 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
     }
 
     fun onPackAllClicked(view: View){
-        packed_et.setText(orderedWare.orderedNumber.toString())
-        cancelled_et.setText(0.toString())
-        next_et.setText(0.toString())
+        orderedWare.packedNumber = orderedWare.orderedNumber
+        orderedWare.cancelledNumber = 0.0
+        orderedWare.postponedNumber = 0.0
+
+        displayWare()
 
     }
     fun onOrderAllClicked(view: View){
-        next_et.setText(orderedWare.orderedNumber.toString())
-        packed_et.setText(0.toString())
-        cancelled_et.setText(0.toString())
+        orderedWare.postponedNumber = orderedWare.orderedNumber
+        orderedWare.cancelledNumber = 0.0
+        orderedWare.packedNumber = 0.0
 
+        displayWare()
     }
-    fun onCancelAllClicked(view: View){
-        cancelled_et.setText(orderedWare.orderedNumber.toString())
-        packed_et.setText(0.toString())
-        next_et.setText(0.toString())
 
+    fun onCancelAllClicked(view: View){
+        orderedWare.cancelledNumber = orderedWare.orderedNumber
+        orderedWare.packedNumber = 0.0
+        orderedWare.postponedNumber = 0.0
+
+        displayWare()
     }
 
     fun onFinishClicked(view: View){

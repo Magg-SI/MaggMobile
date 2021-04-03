@@ -27,6 +27,11 @@ open class APIResponse {
         var wares : ArrayList<OrderedWare>? = null
     }
 
+    class Warehouses : APIResponse() {
+        @SerializedName("lista")
+        var warehouses  : ArrayList<Warehouse>? = null
+    }
+
     class WaresPage : APIResponse() {
         @SerializedName("lista")
         var list : ArrayList<Ware>? = null
@@ -49,6 +54,12 @@ open class APIResponse {
     class Picture : APIResponse(){
         @SerializedName("foto")
         var picture: String? = null
+    }
+
+
+    class LocationChange : APIResponse(){
+        @SerializedName("indeks")
+        var index: String? = null
     }
 
     class Availabilities : APIResponse(){
