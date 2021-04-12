@@ -12,17 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.constants.ListActivityMode
-import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
-import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.data.model.DocumentItem
 import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.ViewModelFactory
-import pl.tysia.maggstone.ui.contractors.ContractorListActivity
 import pl.tysia.maggstone.ui.hose.HoseActivity
 import pl.tysia.maggstone.ui.wares.WareListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
@@ -97,7 +92,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
 
     fun onScanClick(view: View){
         val intent = Intent(this, WareScannerActivity::class.java)
-        intent.putExtra("theme", R.style.AppThemeYellow)
+        intent.putExtra("theme", R.style.AppThemeRed)
         startActivityForResult(intent, WARE_REQUEST_CODE)
     }
 

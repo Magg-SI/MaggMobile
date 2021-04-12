@@ -95,7 +95,7 @@
             android:layout_marginBottom="16dp"
             android:paddingStart="16dp"
             android:text="TextView"
-            android:textColor="#02E124"
+            android:textColor="?colorAccent"
             android:textSize="18sp" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -107,6 +107,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MainActivity">

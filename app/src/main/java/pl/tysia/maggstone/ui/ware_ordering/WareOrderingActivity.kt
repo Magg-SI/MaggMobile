@@ -12,10 +12,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_ware_ordering.*
+import kotlinx.android.synthetic.main.activity_ware_packing.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.OrderedWare
@@ -181,6 +182,8 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+
+        val form = form as ConstraintLayout
 
         form.visibility = if (show) View.GONE else View.VISIBLE
         form.animate()

@@ -62,7 +62,9 @@
         app:backgroundTint="@color/colorAccentOrange"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3"
         app:srcCompat="@drawable/ic_list" />
 
     <TextView
@@ -96,6 +98,7 @@
         app:backgroundTint="@color/colorAccentRed"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/floatingActionButton3"
         app:srcCompat="@drawable/ic_qr_code_scanner" />
