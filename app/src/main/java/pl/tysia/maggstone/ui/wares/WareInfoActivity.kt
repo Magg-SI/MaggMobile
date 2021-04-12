@@ -54,9 +54,8 @@ class WareInfoActivity : AppCompatActivity() {
         location_tv.text = ware.location
         if (ware.priceN != null && ware.priceB != null)
             price_tv.text =
-                "Cena netto: ${ware.priceN.toString()}" +
-                    "Cena brutto: ${ware.priceB.toString()}"
-
+                "netto: ${ware.priceN.toString()}"+
+                "      brutto: ${ware.priceB.toString()}"
     }
 
     private fun displayAvailability(){

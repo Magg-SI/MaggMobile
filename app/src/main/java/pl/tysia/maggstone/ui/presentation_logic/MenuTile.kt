@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import pl.tysia.maggstone.R
@@ -64,12 +65,16 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
             MenuTileType.CATALOG_WARES -> onWareCatalogClicked()
             MenuTileType.DOCUMENT_OFFER -> onNewOfferClicked()
             MenuTileType.DOCUMENT_PACKING -> onOrdersClicked()
-            MenuTileType.DOCUMENT_RECEIVE -> TODO()
+            MenuTileType.DOCUMENT_RECEIVE -> nic()
             MenuTileType.DOCUMENT_SHIFT -> onNewShiftClicked()
-            MenuTileType.FIND_HOSE -> TODO()
+            MenuTileType.FIND_HOSE -> nic()
             MenuTileType.CHANGE_LOCATION -> onChangeLocationClicked()
             MenuTileType.SCAN_WARE -> onScanWareClicked()
         }
+    }
+
+    fun nic() {
+        Toast.makeText(activity, "Funkcja w przygotowaniu", Toast.LENGTH_LONG).show()
     }
 
     private fun onContractorsCatalogClicked(){

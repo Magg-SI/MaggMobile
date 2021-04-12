@@ -116,7 +116,7 @@ class WareOrderingActivity : AppCompatActivity(), TextWatcher {
         val sum = cancelled + next + packed
         total_tv.text = sum.toString()
 
-        if (sum > orderedWare.availability!! || sum < orderedWare.orderedNumber!!){
+        if (packed > orderedWare.availability!! || sum < orderedWare.orderedNumber!!){
             total_tv.setTextColor(Color.RED)
             save_button.isEnabled = false
         }else{
