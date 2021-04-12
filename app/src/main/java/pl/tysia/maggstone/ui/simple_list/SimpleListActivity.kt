@@ -44,7 +44,7 @@ abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSele
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
 
-        recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 150, mBottomLast = 64))
+        recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 200, mBottomLast = 64))
 
     }
 

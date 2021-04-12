@@ -57,6 +57,13 @@ class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<
             adapter.notifyDataSetChanged()
         })
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.allItems.clear()
+        adapter.notifyDataSetChanged()
+
         ordersViewModel.getOrders( LoginRepository(
             LoginDataSource(NetAddressManager(this)),
             this

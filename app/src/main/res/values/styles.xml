@@ -17,7 +17,7 @@
         <item name="colorAccent">@color/colorAccentOrange</item>
     </style>
 
-    <style name="AppThemeYellow" parent="AppTheme">
+    <style name="AppThemeRed" parent="AppTheme">
         <item name="colorAccent">@color/colorAccentRed</item>
     </style>
 

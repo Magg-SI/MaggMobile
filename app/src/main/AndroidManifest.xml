@@ -47,21 +47,21 @@
         <service android:name=".data.service.ContractorsDownloadService" />
         <service android:name=".data.service.SendingService" android:foregroundServiceType="dataSync" />
 
-        <activity android:name=".ui.orders.OrdersActivity" />
-        <activity android:name=".ui.ware_ordering.OrderedWaresActivity" />
-        <activity android:name=".ui.ware_ordering.WareOrderingActivity" />
+        <activity android:name=".ui.orders.OrdersActivity" android:theme="@style/AppThemeBlue"/>
+        <activity android:name=".ui.ware_ordering.OrderedWaresActivity" android:theme="@style/AppThemeBlue"/>
+        <activity android:name=".ui.ware_ordering.WareOrderingActivity" android:theme="@style/AppThemeBlue" />
         <activity
             android:name=".ui.wares.WareInfoActivity"
-            android:theme="@style/AppThemeOrange" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.scanner.WareScannerActivity"
-            android:theme="@style/AppThemeOrange" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.wares.WareListActivity"
             android:theme="@style/AppThemeOrange" />
         <activity
             android:name=".ui.contractors.ContractorListActivity"
-            android:theme="@style/AppThemeBlue" />
+            android:theme="@style/AppThemeOrange" />
         <activity
             android:name=".ui.document.NewShiftDocumentActivity"
             android:theme="@style/AppThemeBlue" />

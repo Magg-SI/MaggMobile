@@ -18,7 +18,7 @@ import pl.tysia.maggstone.ui.wares.WareViewModel
 
 class WareScannerActivity : ScanningActivity() {
     companion object{
-        const val BARCODE_PREFIX = "250"
+        const val BARCODE_PREFIX = "205"
         const val BARCODE_LENGTH = 9
     }
 

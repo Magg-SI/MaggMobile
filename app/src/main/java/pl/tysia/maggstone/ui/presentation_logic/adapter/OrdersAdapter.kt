@@ -58,7 +58,7 @@ class OrdersAdapter(items : ArrayList<Order>) : CatalogAdapter<Order, OrdersAdap
             }
             PackingState.PACKED -> {
                 holder.imageView.setImageResource(R.drawable.round_check_24)
-                val color = ContextCompat.getColor(context, R.color.colorAccent);
+                val color = ContextCompat.getColor(context, R.color.colorAccentBlue);
                 holder.title.setTextColor(color)
                 ImageViewCompat.setImageTintList(holder.imageView, ColorStateList.valueOf(color));
             }
