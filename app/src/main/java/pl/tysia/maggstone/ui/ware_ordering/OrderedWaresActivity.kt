@@ -138,6 +138,7 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
             val ware = data!!.getSerializableExtra(Ware.WARE_EXTRA) as Ware
 
             val foundWare = adapter.allItems.firstOrNull { it.qrCode == ware.qrCode }
+            adapter.selectedItem = foundWare
 
             if (foundWare != null)
                 onItemSelected(foundWare)
