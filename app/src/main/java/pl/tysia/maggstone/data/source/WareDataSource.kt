@@ -17,6 +17,10 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    fun findHose(token : String,hoseNumber : String) : Result<Hose>{
+        TODO("")
+    }
+
     fun getWare(qrCode: String, token: String) : Result<Ware> {
         val service = retrofit.create(WareService::class.java)
 
