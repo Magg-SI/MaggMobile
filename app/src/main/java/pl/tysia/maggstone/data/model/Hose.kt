@@ -1,10 +1,11 @@
 package pl.tysia.maggstone.data.model
 
 import com.google.gson.annotations.SerializedName
+import pl.tysia.maggstone.data.api.model.APIResponse
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
 
-class Hose : ICatalogable, Serializable {
+class Hose : ICatalogable, Serializable, APIResponse() {
     var cord : Ware? = null
     var tip1 : Ware? = null
     var tip2 : Ware? = null

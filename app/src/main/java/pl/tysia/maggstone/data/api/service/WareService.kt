@@ -1,6 +1,7 @@
 package pl.tysia.maggstone.data.api.service
 
 import pl.tysia.maggstone.data.api.model.*
+import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
 import retrofit2.Call
 import retrofit2.http.Body
@@ -27,5 +28,9 @@ interface WareService {
 
     @POST("json.aspx")
     fun addHose(@Body body : AddHoseRequest) : Call<APIResponse.Hose>
+
+
+    @POST("json.aspx")
+    fun getHose(@Body body : GetHoseRequest) : Call<Hose>
 
 }
