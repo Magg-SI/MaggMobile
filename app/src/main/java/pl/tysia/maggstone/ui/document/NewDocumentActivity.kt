@@ -63,10 +63,12 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
 
         viewModel.documentsError.observe(this@NewDocumentActivity, Observer {
             okDialog("Błąd", it, this@NewDocumentActivity)
+            showProgress(false)
         })
 
         viewModel.documentsResult.observe(this@NewDocumentActivity, Observer {
             Toast.makeText(this@NewDocumentActivity, it, Toast.LENGTH_SHORT).show()
+            showProgress(false)
             finish()
 
         })
@@ -87,6 +89,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     }
 
     fun onSaveClick(view: View){
+        showProgress(true)
        save()
     }
 
