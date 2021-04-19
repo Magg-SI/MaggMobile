@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_new_document.*
@@ -41,8 +42,10 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setContentView(R.layout.activity_new_shift_document)
+
+        super.onCreate(savedInstanceState)
 
         adapter = ShiftDocumentAdapter(ArrayList())
         wares_recycler.adapter = adapter
@@ -51,13 +54,14 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
             ViewModelFactory(this)
         ).get(WareInfoViewModel::class.java)
 
-        wareViewModel.availability.observe(this@NewShiftDocumentActivity, Observer {
+        wareViewModel!!.availability.observe(this@NewShiftDocumentActivity, Observer {
             lastWare!!.availabilities = it
             super.addWare(lastWare!!)
             showProgress(false)
         })
 
-        wareViewModel.result.observe(this@NewShiftDocumentActivity, Observer {
+        wareViewModel!!.result.observe(this@NewShiftDocumentActivity, Observer {
+            Toast.makeText(this@NewShiftDocumentActivity, it, Toast.LENGTH_LONG).show()
             showProgress(false)
         })
 
@@ -73,21 +77,16 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
         return warehouse != null && adapter.allItems.isNotEmpty()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_new_shift_document)
-
-        super.onCreate(savedInstanceState)
-    }
-
     override fun addWare(ware: Ware) {
         lastWare = ware
+        showProgress(true)
 
         val token = LoginRepository(
             LoginDataSource(NetAddressManager(this)),
             this@NewShiftDocumentActivity
         ).user!!.token
 
-        wareViewModel.getAvailabilities(ware.index!!, token)
+        wareViewModel!!.getAvailabilities(ware.index!!, token)
 
     }
 

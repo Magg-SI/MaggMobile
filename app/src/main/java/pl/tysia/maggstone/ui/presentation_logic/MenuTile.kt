@@ -18,6 +18,7 @@ import pl.tysia.maggstone.ui.DownloadStateActivity
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
 import pl.tysia.maggstone.ui.document.BasicNewDocumentActivity
 import pl.tysia.maggstone.ui.document.NewShiftDocumentActivity
+import pl.tysia.maggstone.ui.hose.HoseInfoActivity
 import pl.tysia.maggstone.ui.main.MainActivity
 import pl.tysia.maggstone.ui.orders.OrdersActivity
 import pl.tysia.maggstone.ui.scanner.ShelfScannerActivity
@@ -67,7 +68,7 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
             MenuTileType.DOCUMENT_PACKING -> onOrdersClicked()
             MenuTileType.DOCUMENT_RECEIVE -> nic()
             MenuTileType.DOCUMENT_SHIFT -> onNewShiftClicked()
-            MenuTileType.FIND_HOSE -> nic()
+            MenuTileType.FIND_HOSE -> onSearchHoseClicked()
             MenuTileType.CHANGE_LOCATION -> onChangeLocationClicked()
             MenuTileType.SCAN_WARE -> onScanWareClicked()
         }
@@ -75,6 +76,10 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
 
     fun nic() {
         Toast.makeText(activity, "Funkcja w przygotowaniu", Toast.LENGTH_LONG).show()
+    }
+
+    private fun onSearchHoseClicked(){
+        activity.startActivity(Intent(activity, HoseInfoActivity::class.java))
     }
 
     private fun onContractorsCatalogClicked(){

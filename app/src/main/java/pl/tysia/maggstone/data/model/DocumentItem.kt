@@ -25,7 +25,7 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
     }
 
     fun getMainAvailability() : Availability?{
-        return getAvailabilities()?.firstOrNull { a -> a.warehouse == WAREHOUSE_MAIN }
+        return getAvailabilities()!![0]
     }
 
     override fun getTitle(): String {

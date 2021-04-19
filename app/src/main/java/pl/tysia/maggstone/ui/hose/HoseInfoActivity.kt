@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +34,13 @@ class HoseInfoActivity : AppCompatActivity() {
         viewModel.hoseResult.observe(this@HoseInfoActivity, Observer {
             displayHose(it)
             showLoading(false)
+            info_ll.visibility = View.VISIBLE
+            availability_sv.visibility = View.VISIBLE
+        })
+
+        viewModel.result.observe(this@HoseInfoActivity, Observer {
+            Toast.makeText(this@HoseInfoActivity, it, Toast.LENGTH_LONG).show()
+            showLoading(false)
         })
     }
 
@@ -58,8 +66,7 @@ class HoseInfoActivity : AppCompatActivity() {
         }
         else{
             progress_bar.visibility = View.INVISIBLE
-            info_ll.visibility = View.VISIBLE
-            availability_sv.visibility = View.VISIBLE
+
         }
     }
 
