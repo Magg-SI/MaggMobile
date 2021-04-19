@@ -11,6 +11,7 @@ import pl.tysia.maggstone.data.model.Warehouse
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
+import pl.tysia.maggstone.ui.sign.SignActivity
 import pl.tysia.maggstone.ui.warehouses.WarehousesListActivity
 
 class NewShiftDocumentActivity : NewDocumentActivity() {
@@ -18,12 +19,10 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
 
     override fun save() {
         if(warehouse != null && adapter.allItems.isNotEmpty()) {
-            val token = LoginRepository(
-                LoginDataSource(NetAddressManager(this)),
-                this@NewShiftDocumentActivity
-            ).user!!.token
 
-            viewModel.sendShiftDocument(token, warehouse!!.id, adapter.allItems)
+            val intent = Intent(this, SignActivity::class.java)
+            startActivity(intent)
+
         }
     }
 

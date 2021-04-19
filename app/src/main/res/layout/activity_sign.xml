@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".ui.sign.SignActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Podpis"
+        android:textColor="@color/hintGray"
+        android:textSize="16dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/list_item_background"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:padding="6dp">
+
+        <pl.tysia.maggstone.ui.sign.SignView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1.5"
+        android:background="@drawable/list_item_background"
+        android:backgroundTint="@color/lightGray"
+        android:ems="10"
+        android:gravity="top|left"
+        android:hint="Uwagi..."
+        android:inputType="textPersonName"
+        android:padding="24dp" />
+
+    <Button
+        android:id="@+id/button"
+        style="@style/round_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_weight="0"
+        android:text="Zatwierdź" />
+
+</LinearLayout>
