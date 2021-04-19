@@ -13,10 +13,10 @@ abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var
     var filterer: Filterer<T>
     var selectedItem: T? = null
 
-    private val listeners: ArrayList<ItemSelectedListener<T>>
+    val listeners: ArrayList<ItemSelectedListener<T>>
     protected var emptyListeners: ArrayList<EmptyListListener>
 
-    protected fun onItemClick(v: View?, adapterPosition: Int) {
+    protected open fun onItemClick(v: View?, adapterPosition: Int) {
         val item = shownItems[adapterPosition]
         selectedItem = item
         notifyDataSetChanged()

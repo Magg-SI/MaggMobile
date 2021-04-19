@@ -20,7 +20,7 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     CatalogAdapter<T, DocumentAdapter<T>.DocumentViewHolder>(items) {
 
     inner class DocumentViewHolder(v: View) :
-        RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener {
+        RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener, TextWatcher {
 
         var title: TextView = v.findViewById(R.id.title_tv)
         var description: TextView = v.findViewById(R.id.subtitle_tv)
@@ -33,6 +33,8 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         var numberET: EditText = v.findViewById(R.id.number_et)
         var checkImage: ImageView = v.findViewById(R.id.check_image)
 
+        private var lastEdited : DocumentItem? = null
+
         override fun onClick(v: View) {
             val pos = adapterPosition
             onItemClick(v, pos)
@@ -40,6 +42,7 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         init {
             numberET.onFocusChangeListener = this
+            numberET.addTextChangedListener(this)
 
             moreButton.setOnClickListener {
                 val item: DocumentItem = shownItems[adapterPosition]
@@ -61,17 +64,25 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         }
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
-            if (!hasFocus){
-                val item = shownItems[adapterPosition] as DocumentItem
+            if (!hasFocus && lastEdited != null){
+                val item = lastEdited!!
                 try {
                     val quantity = numberET.text.toString().toDouble()
                     if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
                 } catch (ex: NumberFormatException) {
                     numberET.setText("0")
                 }
-            }else{
-                numberET.selectAll()
             }
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            lastEdited = allItems[adapterPosition]
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         }
     }
 
