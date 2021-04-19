@@ -30,8 +30,8 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     protected lateinit var viewModel: DocumentViewModel
 
     companion object{
-        private const val WARE_REQUEST_CODE  = 1337
-        private const val HOSE_REQUEST_CODE  = 1338
+        const val WARE_REQUEST_CODE  = 1337
+        const val HOSE_REQUEST_CODE  = 1338
         const val CONTRACTOR_REQUEST_CODE  = 842
         const val WAREHOUSE_REQUEST_CODE  = 842
     }
@@ -63,10 +63,12 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
 
         viewModel.documentsError.observe(this@NewDocumentActivity, Observer {
             okDialog("Błąd", it, this@NewDocumentActivity)
+            showProgress(false)
         })
 
         viewModel.documentsResult.observe(this@NewDocumentActivity, Observer {
             Toast.makeText(this@NewDocumentActivity, it, Toast.LENGTH_SHORT).show()
+            showProgress(false)
             finish()
 
         })
@@ -74,19 +76,28 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
 
     }
 
-    private fun showProgress(show : Boolean){
+    protected fun showProgress(show : Boolean){
         if (show){
             progressBar3.visibility = View.VISIBLE
-
+            save_button.isEnabled = false
+            floatingActionButton3.isEnabled = false
+            floatingActionButton4.isEnabled = false
+            floatingActionButton5.isEnabled = false
+            floatingActionButton6?.isEnabled = false
         }else {
             progressBar3.visibility = View.GONE
-
+            checkIfSaveAllowed()
+            floatingActionButton3.isEnabled = true
+            floatingActionButton4.isEnabled = true
+            floatingActionButton5.isEnabled = true
+            floatingActionButton6?.isEnabled = true
         }
 
-        save_button.isEnabled = !show
+
     }
 
     fun onSaveClick(view: View){
+        showProgress(true)
        save()
     }
 
@@ -116,19 +127,27 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
         checkIfSaveAllowed()
     }
 
+    open fun addWare(ware : Ware){
+        adapter.addItem(DocumentItem(ware))
+        adapter.filter()
+        adapter.notifyDataSetChanged()
+    }
+
+    open fun addHose(hose : Hose){
+        adapter.addItem(DocumentItem(hose))
+        adapter.filter()
+        adapter.notifyDataSetChanged()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == WARE_REQUEST_CODE && resultCode == Activity.RESULT_OK ){
             val ware = data!!.getSerializableExtra(Ware.WARE_EXTRA) as Ware
-            adapter.addItem(DocumentItem(ware))
-            adapter.filter()
-            adapter.notifyDataSetChanged()
+            addWare(ware)
         } else if (requestCode == HOSE_REQUEST_CODE && resultCode == Activity.RESULT_OK ){
             val hose = data!!.getSerializableExtra(Hose.HOSE_EXTRA) as Hose
-            adapter.addItem(DocumentItem(hose))
-            adapter.filter()
-            adapter.notifyDataSetChanged()
+            addHose(hose)
         }
 
         checkIfSaveAllowed()
