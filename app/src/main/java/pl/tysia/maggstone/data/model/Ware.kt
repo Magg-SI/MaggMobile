@@ -64,28 +64,29 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
 
         sb.append(index)
 
-        if (location != null){
+        /*if (location != null){
             sb.append(" - ")
             sb.append(location)
-        }
+        }*/
 
        return sb.toString()
     }
 
     override fun getSubtitle(): String {
-        return if (!hoseType.isNullOrEmpty()) "${name}, Fi: $hoseFi"
-        else name
+        //return if (!hoseType.isNullOrEmpty()) "${name}, Fi: $hoseFi"
+        //else name
+        return name
     }
 
     override fun getDescription(): String {
         val sb = StringBuilder()
 
-        if (priceB != null){
-            sb.append("\nCena brutto: $priceB\n")
+        if (priceN != null){
+            sb.append("Cena netto: $priceN\n")
         }
 
-        if (priceN != null){
-            sb.append("\nCena netto: $priceN\n")
+        if (priceB != null){
+            sb.append("\nCena brutto: $priceB")
         }
 
         return sb.toString()

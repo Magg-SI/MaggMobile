@@ -38,7 +38,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_weight="0.5"
                 android:text="TextView"
-                android:textColor="#14A329"
+                android:textColor="?colorAccent"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

@@ -19,7 +19,7 @@ import pl.tysia.maggstone.ui.ViewModelFactory
 class WaresShelfScannerActivity : ScanningActivity() {
     companion object{
         const val SHELF_EXTRA = "pl.tysia.maggstone.shelf_extra"
-        const val BARCODE_PREFIX = "250"
+        const val BARCODE_PREFIX = "205"
         const val BARCODE_LENGTH = 9
     }
 

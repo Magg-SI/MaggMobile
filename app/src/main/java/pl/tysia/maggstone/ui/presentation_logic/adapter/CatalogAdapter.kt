@@ -12,7 +12,6 @@ abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var
     protected var shownItems: ArrayList<T> = ArrayList()
     var filterer: Filterer<T>
     var selectedItem: T? = null
-        protected set
 
     private val listeners: ArrayList<ItemSelectedListener<T>>
     protected var emptyListeners: ArrayList<EmptyListListener>

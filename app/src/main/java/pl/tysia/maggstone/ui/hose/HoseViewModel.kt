@@ -114,6 +114,23 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
         }
     }
 
+    fun getHose(token : String, hoseNumber : String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try{
+                val result = remoteDataSource.findHose(token, hoseNumber)
+
+                if (result is Result.Success) {
+                    _hoseResult.postValue(result.data)
+                } else if (result is Result.Error) {
+                    _result.postValue(result.exception.message!!)
+                }
+            }catch (e : IOException){
+                _result.postValue("Brak połączenia z internetem.")
+            }
+
+        }
+    }
+
     fun addHose(token : String, hose : Hose){
         viewModelScope.launch(Dispatchers.IO) {
             try{

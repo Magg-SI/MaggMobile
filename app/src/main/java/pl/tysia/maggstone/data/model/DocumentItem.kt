@@ -1,5 +1,6 @@
 package pl.tysia.maggstone.data.model
 
+import pl.tysia.maggstone.constants.Warehouses.WAREHOUSE_MAIN
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
 
@@ -13,6 +14,18 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
             is Ware -> item.name
             else -> item.getDescription()
         }
+    }
+
+    fun getAvailabilities() : List<Availability>?{
+        return when (item) {
+            is Hose -> null
+            is Ware -> item.availabilities
+            else -> null
+        }
+    }
+
+    fun getMainAvailability() : Availability?{
+        return getAvailabilities()?.firstOrNull { a -> a.warehouse == WAREHOUSE_MAIN }
     }
 
     override fun getTitle(): String {
