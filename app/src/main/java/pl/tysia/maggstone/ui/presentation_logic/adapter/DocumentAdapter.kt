@@ -16,11 +16,11 @@ import pl.tysia.maggstone.data.model.DocumentItem
 import java.lang.Integer.MAX_VALUE
 import java.util.*
 
-class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
+open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     CatalogAdapter<T, DocumentAdapter<T>.DocumentViewHolder>(items) {
 
     inner class DocumentViewHolder(v: View) :
-        RecyclerView.ViewHolder(v), TextWatcher, View.OnClickListener {
+        RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener {
 
         var title: TextView = v.findViewById(R.id.title_tv)
         var description: TextView = v.findViewById(R.id.subtitle_tv)
@@ -38,45 +38,17 @@ class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
             onItemClick(v, pos)
         }
 
-        override fun beforeTextChanged(
-            charSequence: CharSequence,
-            i: Int,
-            i1: Int,
-            i2: Int
-        ) {
-        }
-
-        override fun onTextChanged(
-            charSequence: CharSequence,
-            i: Int,
-            i1: Int,
-            i2: Int
-        ) {
-        }
-
-        override fun afterTextChanged(editable: Editable) {
-            val item = shownItems[adapterPosition] as DocumentItem
-            try {
-                val quantity = numberET.text.toString().toDouble()
-                if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
-            } catch (ex: NumberFormatException) {
-                numberET.setText("0")
-            }
-        }
-
         init {
-            numberET.addTextChangedListener(this)
+            numberET.onFocusChangeListener = this
 
             moreButton.setOnClickListener {
                 val item: DocumentItem = shownItems[adapterPosition]
-                if (item.ilosc < MAX_VALUE) item.ilosc = item.ilosc + 1
-                notifyDataSetChanged()
+                onMoreClicked(item)
             }
 
             lessButton.setOnClickListener {
                 val item = shownItems[adapterPosition] as DocumentItem
-                if (item.ilosc > 0) item.ilosc = item.ilosc - 1
-                notifyDataSetChanged()
+                onLessClicked(item)
             }
 
             deleteButton.setOnClickListener {
@@ -87,6 +59,30 @@ class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
             v.setOnClickListener(this)
         }
+
+        override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            if (!hasFocus){
+                val item = shownItems[adapterPosition] as DocumentItem
+                try {
+                    val quantity = numberET.text.toString().toDouble()
+                    if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
+                } catch (ex: NumberFormatException) {
+                    numberET.setText("0")
+                }
+            }else{
+                numberET.selectAll()
+            }
+        }
+    }
+
+    protected open fun onMoreClicked(item : DocumentItem){
+        if (item.ilosc < MAX_VALUE) item.ilosc = item.ilosc + 1
+        notifyDataSetChanged()
+    }
+
+    protected open fun onLessClicked(item : DocumentItem){
+        if (item.ilosc > 0) item.ilosc = item.ilosc - 1
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DocumentViewHolder {
