@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_sign.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.DocumentType
 import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.DocumentItem
@@ -23,6 +24,7 @@ class SignActivity : AppCompatActivity() {
     private lateinit var viewModel: DocumentViewModel
     private lateinit var items: ArrayList<DocumentItem>
     private lateinit var warehouse: Warehouse
+    private lateinit var documentType: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,7 @@ class SignActivity : AppCompatActivity() {
 
         val intent = Intent(this, SignActivity::class.java)
         warehouse = intent.getSerializableExtra(Extras.WAREHOUSE_EXTRA) as Warehouse
+        documentType = intent.getStringExtra(Extras.DOCUMENT_TYPE)!!
         items = intent.getSerializableExtra(Extras.DOCUMENT_ITEMS_EXTRA) as ArrayList<DocumentItem>
 
         viewModel = ViewModelProvider(this,
@@ -55,7 +58,12 @@ class SignActivity : AppCompatActivity() {
             this@SignActivity
         ).user!!.token
 
-        viewModel.sendDocument(token, warehouse.id, items)
+        when (documentType){
+            DocumentType.SHIFT -> viewModel.sendShiftDocument(token, warehouse.id, items)
+            DocumentType.OFFER -> viewModel.sendOfferDocument(token, warehouse.id, items)
+        }
+
+        viewModel.sendOfferDocument(token, warehouse.id, items)
     }
 
     private fun showProgress(show : Boolean){

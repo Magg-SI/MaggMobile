@@ -33,7 +33,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
         const val WARE_REQUEST_CODE  = 1337
         const val HOSE_REQUEST_CODE  = 1338
         const val CONTRACTOR_REQUEST_CODE  = 842
-        const val WAREHOUSE_REQUEST_CODE  = 842
+        const val WAREHOUSE_REQUEST_CODE  = 843
     }
 
     abstract fun save()

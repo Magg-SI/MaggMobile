@@ -8,9 +8,6 @@ import pl.tysia.maggstone.R
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Contractor
-import pl.tysia.maggstone.data.model.DocumentItem
-import pl.tysia.maggstone.data.model.Hose
-import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
@@ -25,7 +22,7 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
                 this@BasicNewDocumentActivity
             ).user!!.token
 
-            viewModel.sendDocument(token, contractor!!.id, adapter.allItems)
+            viewModel.sendOfferDocument(token, contractor!!.id, adapter.allItems)
         }
     }
 

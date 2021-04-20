@@ -19,7 +19,7 @@ class DocumentViewModel(val dataSource : DocumentsDataSource) : ViewModel() {
     private val _documentsError = MutableLiveData<String>()
     val documentsError: LiveData<String> = _documentsError
 
-    fun sendDocument(token: String, id : Int, items : List<DocumentItem>) {
+    fun sendOfferDocument(token: String, id : Int, items : List<DocumentItem>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = dataSource.sendDocument(token, id, items)
@@ -33,7 +33,6 @@ class DocumentViewModel(val dataSource : DocumentsDataSource) : ViewModel() {
                 _documentsError.postValue("Brak połączenia z internetem.")
 
             }
-
         }
     }
 
