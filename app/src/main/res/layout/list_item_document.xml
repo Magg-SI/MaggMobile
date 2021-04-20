@@ -58,6 +58,7 @@
             android:background="@null"
             android:hint="0"
             android:inputType="number|numberDecimal"
+            android:digits="0123456789,."
             android:maxEms="6"
             android:minEms="2"
             android:padding="12dp"

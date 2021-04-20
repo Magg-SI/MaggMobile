@@ -6,6 +6,7 @@ import java.io.Serializable
 
 data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Serializable {
     var ilosc : Double = 1.0
+    var iloscOk : Boolean  = true
     val towID : Int = if (item is Hose) item.id!! else if (item is Ware) item.id!! else -1
 
     fun getShortDescription() : String {

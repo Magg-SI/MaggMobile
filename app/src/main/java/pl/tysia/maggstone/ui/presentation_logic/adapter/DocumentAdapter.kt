@@ -15,6 +15,7 @@ import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.model.DocumentItem
 import java.lang.Integer.MAX_VALUE
 import java.util.*
+import kotlin.math.round
 
 open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     CatalogAdapter<T, DocumentAdapter<T>.DocumentViewHolder>(items) {
@@ -46,11 +47,13 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
             moreButton.setOnClickListener {
                 val item: DocumentItem = shownItems[adapterPosition]
+                numberET.clearFocus();
                 onMoreClicked(item)
             }
 
             lessButton.setOnClickListener {
                 val item = shownItems[adapterPosition] as DocumentItem
+                numberET.clearFocus();
                 onLessClicked(item)
             }
 
@@ -64,7 +67,7 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         }
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
-            if (!hasFocus && lastEdited != null){
+            /*if (!hasFocus && lastEdited != null){
                 val item = lastEdited!!
                 try {
                     val quantity = numberET.text.toString().toDouble()
@@ -72,11 +75,35 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
                 } catch (ex: NumberFormatException) {
                     numberET.setText("0")
                 }
+                numberET.clearFocus();
+            }*/
+
+            if (!hasFocus) {
+                title.setText("0")
+                numberET.clearFocus();
             }
         }
 
         override fun afterTextChanged(s: Editable?) {
-            lastEdited = allItems[adapterPosition]
+            //if(adapterPosition>=0) lastEdited = allItems[adapterPosition]
+
+            val item = allItems[adapterPosition]
+            if(numberET.text.toString().isEmpty()) {
+                item.ilosc=0.0
+                item.iloscOk=false
+            }
+            else if (numberET.hasFocus() ) {
+                try {
+                    val quantity = numberET.text.toString().replace(',','.').toDouble()
+                    if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
+                    item.iloscOk=true
+                    setIloscState(item)
+                } catch (ex: NumberFormatException) {
+                    item.ilosc=0.0
+                    item.iloscOk=false
+                    //numberET.setText("0")
+                }
+            }
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -87,12 +114,18 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     protected open fun onMoreClicked(item : DocumentItem){
-        if (item.ilosc < MAX_VALUE) item.ilosc = item.ilosc + 1
+        if (item.ilosc < MAX_VALUE) {
+            item.ilosc = item.ilosc + 1
+            item.iloscOk=true
+        }
         notifyDataSetChanged()
     }
 
     protected open fun onLessClicked(item : DocumentItem){
-        if (item.ilosc > 0) item.ilosc = item.ilosc - 1
+        if (item.ilosc > 1) {
+            item.ilosc = item.ilosc - 1
+            item.iloscOk=true
+        }
         notifyDataSetChanged()
     }
 
@@ -112,6 +145,22 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         holder.title.text = item.getTitle()
         holder.description.text = item.getDescription()
         holder.name.text = item.getShortDescription()
-        holder.numberET.setText(java.lang.Double.toString(item.ilosc))
+        //holder.numberET.setText(java.lang.Double.toString(item.ilosc))
+        holder.numberET.setText(iloscToStr(item.ilosc))
+    }
+
+    protected open fun setIloscState(i: DocumentItem) {
+    }
+
+    fun iloscToStr(ilo: Double): String {
+        val x = 1.0*ilo.toInt()
+        if(x==ilo) return ilo.toInt().toString()
+        return ilo.round(4).toString().replace('.',',')
+    }
+
+    fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return round(this * multiplier) / multiplier
     }
 }
