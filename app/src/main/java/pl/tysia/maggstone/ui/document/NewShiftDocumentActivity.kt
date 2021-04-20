@@ -47,16 +47,19 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        adapter = ShiftDocumentAdapter(ArrayList())
-        wares_recycler.adapter = adapter
-
         wareViewModel = ViewModelProvider(this,
             ViewModelFactory(this)
         ).get(WareInfoViewModel::class.java)
 
         wareViewModel!!.availability.observe(this@NewShiftDocumentActivity, Observer {
             lastWare!!.availabilities = it
-            super.addWare(lastWare!!)
+
+            if (lastWare!!.availabilities!![0].quantity <= 0 ){
+                Toast.makeText(this@NewShiftDocumentActivity, "Brak produktu w magazynie", Toast.LENGTH_LONG).show()
+            }else{
+                super.addWare(lastWare!!)
+            }
+
             showProgress(false)
         })
 
@@ -74,7 +77,12 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
     }
 
     override fun saveAllowed(): Boolean {
-        return warehouse != null && adapter.allItems.isNotEmpty()
+        val badItems = adapter.allItems.filter { item -> !item.iloscOk }
+        return warehouse != null && adapter.allItems.isNotEmpty() && badItems.isEmpty()
+    }
+
+    override fun getDocumentAdapter(): DocumentAdapter<DocumentItem> {
+        return ShiftDocumentAdapter(ArrayList())
     }
 
     override fun addWare(ware: Ware) {

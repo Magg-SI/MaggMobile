@@ -25,7 +25,7 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 
 
-abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyListListener {
+abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.ListChangeListener {
     protected lateinit var adapter : DocumentAdapter<DocumentItem>
     protected lateinit var viewModel: DocumentViewModel
 
@@ -39,6 +39,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
     abstract fun save()
     abstract fun onSearch()
     abstract fun saveAllowed() : Boolean
+    abstract fun getDocumentAdapter() : DocumentAdapter<DocumentItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +55,10 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
             )
         )
 
-        adapter = DocumentAdapter(ArrayList())
+        adapter = getDocumentAdapter()
         wares_recycler.adapter = adapter
 
+        adapter.addChangeListener(this)
 
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         wares_recycler.layoutManager = linearLayoutManager
@@ -123,7 +125,7 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.EmptyLi
         else okDialog("Brak połączenia z internetem", "Żeby utworzyć wąż konieczne jest połączenie z internetem.", this)
     }
 
-    override fun onListEmptied() {
+    override fun onListChanged() {
         checkIfSaveAllowed()
     }
 

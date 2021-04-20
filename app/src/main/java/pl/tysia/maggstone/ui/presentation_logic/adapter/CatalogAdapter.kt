@@ -11,10 +11,10 @@ abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var
 
     protected var shownItems: ArrayList<T> = ArrayList()
     var filterer: Filterer<T>
-    var selectedItem: T? = null
+    open var selectedItem: T? = null
 
     val listeners: ArrayList<ItemSelectedListener<T>>
-    protected var emptyListeners: ArrayList<EmptyListListener>
+    protected var changeListeners: ArrayList<ListChangeListener>
 
     protected open fun onItemClick(v: View?, adapterPosition: Int) {
         val item = shownItems[adapterPosition]
@@ -27,8 +27,8 @@ abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var
         listeners.add(listener)
     }
 
-    fun addEmptyListener(listener: EmptyListListener) {
-        emptyListeners.add(listener)
+    fun addChangeListener(listener: ListChangeListener) {
+        changeListeners.add(listener)
     }
 
     fun addItem(item: T) {
@@ -51,13 +51,13 @@ abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var
         fun onItemSelected(item: T)
     }
 
-    interface EmptyListListener {
-        fun onListEmptied()
+    interface ListChangeListener {
+        fun onListChanged()
     }
 
     init {
         filterer = CatalogFilterer<T>(allItems, shownItems)
         listeners = ArrayList()
-        emptyListeners = ArrayList()
+        changeListeners = ArrayList()
     }
 }

@@ -1,18 +1,6 @@
 package pl.tysia.maggstone.ui.presentation_logic.adapter
 
 import android.graphics.Color
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.model.DocumentItem
 import java.lang.Integer.MAX_VALUE
@@ -34,6 +22,8 @@ class ShiftDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     override fun onBindViewHolder(holder: DocumentViewHolder, position: Int) {
         val item: DocumentItem = shownItems[position]
 
+        val context = holder.back.context
+
         holder.title.text = item.getTitle()
 
         val availability = item.getMainAvailability()
@@ -41,23 +31,34 @@ class ShiftDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         if (availability == null){
             holder.description.text = ""
         }else{
-            //holder.description.text = "Dostępność: ${availability.quantity}"
-            holder.description.text = "Dostępność: "+iloscToStr(availability.quantity)
+            holder.description.text = context.getString(R.string.availability, countToStr(availability.quantity))
         }
 
         holder.name.text = item.getShortDescription()
-        //holder.numberET.setText(item.ilosc.toString())
-        holder.numberET.setText(iloscToStr(item.ilosc))
+        holder.numberET.setText(countToStr(item.ilosc))
 
-        if(item.iloscOk) holder.numberET.setTextColor(Color.LTGRAY)
-        else holder.numberET.setTextColor(Color.RED)
+        if (!item.iloscOk){
+            holder.numberET.error = "Liczba musi być większa niż 0"
+        }else{
+            holder.numberET.error = null
+        }
     }
 
-    override fun setIloscState(i: DocumentItem) {
-        val availability = i.getMainAvailability()
-        if (availability != null) {
-            if(i.ilosc>availability.quantity )i.iloscOk = false;
+    override fun isCountValid(item: T): Boolean {
+        return super.isCountValid(item)
+                && item.ilosc <= item.getMainAvailability()!!.quantity
+    }
+
+    override fun fixCount(item: T){
+        if (!isCountValid(item)) {
+            val availability = item.getMainAvailability()!!.quantity
+
+            if (item.ilosc > availability) {
+                item.ilosc = availability
+            }
         }
-        if (i.ilosc == 0.0) i.iloscOk = false;
+
+        super.fixCount(item)
+
     }
 }
