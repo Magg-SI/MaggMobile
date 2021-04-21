@@ -50,14 +50,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val mode = LoginRepository(LoginDataSource(NetAddressManager(this)), this).mode
-
-        when(mode){
-            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
-
         setContentView(R.layout.activity_main)
 
         startService(Intent(this, WaresDownloadService::class.java))
