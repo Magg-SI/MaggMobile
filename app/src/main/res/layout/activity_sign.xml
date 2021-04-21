@@ -34,17 +34,19 @@
         android:layout_marginRight="20dp"
         android:layout_weight="1"
         android:background="@drawable/list_item_background"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="?colorPrimaryDark"
+        android:elevation="6dp"
         android:padding="6dp">
 
         <pl.tysia.maggstone.ui.sign.SignView
+            android:id="@+id/sign_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
     </FrameLayout>
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/comments_et"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
@@ -53,7 +55,7 @@
         android:layout_marginBottom="20dp"
         android:layout_weight="1.5"
         android:background="@drawable/list_item_background"
-        android:backgroundTint="@color/lightGray"
+        android:elevation="2dp"
         android:ems="10"
         android:gravity="top|left"
         android:hint="Uwagi..."
@@ -70,6 +72,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:layout_weight="0"
+        android:elevation="6dp"
+        android:onClick="save"
         android:text="Zatwierdź" />
 
 </LinearLayout>

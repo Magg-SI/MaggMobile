@@ -114,12 +114,14 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         adapter.addItem(DocumentItem(ware))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        checkIfSaveAllowed()
     }
 
     open fun addHose(hose : Hose){
         adapter.addItem(DocumentItem(hose))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        checkIfSaveAllowed()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

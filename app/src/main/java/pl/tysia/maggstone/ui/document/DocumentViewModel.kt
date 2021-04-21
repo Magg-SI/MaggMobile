@@ -19,10 +19,10 @@ class DocumentViewModel(val dataSource : DocumentsDataSource) : ViewModel() {
     private val _documentsError = MutableLiveData<String>()
     val documentsError: LiveData<String> = _documentsError
 
-    fun sendOfferDocument(token: String, id : Int, items : List<DocumentItem>) {
+    fun sendOfferDocument(token: String, id : Int, sign : String, comments : String, items : List<DocumentItem>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = dataSource.sendDocument(token, id, items)
+                val result = dataSource.sendDocument(token, id, sign, comments, items)
 
                 if (result is Result.Success) {
                     _documentsResult.postValue(R.string.correct_document_send)
@@ -36,10 +36,10 @@ class DocumentViewModel(val dataSource : DocumentsDataSource) : ViewModel() {
         }
     }
 
-    fun sendShiftDocument(token: String, id : Int, items : List<DocumentItem>) {
+    fun sendShiftDocument(token: String, id : Int, sign : String, comments : String, items : List<DocumentItem>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = dataSource.sendShiftDocument(token, id, items)
+                val result = dataSource.sendShiftDocument(token, id, sign, comments, items)
 
                 if (result is Result.Success) {
                     _documentsResult.postValue(R.string.correct_document_send)

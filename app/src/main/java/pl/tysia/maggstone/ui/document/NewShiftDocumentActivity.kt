@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.DocumentType
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.Extras.DOCUMENT_ITEMS_EXTRA
 import pl.tysia.maggstone.constants.Extras.WAREHOUSE_EXTRA
 import pl.tysia.maggstone.constants.ListActivityMode
@@ -38,8 +40,9 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
         if(warehouse != null && adapter.allItems.isNotEmpty()) {
 
             val intent = Intent(this, SignActivity::class.java)
-            intent.putExtra(WAREHOUSE_EXTRA, warehouse)
-            intent.putExtra(DOCUMENT_ITEMS_EXTRA, adapter.allItems)
+            intent.putExtra(Extras.WAREHOUSE_EXTRA, warehouse)
+            intent.putExtra(Extras.DOCUMENT_ITEMS_EXTRA, adapter.allItems)
+            intent.putExtra(Extras.DOCUMENT_TYPE, DocumentType.SHIFT)
             startActivity(intent)
 
         }
