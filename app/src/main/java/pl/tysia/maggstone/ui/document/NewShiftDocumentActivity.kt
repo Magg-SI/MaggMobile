@@ -60,12 +60,12 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
                 super.addWare(lastWare!!)
             }
 
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
         wareViewModel!!.result.observe(this@NewShiftDocumentActivity, Observer {
             Toast.makeText(this@NewShiftDocumentActivity, it, Toast.LENGTH_LONG).show()
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
     }
@@ -87,7 +87,7 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
 
     override fun addWare(ware: Ware) {
         lastWare = ware
-        showProgress(true)
+        showBlockingProgress(true)
 
         val token = LoginRepository(
             LoginDataSource(NetAddressManager(this)),

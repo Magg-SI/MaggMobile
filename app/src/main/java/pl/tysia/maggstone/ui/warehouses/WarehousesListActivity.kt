@@ -19,7 +19,7 @@ import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
 class WarehousesListActivity : SimpleListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showProgress(true)
+        showBlockingProgress(true)
 
          val warehousesViewModel = ViewModelProvider(this,
             ViewModelFactory(this)
@@ -30,7 +30,7 @@ class WarehousesListActivity : SimpleListActivity() {
             adapter.allItems.addAll(it as Collection<ICatalogable>)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
         warehousesViewModel.getWarehouses( LoginRepository(

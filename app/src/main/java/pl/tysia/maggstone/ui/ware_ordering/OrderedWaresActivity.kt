@@ -24,6 +24,7 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.orders.OrderedWaresViewModel
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
@@ -35,7 +36,7 @@ import java.util.ArrayList
 
 
 
-class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedListener<OrderedWare>,
+class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListener<OrderedWare>,
     TextWatcher {
     private lateinit var adapter:  OrderedItemsAdapter
     private var filter: StringFilter<ICatalogable>? = null
@@ -91,14 +92,14 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
             adapter.allItems.addAll(it)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
         orderedWaresViewModel.getOrder( LoginRepository(
             LoginDataSource(NetAddressManager(this)),
             this
         ).user!!.token, order.id)
-        showProgress(true)
+        showBlockingProgress(true)
     }
 
     override fun onItemSelected(item: OrderedWare) {
@@ -151,32 +152,6 @@ class OrderedWaresActivity : AppCompatActivity() , CatalogAdapter.ItemSelectedLi
             adapter.notifyDataSetChanged()
 
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private fun showProgress(show: Boolean) {
-        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-
-
-        form.visibility = if (show) View.GONE else View.VISIBLE
-        form.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 0 else 1).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    form.visibility = if (show) View.GONE else View.VISIBLE
-                }
-            })
-
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
-        progressBar.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 1 else 0).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    progressBar.visibility = if (show) View.VISIBLE else View.GONE
-                }
-            })
     }
 
 }

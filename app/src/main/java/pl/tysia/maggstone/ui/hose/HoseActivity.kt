@@ -22,6 +22,7 @@ import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.login.afterTextChanged
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
@@ -32,7 +33,7 @@ private const val FRAGMENT_TAG_CORD = "pl.tysia.maggstone.cord_fragment_tag"
 private const val FRAGMENT_TAG_TIP1 = "pl.tysia.maggstone.tip_fragment_tag1"
 private const val FRAGMENT_TAG_TIP2 = "pl.tysia.maggstone.tip_fragment_tag2"
 private const val FRAGMENT_TAG_SLEEVE = "pl.tysia.maggstone.sleeve_fragment_tag"
-class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwner<Ware> {
+class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Ware> {
     private lateinit var dao : WaresDAO
 
     private lateinit var viewModel: HoseViewModel
@@ -101,32 +102,19 @@ class HoseActivity : AppCompatActivity(), SimpleListDialogFragment.SimpleListOwn
             val returnIntent = Intent()
             returnIntent.putExtra(Hose.HOSE_EXTRA, it)
             setResult(Activity.RESULT_OK, returnIntent)
-//            showProgress(false)
             finish()
 
         })
 
         viewModel.result.observe(this@HoseActivity, Observer {
             okDialog("Błąd", it, this@HoseActivity)
-            showProgress(false)
+            showBlockingProgress(false)
 
         })
     }
 
-    private fun showProgress(show : Boolean){
-        if (show){
-            hose_form.visibility = View.INVISIBLE
-            save_button.visibility = View.INVISIBLE
-            progressBar.visibility = View.VISIBLE
-        }else{
-            hose_form.visibility = View.VISIBLE
-            save_button.visibility = View.VISIBLE
-            progressBar.visibility = View.INVISIBLE
-        }
-    }
-
     fun addHose(view: View){
-        showProgress(true)
+        showBlockingProgress(true)
 
         val token = LoginRepository(
             LoginDataSource(NetAddressManager(this)),

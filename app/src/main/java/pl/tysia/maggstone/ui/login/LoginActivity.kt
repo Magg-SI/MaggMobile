@@ -14,15 +14,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.tysia.maggstone.ui.main.MainActivity
 
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetworkChangeReceiver
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
@@ -34,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
-        val loading = findViewById<ProgressBar>(R.id.loading)
 
         NetworkChangeReceiver().enable(this)
 
@@ -45,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
 
         NetworkChangeReceiver.internetConnection.observe(this, Observer {
             if (it && loginViewModel.loginRepository.isLoggedIn){
-                showProgress(true)
+                showBlockingProgress(true)
                 loginViewModel.testToken()
             }
         })
@@ -54,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
             if (it) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
-            } else showProgress(false)
+            } else showBlockingProgress(false)
         })
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -88,7 +89,7 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             }
 
-            showProgress(false)
+            showBlockingProgress(false)
 
         })
 
@@ -110,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->{
-                        showProgress(true)
+                        showBlockingProgress(true)
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
@@ -122,10 +123,19 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
-                showProgress(true)
+                showBlockingProgress(true)
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+    }
+
+    override fun showBlockingProgress(show: Boolean) {
+        container.children.forEach {
+            if (!show) it.visibility = View.VISIBLE
+            else it.visibility = View.INVISIBLE
+        }
+
+        super.showBlockingProgress(show)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
@@ -140,15 +150,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showProgress(show : Boolean){
-        username.isEnabled = !show
-        password.isEnabled = !show
-        login.isEnabled = !show
-
-        imageView.visibility = if (show) View.INVISIBLE else View.VISIBLE
-        loading.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 }
 

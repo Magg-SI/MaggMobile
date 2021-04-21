@@ -17,6 +17,7 @@ import pl.tysia.maggstone.data.model.DocumentItem
 import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.okDialog
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.hose.HoseActivity
 import pl.tysia.maggstone.ui.wares.WareListActivity
@@ -25,7 +26,7 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 
 
-abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.ListChangeListener {
+abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeListener {
     protected lateinit var adapter : DocumentAdapter<DocumentItem>
     protected lateinit var viewModel: DocumentViewModel
 
@@ -65,12 +66,12 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.ListCha
 
         viewModel.documentsError.observe(this@NewDocumentActivity, Observer {
             okDialog("Błąd", it, this@NewDocumentActivity)
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
         viewModel.documentsResult.observe(this@NewDocumentActivity, Observer {
             Toast.makeText(this@NewDocumentActivity, it, Toast.LENGTH_SHORT).show()
-            showProgress(false)
+            showBlockingProgress(false)
             finish()
 
         })
@@ -78,29 +79,9 @@ abstract class NewDocumentActivity : AppCompatActivity(), CatalogAdapter.ListCha
 
     }
 
-    protected fun showProgress(show : Boolean){
-        if (show){
-            progressBar3.visibility = View.VISIBLE
-            save_button.isEnabled = false
-            floatingActionButton3.isEnabled = false
-            floatingActionButton4.isEnabled = false
-            floatingActionButton5.isEnabled = false
-            floatingActionButton6?.isEnabled = false
-        }else {
-            progressBar3.visibility = View.GONE
-            checkIfSaveAllowed()
-            floatingActionButton3.isEnabled = true
-            floatingActionButton4.isEnabled = true
-            floatingActionButton5.isEnabled = true
-            floatingActionButton6?.isEnabled = true
-        }
-
-
-    }
-
     fun onSaveClick(view: View){
-        showProgress(true)
-       save()
+        showBlockingProgress(true)
+        save()
     }
 
     fun onScanClick(view: View){
