@@ -1,14 +1,13 @@
 package pl.tysia.maggstone.ui.presentation_logic.adapter
 
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import pl.tysia.maggstone.R
@@ -16,6 +15,7 @@ import pl.tysia.maggstone.data.model.DocumentItem
 import java.lang.Integer.MAX_VALUE
 import java.util.*
 import kotlin.math.round
+
 
 open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     CatalogAdapter<T, DocumentAdapter<T>.DocumentViewHolder>(items) {
@@ -68,8 +68,12 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
             if (!hasFocus) {
-                numberET.clearFocus()
-
+                Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+                    override fun run() {
+                        numberET.clearFocus()
+                        notifyDataSetChanged()
+                    }
+                },50)
             }
         }
 
@@ -80,21 +84,23 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
             if(numberET.text.toString().isEmpty()) {
                 item.ilosc=0.0
-                fixCount(item)
+                fixCount(item,1)
                 showError(item, numberET)
             }
 
             else if (numberET.hasFocus()) {
                 try {
-                    val quantity = numberET.text.toString().replace(',','.').toDouble()
+                    val quantity = numberET.text.toString().replace(',', '.').toDouble()
 
                     if (quantity >= 0) item.ilosc = quantity
+                    fixCount(item,0)
                 } catch (ex: NumberFormatException) {
+                    fixCount(item,-1)
                     item.ilosc=0.0
                 } finally {
-                    if (numberET.text.toString().toDouble() != item.ilosc) numberET.setText(countToStr(item.ilosc))
+                    //if (numberET.text.toString().replace(',','.').toDouble() != item.ilosc) numberET.setText(countToStr(item.ilosc))
 
-                    fixCount(item)
+
                     showError(item, numberET)
                 }
 
@@ -108,36 +114,62 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         }
     }
 
-    protected open fun isCountValid(item: T) : Boolean{
-        return item.ilosc > 0
+    protected open fun isCountValid(item: T) {
+        if(item.ilosc <= 0) item.iloscOk=1;
     }
 
-    private fun setCountValidity(item : T){
-        item.iloscOk = item.ilosc > 0.0
+    /*private fun setCountValidity(item: T){
+        if(item.ilosc > 0.0) {
+            item.iloscOk = 0
+        }
 
+        changeListeners.forEach { it.onListChanged() }
+    }*/
+
+    fun fixCount(item: T, err: Int){
+        /*if (!isCountValid(item)){
+            if (item.ilosc < 0) item.ilosc = 0.0
+        }*/
+        item.iloscOk=err
+        if(item.iloscOk==0) isCountValid(item)
+
+        //setCountValidity(item)
         changeListeners.forEach { it.onListChanged() }
     }
 
-    protected open fun fixCount(item: T){
-        if (!isCountValid(item)){
-            if (item.ilosc < 0) item.ilosc = 0.0
+    private fun showError(item: DocumentItem, view: EditText){
+        if (item.iloscOk!=0) {
+            view.error = getErrorTx(item.iloscOk)
         }
-
-        setCountValidity(item)
+        else{
+            view.error = null
+        }
     }
 
-    protected open fun onMoreClicked(item : DocumentItem){
+    fun getErrorTx(err: Int): String {
+        if (err==-1) {
+            return "Nieprawidłowy format danych"
+        }
+        else if (err==1) {
+            return "Ilość musi być większa niż 0"
+        }
+        else if (err==2){
+            return "Zbyt duża ilość"
+        }
+        return "";
+    }
+    protected open fun onMoreClicked(item: DocumentItem){
         if (item.ilosc < MAX_VALUE) {
             item.ilosc = item.ilosc + 1
-            item.iloscOk=true
+            item.iloscOk=0
         }
         notifyDataSetChanged()
     }
 
-    protected open fun onLessClicked(item : DocumentItem){
+    protected open fun onLessClicked(item: DocumentItem){
         if (item.ilosc > 1) {
             item.ilosc = item.ilosc - 1
-            item.iloscOk=true
+            item.iloscOk=0
         }
         notifyDataSetChanged()
     }
@@ -163,18 +195,10 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         showError(item, holder.numberET)
     }
 
-    private fun showError(item : DocumentItem, view : EditText){
-        if (!item.iloscOk){
-            view.error = "Liczba musi być większa niż 0"
-        }else{
-            view.error = null
-        }
-    }
-
     fun countToStr(ilo: Double): String {
         val x = 1.0*ilo.toInt()
         if(x==ilo) return ilo.toInt().toString()
-        return ilo.round(4).toString().replace('.',',')
+        return ilo.round(4).toString().replace('.', ',')
     }
 
     fun Double.round(decimals: Int): Double {

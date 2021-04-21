@@ -37,7 +37,7 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
     }
 
     override fun saveAllowed(): Boolean {
-        val badItems = adapter.allItems.filter { item -> !item.iloscOk }
+        val badItems = adapter.allItems.filter { item -> item.iloscOk!=0 }
 
         return contractor != null && adapter.allItems.isNotEmpty() && badItems.isEmpty()
     }

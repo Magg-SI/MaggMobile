@@ -14,7 +14,7 @@ class ShiftDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         if (item.ilosc < MAX_VALUE && item.ilosc < availability) {
             item.ilosc = item.ilosc + 1
-            item.iloscOk=true
+            item.iloscOk=0
         }
         notifyDataSetChanged()
     }
@@ -37,19 +37,21 @@ class ShiftDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         holder.name.text = item.getShortDescription()
         holder.numberET.setText(countToStr(item.ilosc))
 
-        if (!item.iloscOk){
-            holder.numberET.error = "Liczba musi być większa niż 0"
+        if (item.iloscOk!=0){
+            holder.numberET.error = getErrorTx(item.iloscOk);
         }else{
             holder.numberET.error = null
         }
     }
 
-    override fun isCountValid(item: T): Boolean {
-        return super.isCountValid(item)
-                && item.ilosc <= item.getMainAvailability()!!.quantity
+    override fun isCountValid(item: T) {
+        //return super.isCountValid(item) && item.ilosc <= item.getMainAvailability()!!.quantity
+        if(item.ilosc <= 0) item.iloscOk=1;
+        else if(item.ilosc > item.getMainAvailability()!!.quantity) item.iloscOk=2;
+
     }
 
-    override fun fixCount(item: T){
+    /*override fun fixCount(item: T){
         if (!isCountValid(item)) {
             val availability = item.getMainAvailability()!!.quantity
 
@@ -60,5 +62,5 @@ class ShiftDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         super.fixCount(item)
 
-    }
+    }*/
 }
