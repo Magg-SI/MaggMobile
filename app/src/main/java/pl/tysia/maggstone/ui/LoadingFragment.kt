@@ -1,12 +1,10 @@
 package pl.tysia.maggstone.ui
 
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,7 @@ class LoadingFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        isCancelable = false
     }
 
     override fun onCreateView(
