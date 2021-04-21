@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         app:srcCompat="@drawable/ic_edit_location"
-        app:tint="@color/selectionGray" />
+        app:tint="?attr/colorControlNormal" />
 
     <TextView
         android:id="@+id/textView31"
@@ -22,6 +22,6 @@
         android:layout_weight="0"
         android:gravity="center"
         android:text="Lokalizacja"
-        android:textColor="@color/selectionGray"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
 </LinearLayout>

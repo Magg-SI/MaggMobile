@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/finish_button"
@@ -31,7 +30,6 @@
         android:paddingStart="16dp"
         android:paddingLeft="16dp"
         android:paddingBottom="16dp"
-        android:textColor="@color/lightGray"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +42,6 @@
         android:elevation="6dp"
         android:padding="16dp"
         android:text="Skanowanie produktów"
-        android:textColor="@color/lightGray"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/added_product_tv"
         app:layout_constraintStart_toStartOf="parent"

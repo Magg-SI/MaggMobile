@@ -85,7 +85,8 @@
         <activity
             android:name=".ui.picture.PictureEditorActivity"
             android:theme="@style/AppThemeOrange" />
-        <activity android:name=".ui.login.LoginActivity">
+        <activity android:name=".ui.login.LoginActivity"
+            android:configChanges="uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

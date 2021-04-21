@@ -18,7 +18,7 @@ class ContractorListActivity : SimpleListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        showProgress(true)
+        showBlockingProgress(true)
         mode = intent.getStringExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA)!!
 
         val db = Room.databaseBuilder(
@@ -31,7 +31,7 @@ class ContractorListActivity : SimpleListActivity() {
             adapter.addAll(it as Collection<ICatalogable>?)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
     }

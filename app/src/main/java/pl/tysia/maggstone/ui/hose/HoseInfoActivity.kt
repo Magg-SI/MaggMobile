@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,10 +16,11 @@ import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.login.afterTextChanged
 
-class HoseInfoActivity : AppCompatActivity() {
+class HoseInfoActivity : BaseActivity() {
     private lateinit var viewModel: HoseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +34,13 @@ class HoseInfoActivity : AppCompatActivity() {
 
         viewModel.hoseResult.observe(this@HoseInfoActivity, Observer {
             displayHose(it)
+            showLoading(false)
+            info_ll.visibility = View.VISIBLE
+            availability_sv.visibility = View.VISIBLE
+        })
+
+        viewModel.result.observe(this@HoseInfoActivity, Observer {
+            Toast.makeText(this@HoseInfoActivity, it, Toast.LENGTH_LONG).show()
             showLoading(false)
         })
     }
@@ -52,15 +61,11 @@ class HoseInfoActivity : AppCompatActivity() {
 
     fun showLoading(show : Boolean){
         if (show) {
-            progress_bar.visibility = View.VISIBLE
             info_ll.visibility = View.INVISIBLE
             availability_sv.visibility = View.INVISIBLE
         }
-        else{
-            progress_bar.visibility = View.INVISIBLE
-            info_ll.visibility = View.VISIBLE
-            availability_sv.visibility = View.VISIBLE
-        }
+
+        showBlockingProgress(show)
     }
 
     fun displayHose(hose : Hose){

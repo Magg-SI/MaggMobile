@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.basic_catalog_layout.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.RecyclerMarginDecorator
 import pl.tysia.maggstone.ui.login.afterTextChanged
 import pl.tysia.maggstone.ui.presentation_logic.adapter.BasicCatalogAdapter
@@ -15,7 +16,7 @@ import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import java.util.ArrayList
 
 
-abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable> {
+abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable> {
     protected lateinit var adapter : BasicCatalogAdapter
     protected open var filter: StringFilter<ICatalogable> = StringFilter<ICatalogable>(null){ filteredStrings, item ->
         filteredStrings.count { item.getTitle()!!.toLowerCase().contains(it.toLowerCase()) }
@@ -46,14 +47,6 @@ abstract class SimpleListActivity : AppCompatActivity(), CatalogAdapter.ItemSele
 
         recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 200, mBottomLast = 64))
 
-    }
-
-    protected fun showProgress(show : Boolean){
-        if (show){
-            progressBar4.visibility = View.VISIBLE
-        }else{
-            progressBar4.visibility = View.GONE
-        }
     }
 
 }

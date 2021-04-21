@@ -120,7 +120,7 @@
         android:id="@+id/editor_buttons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="?colorPrimaryDark"
         android:elevation="6dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:background="@drawable/round_edit_background_dark"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="?colorPrimary"
             android:drawableLeft="@drawable/round_search_24"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
@@ -141,9 +141,8 @@
             android:onClick="onContractorSelectClick"
             android:paddingLeft="24dp"
             android:textColor="?colorAccent"
-            android:textColorHint="@color/hintGray"
             android:textSize="18sp"
-            app:drawableTint="@color/hintGray" />
+            app:drawableTint="?attr/colorControlNormal" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"

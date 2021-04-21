@@ -31,6 +31,7 @@ import pl.tysia.maggstone.data.service.SendingService
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.rotateBitmap
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.presentation_logic.EditPictureView
 import java.io.File
@@ -40,7 +41,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PictureEditorActivity : AppCompatActivity() {
+class PictureEditorActivity : BaseActivity() {
     private var currentPhotoPath: String? = null
     private lateinit var ware : Ware
     private lateinit var mService: SendingService
@@ -268,7 +269,7 @@ class PictureEditorActivity : AppCompatActivity() {
 
 
     fun attemptSave(view : View) {
-        showProgress(true)
+        showBlockingProgress(true)
 
         var bitmap : Bitmap? = null
         if (product_image.bitmap != null)
@@ -303,7 +304,7 @@ class PictureEditorActivity : AppCompatActivity() {
             editingEnabled(false)
 
         }
-        showProgress(false)
+        showBlockingProgress(false)
 
     }
 
@@ -315,31 +316,5 @@ class PictureEditorActivity : AppCompatActivity() {
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }
-
-
-    private fun showProgress(show: Boolean) {
-        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-
-        ware_edit_form.visibility = if (show) View.GONE else View.VISIBLE
-        ware_edit_form.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 0 else 1).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    ware_edit_form.visibility = if (show) View.GONE else View.VISIBLE
-                }
-            })
-
-        ware_editor_progress_bar.visibility = if (show) View.VISIBLE else View.GONE
-        ware_editor_progress_bar.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 1 else 0).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    ware_editor_progress_bar.visibility = if (show) View.VISIBLE else View.GONE
-                }
-            })
-    }
-
 
 }

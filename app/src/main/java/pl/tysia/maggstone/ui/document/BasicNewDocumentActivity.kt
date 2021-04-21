@@ -11,6 +11,7 @@ import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
+import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 
 class BasicNewDocumentActivity : NewDocumentActivity() {
     protected var contractor : Contractor? = null
@@ -33,7 +34,13 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
     }
 
     override fun saveAllowed(): Boolean {
-        return contractor != null && adapter.allItems.isNotEmpty()
+        val badItems = adapter.allItems.filter { item -> item.iloscOk!=0 }
+
+        return contractor != null && adapter.allItems.isNotEmpty() && badItems.isEmpty()
+    }
+
+    override fun getDocumentAdapter(): DocumentAdapter<DocumentItem> {
+        return DocumentAdapter(ArrayList())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

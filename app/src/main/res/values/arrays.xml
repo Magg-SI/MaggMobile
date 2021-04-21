@@ -25,4 +25,17 @@
         <item>0.20</item>
         <item>0.10</item>
     </string-array>
+
+    <!-- Reply Preference -->
+    <string-array name="mode_entries">
+        <item>Automatycznie</item>
+        <item>Ciemny motyw</item>
+        <item>Jasny motyw</item>
+    </string-array>
+
+    <string-array name="mode_values">
+        <item>auto</item>
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
 </resources>

@@ -2,17 +2,20 @@ package pl.tysia.maggstone.ui.presentation_logic.adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.constants.PackingState
 import pl.tysia.maggstone.data.model.Order
+
 
 class OrdersAdapter(items : ArrayList<Order>) : CatalogAdapter<Order, OrdersAdapter.OrderViewHolder>(items) {
 
@@ -51,7 +54,11 @@ class OrdersAdapter(items : ArrayList<Order>) : CatalogAdapter<Order, OrdersAdap
 
         when (item.getPackingState()){
             PackingState.UNTOUCHED -> {
-                val color = ContextCompat.getColor(context, R.color.lightGray);
+                val typedValue = TypedValue()
+                val theme = context.theme
+                theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true)
+                @ColorInt val color = typedValue.data
+
                 holder.title.setTextColor(color)
 
                 holder.imageView.setImageResource(0)
@@ -64,7 +71,7 @@ class OrdersAdapter(items : ArrayList<Order>) : CatalogAdapter<Order, OrdersAdap
             }
             PackingState.STARTED -> {
                 holder.imageView.setImageResource(R.drawable.ic_baseline_more)
-                val color = ContextCompat.getColor(context, R.color.colorAccentRed);
+                val color = ContextCompat.getColor(context, R.color.colorAccentOrange);
                 holder.title.setTextColor(color)
                 ImageViewCompat.setImageTintList(holder.imageView, ColorStateList.valueOf(color));
             }

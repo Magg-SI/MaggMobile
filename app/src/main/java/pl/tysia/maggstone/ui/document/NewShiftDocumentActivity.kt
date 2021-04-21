@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_new_document.*
@@ -44,24 +45,30 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setContentView(R.layout.activity_new_shift_document)
 
-        adapter = ShiftDocumentAdapter(ArrayList())
-        wares_recycler.adapter = adapter
+        super.onCreate(savedInstanceState)
 
         wareViewModel = ViewModelProvider(this,
             ViewModelFactory(this)
         ).get(WareInfoViewModel::class.java)
 
-        wareViewModel.availability.observe(this@NewShiftDocumentActivity, Observer {
+        wareViewModel!!.availability.observe(this@NewShiftDocumentActivity, Observer {
             lastWare!!.availabilities = it
-            super.addWare(lastWare!!)
-            showProgress(false)
+
+            if (lastWare!!.availabilities!![0].quantity <= 0 ){
+                Toast.makeText(this@NewShiftDocumentActivity, "Brak produktu w magazynie", Toast.LENGTH_LONG).show()
+            }else{
+                super.addWare(lastWare!!)
+            }
+
+            showBlockingProgress(false)
         })
 
-        wareViewModel.result.observe(this@NewShiftDocumentActivity, Observer {
-            showProgress(false)
+        wareViewModel!!.result.observe(this@NewShiftDocumentActivity, Observer {
+            Toast.makeText(this@NewShiftDocumentActivity, it, Toast.LENGTH_LONG).show()
+            showBlockingProgress(false)
         })
 
     }
@@ -73,24 +80,24 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
     }
 
     override fun saveAllowed(): Boolean {
-        return warehouse != null && adapter.allItems.isNotEmpty()
+        val badItems = adapter.allItems.filter { item -> item.iloscOk!=0 }
+        return warehouse != null && adapter.allItems.isNotEmpty() && badItems.isEmpty()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_new_shift_document)
-
-        super.onCreate(savedInstanceState)
+    override fun getDocumentAdapter(): DocumentAdapter<DocumentItem> {
+        return ShiftDocumentAdapter(ArrayList())
     }
 
     override fun addWare(ware: Ware) {
         lastWare = ware
+        showBlockingProgress(true)
 
         val token = LoginRepository(
             LoginDataSource(NetAddressManager(this)),
             this@NewShiftDocumentActivity
         ).user!!.token
 
-        wareViewModel.getAvailabilities(ware.index!!, token)
+        wareViewModel!!.getAvailabilities(ware.index!!, token)
 
     }
 

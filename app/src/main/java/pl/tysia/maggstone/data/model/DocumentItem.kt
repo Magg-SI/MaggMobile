@@ -6,6 +6,7 @@ import java.io.Serializable
 
 data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Serializable {
     var ilosc : Double = 1.0
+    var iloscOk : Int  = 0
     val towID : Int = if (item is Hose) item.id!! else if (item is Ware) item.id!! else -1
 
     fun getShortDescription() : String {
@@ -25,7 +26,7 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
     }
 
     fun getMainAvailability() : Availability?{
-        return getAvailabilities()?.firstOrNull { a -> a.warehouse == WAREHOUSE_MAIN }
+        return getAvailabilities()?.get(0)
     }
 
     override fun getTitle(): String {

@@ -37,7 +37,7 @@
                 android:id="@+id/textInputLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="?colorPrimaryDark"
                 android:elevation="6dp"
                 android:orientation="horizontal"
                 android:paddingStart="12dp"
@@ -53,9 +53,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/button_half_round_dark_left"
-                    android:hint="Przewód"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/hintGray" />
+                    android:backgroundTint="?colorPrimary"
+                    android:hint="Przewód" />
 
                 <ImageButton
                     android:id="@+id/cord_search_button"
@@ -75,14 +74,15 @@
                 android:id="@+id/tips_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="?colorPrimaryDark"
                 android:elevation="6dp"
                 android:orientation="horizontal"
                 android:paddingStart="12dp"
                 android:paddingLeft="12dp"
                 android:paddingEnd="12dp"
                 android:paddingRight="12dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/end1_et"
@@ -91,9 +91,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_half_round_dark_left"
                     android:enabled="true"
-                    android:hint="Końcówka"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/colorPrimary" />
+                    android:hint="Końcówka" />
 
                 <ImageButton
                     android:id="@+id/tip_search_button"
@@ -117,9 +115,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_half_round_dark_left"
                     android:enabled="true"
-                    android:hint="Końcówka"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/colorPrimary" />
+                    android:hint="Końcówka" />
 
                 <ImageButton
                     android:id="@+id/tip_search_button2"
@@ -138,7 +134,7 @@
                 android:id="@+id/sleeve_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="?colorPrimaryDark"
                 android:elevation="6dp"
                 android:paddingStart="12dp"
                 android:paddingLeft="12dp"
@@ -146,7 +142,8 @@
                 android:paddingEnd="12dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="16dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/sleeve_et"
@@ -155,9 +152,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_half_round_dark_left"
                     android:enabled="true"
-                    android:hint="Tulejki"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/colorPrimary" />
+                    android:hint="Tulejki" />
 
                 <ImageButton
                     android:id="@+id/sleeve_search_button"
@@ -182,12 +177,9 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text"
-                android:backgroundTint="@color/lightGray"
                 android:ems="6"
                 android:hint="Długość"
-                android:inputType="number"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/hintGray" />
+                android:inputType="number" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/hose_code_et"
@@ -199,10 +191,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/edit_text"
-                android:backgroundTint="@color/lightGray"
-                android:hint="Kod węża"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/hintGray" />
+                android:hint="Kod węża" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/twist_angle_et"
@@ -212,10 +201,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text"
-                android:backgroundTint="@color/lightGray"
-                android:hint="Kąt skręcenia końc. "
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/hintGray" />
+                android:hint="Kąt skręcenia końc. " />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/creator_et"
@@ -227,10 +213,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/edit_text"
-                android:backgroundTint="@color/lightGray"
-                android:hint="Wykonawca"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/hintGray" />
+                android:hint="Wykonawca" />
 
         </LinearLayout>
     </ScrollView>

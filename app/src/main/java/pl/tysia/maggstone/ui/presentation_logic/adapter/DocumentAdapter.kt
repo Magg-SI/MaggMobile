@@ -1,26 +1,29 @@
 package pl.tysia.maggstone.ui.presentation_logic.adapter
 
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.model.DocumentItem
 import java.lang.Integer.MAX_VALUE
 import java.util.*
+import kotlin.math.round
+
 
 open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     CatalogAdapter<T, DocumentAdapter<T>.DocumentViewHolder>(items) {
 
+    override var selectedItem: T? = null
+
     inner class DocumentViewHolder(v: View) :
-        RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener {
+        RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener, TextWatcher {
 
         var title: TextView = v.findViewById(R.id.title_tv)
         var description: TextView = v.findViewById(R.id.subtitle_tv)
@@ -40,14 +43,17 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         init {
             numberET.onFocusChangeListener = this
+            numberET.addTextChangedListener(this)
 
             moreButton.setOnClickListener {
                 val item: DocumentItem = shownItems[adapterPosition]
+                numberET.clearFocus();
                 onMoreClicked(item)
             }
 
             lessButton.setOnClickListener {
                 val item = shownItems[adapterPosition] as DocumentItem
+                numberET.clearFocus();
                 onLessClicked(item)
             }
 
@@ -61,27 +67,110 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         }
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
-            if (!hasFocus){
-                val item = shownItems[adapterPosition] as DocumentItem
-                try {
-                    val quantity = numberET.text.toString().toDouble()
-                    if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
-                } catch (ex: NumberFormatException) {
-                    numberET.setText("0")
-                }
-            }else{
-                numberET.selectAll()
+            if (!hasFocus) {
+                Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+                    override fun run() {
+                        numberET.clearFocus()
+                        notifyDataSetChanged()
+                    }
+                },50)
             }
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            val item = allItems[adapterPosition]
+            if (selectedItem != item)
+                selectedItem = item
+
+            if(numberET.text.toString().isEmpty()) {
+                item.ilosc=0.0
+                fixCount(item,1)
+                showError(item, numberET)
+            }
+
+            else if (numberET.hasFocus()) {
+                try {
+                    val quantity = numberET.text.toString().replace(',', '.').toDouble()
+
+                    if (quantity >= 0) item.ilosc = quantity
+                    fixCount(item,0)
+                } catch (ex: NumberFormatException) {
+                    fixCount(item,-1)
+                    item.ilosc=0.0
+                } finally {
+                    //if (numberET.text.toString().replace(',','.').toDouble() != item.ilosc) numberET.setText(countToStr(item.ilosc))
+
+
+                    showError(item, numberET)
+                }
+
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         }
     }
 
-    protected open fun onMoreClicked(item : DocumentItem){
-        if (item.ilosc < MAX_VALUE) item.ilosc = item.ilosc + 1
+    protected open fun isCountValid(item: T) {
+        if(item.ilosc <= 0) item.iloscOk=1;
+    }
+
+    /*private fun setCountValidity(item: T){
+        if(item.ilosc > 0.0) {
+            item.iloscOk = 0
+        }
+
+        changeListeners.forEach { it.onListChanged() }
+    }*/
+
+    fun fixCount(item: T, err: Int){
+        /*if (!isCountValid(item)){
+            if (item.ilosc < 0) item.ilosc = 0.0
+        }*/
+        item.iloscOk=err
+        if(item.iloscOk==0) isCountValid(item)
+
+        //setCountValidity(item)
+        changeListeners.forEach { it.onListChanged() }
+    }
+
+    private fun showError(item: DocumentItem, view: EditText){
+        if (item.iloscOk!=0) {
+            view.error = getErrorTx(item.iloscOk)
+        }
+        else{
+            view.error = null
+        }
+    }
+
+    fun getErrorTx(err: Int): String {
+        if (err==-1) {
+            return "Nieprawidłowy format danych"
+        }
+        else if (err==1) {
+            return "Ilość musi być większa niż 0"
+        }
+        else if (err==2){
+            return "Zbyt duża ilość"
+        }
+        return "";
+    }
+    protected open fun onMoreClicked(item: DocumentItem){
+        if (item.ilosc < MAX_VALUE) {
+            item.ilosc = item.ilosc + 1
+            item.iloscOk=0
+        }
         notifyDataSetChanged()
     }
 
-    protected open fun onLessClicked(item : DocumentItem){
-        if (item.ilosc > 0) item.ilosc = item.ilosc - 1
+    protected open fun onLessClicked(item: DocumentItem){
+        if (item.ilosc > 1) {
+            item.ilosc = item.ilosc - 1
+            item.iloscOk=0
+        }
         notifyDataSetChanged()
     }
 
@@ -96,11 +185,25 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     override fun onBindViewHolder(holder: DocumentViewHolder, position: Int) {
-        val item: DocumentItem = shownItems[position]
-        val context = holder.back.context
+        val item: T = shownItems[position]
+
         holder.title.text = item.getTitle()
         holder.description.text = item.getDescription()
         holder.name.text = item.getShortDescription()
-        holder.numberET.setText(java.lang.Double.toString(item.ilosc))
+        holder.numberET.setText(countToStr(item.ilosc))
+
+        showError(item, holder.numberET)
+    }
+
+    fun countToStr(ilo: Double): String {
+        val x = 1.0*ilo.toInt()
+        if(x==ilo) return ilo.toInt().toString()
+        return ilo.round(4).toString().replace('.', ',')
+    }
+
+    fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return round(this * multiplier) / multiplier
     }
 }
