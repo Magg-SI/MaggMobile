@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:elevation="3dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:background="@drawable/list_item_background">
+        android:background="@drawable/list_item_background"
+        android:elevation="2dp">
 
         <ImageView
             android:id="@+id/check_image"
@@ -45,7 +47,6 @@
             android:layout_marginEnd="16dp"
             android:padding="8dp"
             android:text="This is the path that is defined in the TMDB api for getting popular movies. After that we create a function called getmovies that we will return a call object containing data which is in the form of PopulaMovies object of the PopulaMovies"
-            android:textColor="@color/lightGray"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/less_button"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,15 +57,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:digits="0123456789,."
             android:hint="0"
             android:inputType="number|numberDecimal"
-            android:digits="0123456789,."
             android:maxEms="6"
             android:minEms="2"
             android:padding="12dp"
             android:selectAllOnFocus="true"
-            android:textColor="@color/lightGray"
-            android:textColorHint="@color/hintGray"
             app:layout_constraintBottom_toBottomOf="@+id/subtitle_tv"
             app:layout_constraintEnd_toStartOf="@+id/more_button"
             app:layout_constraintTop_toTopOf="@+id/subtitle_tv"
@@ -80,7 +79,7 @@
             app:layout_constraintEnd_toStartOf="@+id/number_et"
             app:layout_constraintTop_toTopOf="@+id/number_et"
             app:srcCompat="@drawable/round_remove_24"
-            app:tint="@color/lightGray" />
+            app:tint="?attr/colorControlNormal" />
 
         <ImageView
             android:id="@+id/more_button"
@@ -93,7 +92,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/number_et"
             app:srcCompat="@drawable/round_add_24"
-            app:tint="@color/lightGray" />
+            app:tint="?attr/colorControlNormal" />
 
         <ImageButton
             android:id="@+id/delete_button"
@@ -102,7 +101,7 @@
             android:layout_marginEnd="8dp"
             android:background="@null"
             android:padding="8dp"
-            android:tint="@color/lightGray"
+            android:tint="?attr/colorControlNormal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_delete_outline_24" />
@@ -114,7 +113,8 @@
             android:layout_marginEnd="8dp"
             android:background="@null"
             android:padding="8dp"
-            android:tint="@color/lightGray"
+            android:tint="?attr/colorControlNormal"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/delete_button"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/round_info_24" />
@@ -126,7 +126,6 @@
             android:layout_marginTop="16dp"
             android:padding="8dp"
             android:text="This is the path that is defined in the TMDB api for getting popular movies. After that we create a function called getmovies that we will return a call object containing data which is in the form of PopulaMovies object of the PopulaMovies"
-            android:textColor="@color/lightGray"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

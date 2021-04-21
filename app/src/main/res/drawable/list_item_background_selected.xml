@@ -7,7 +7,7 @@
         android:right="16dp"
         android:top="16dp" />
 
-    <solid android:color="@color/colorPrimaryDark" />
+    <solid android:color="?colorControlHighlight" />
 
 <!--    <stroke-->
 <!--        android:color="@color/colorPrimary"-->

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
 
     tools:context=".ui.main.MainActivity">
 
@@ -30,7 +29,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Dokumenty"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp" />
 
             <HorizontalScrollView
@@ -51,7 +49,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Kartoteki"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp" />
 
             <HorizontalScrollView
@@ -71,7 +68,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Narzędzia"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp" />
 
             <HorizontalScrollView
@@ -94,8 +90,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/button_half_round_dark_right"
-        android:backgroundTint="@color/colorPrimary"
         android:elevation="6dp"
         android:gravity="center|right"
         android:orientation="horizontal"
@@ -104,62 +98,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/error_fab"
+        <ImageButton
+            android:id="@+id/error_fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="1"
+            android:layout_weight="0"
             android:clickable="true"
             android:onClick="onErrorsClicked"
+            android:padding="16dp"
             android:tint="@color/design_default_color_error"
             android:visibility="visible"
             app:backgroundTint="@android:color/transparent"
             app:borderWidth="0dp"
-            app:elevation="0dp"
             app:srcCompat="@drawable/round_priority_high_24" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/synchronize_fab"
+        <ImageButton
+            android:id="@+id/synchronize_fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="1"
+            android:layout_weight="0"
             android:clickable="true"
             android:onClick="onSynchroniseClicked"
-            android:tint="@color/lightGray"
+            android:padding="16dp"
+            android:tint="?colorControlNormal"
             app:backgroundTint="@android:color/transparent"
             app:borderWidth="0dp"
-            app:elevation="0dp"
             app:srcCompat="@drawable/round_loop_24" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/sending_fab"
+        <ImageButton
+            android:id="@+id/sending_fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="1"
+            android:layout_weight="0"
             android:clickable="true"
             android:onClick="onSendingClicked"
-            android:tint="@color/lightGray"
+            android:padding="16dp"
+            android:tint="?colorControlNormal"
             app:backgroundTint="@android:color/transparent"
             app:borderWidth="0dp"
-            app:elevation="0dp"
             app:srcCompat="@drawable/round_publish_24" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/settings_fab"
+        <ImageButton
+            android:id="@+id/settings_fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@drawable/fab_gradient_colors"
+            android:backgroundTint="?colorPrimaryDark"
             android:clickable="true"
             android:onClick="onSettingsClicked"
-            android:tint="@color/colorPrimaryDark"
-            app:backgroundTint="@color/lightGray"
-            app:borderWidth="0dp"
-            app:srcCompat="@drawable/round_settings_24" />
+            android:src="@drawable/round_settings_24"
+            android:tint="@color/colorPrimaryDark" />
     </LinearLayout>
 
 

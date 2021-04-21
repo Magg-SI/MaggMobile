@@ -2,6 +2,7 @@ package pl.tysia.maggstone.data.source
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import androidx.preference.PreferenceManager
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.model.LoggedInUser
 import pl.tysia.maggstone.data.api.model.LoginResponse
@@ -17,11 +18,23 @@ private const val LOGGED_USER_PREFERENCES = "pl.tysia.maggstone.logged_user_pref
 private const val PREF_USERNAME = "pl.tysia.maggstone.username"
 private const val PREF_TOKEN = "pl.tysia.maggstone.token"
 private const val PREF_ID = "pl.tysia.maggstone.id"
+private const val PREF_MODE = "mode_preference"
+private const val PREF_PROMPT_MODE = "mode_preference_prompt"
 
 class LoginRepository(val dataSource: LoginDataSource, val context: Context) {
 
+    companion object{
+
+    }
+
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
+        private set
+
+    var mode: String? = null
+        private set
+
+    var promptedDarkMode: String? = null
         private set
 
     val isLoggedIn: Boolean
@@ -35,6 +48,12 @@ class LoginRepository(val dataSource: LoginDataSource, val context: Context) {
         val username = preferences.getString(PREF_USERNAME, null)
         val id = preferences.getInt(PREF_ID, -1)
         val token =preferences.getString(PREF_TOKEN, null)
+
+        val appPreferences = PreferenceManager
+            .getDefaultSharedPreferences(context)
+
+        mode = appPreferences.getString(PREF_MODE, null)
+        promptedDarkMode = appPreferences.getString(PREF_PROMPT_MODE, null)
 
         user =
             if (username != null && token !=null && id > -1)

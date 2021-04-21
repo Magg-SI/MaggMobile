@@ -1,11 +1,14 @@
 package pl.tysia.maggstone.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.settings_activity.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.NetAddressManager
@@ -16,6 +19,7 @@ import pl.tysia.maggstone.ui.login.LoginViewModel
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var listener : SharedPreferences.OnSharedPreferenceChangeListener;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,22 @@ class SettingsActivity : AppCompatActivity() {
         val user =  LoginRepository(LoginDataSource(NetAddressManager(this@SettingsActivity)),this@SettingsActivity).user!!
 
         title_username.text = user.displayName
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences, s: String ->
+            if (s == "mode_preference") {
+                val mode = sharedPreferences.getString("mode_preference", "auto")
+
+                when(mode){
+                    "auto" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
+        }
+
+        prefs.registerOnSharedPreferenceChangeListener(listener);
 
     }
 

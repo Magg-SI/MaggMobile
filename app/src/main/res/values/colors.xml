@@ -6,16 +6,21 @@
     <color name="colorPrimaryBackground">#2E2E2E</color>
 
     <color name="lightGray">#F3F3F3</color>
+
     <color name="colorAccent">#01B31B</color>
+    <color name="colorAccentLight">#A5F6B1</color>
     <color name="colorAccentDark">#037014</color>
 
     <color name="colorAccentRed">#FFE500</color>
+    <color name="colorAccentRedLight">#FFF6A6</color>
     <color name="colorAccentRedDark">#D3A500</color>
 
     <color name="colorAccentBlue">#03A9F4</color>
+    <color name="colorAccentBlueLight">#8CDBFF</color>
     <color name="colorAccentBlueDark">#066C9A</color>
 
     <color name="colorAccentOrange">#FF5722</color>
+    <color name="colorAccentOrangeLight">#F6A187</color>
     <color name="colorAccentOrangeDark">#B63810</color>
 
     <color name="selectionGray">#E6E6E6</color>
