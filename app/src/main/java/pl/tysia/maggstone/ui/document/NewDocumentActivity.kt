@@ -34,7 +34,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         const val WARE_REQUEST_CODE  = 1337
         const val HOSE_REQUEST_CODE  = 1338
         const val CONTRACTOR_REQUEST_CODE  = 842
-        const val WAREHOUSE_REQUEST_CODE  = 842
+        const val WAREHOUSE_REQUEST_CODE  = 843
     }
 
     abstract fun save()
@@ -114,12 +114,14 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         adapter.addItem(DocumentItem(ware))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        checkIfSaveAllowed()
     }
 
     open fun addHose(hose : Hose){
         adapter.addItem(DocumentItem(hose))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        checkIfSaveAllowed()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

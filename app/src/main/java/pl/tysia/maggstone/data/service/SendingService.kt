@@ -28,6 +28,7 @@ import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.source.PictureDataSource
+import pl.tysia.maggstone.getPhotoString
 import pl.tysia.maggstone.resizeBitmap
 import pl.tysia.maggstone.rotateBitmap
 import pl.tysia.maggstone.ui.SendingStateActivity
@@ -87,13 +88,7 @@ class SendingService : Service(){
             .getString("picture_size", "0.1")!!.toFloat()
     }
 
-    private fun getPhotoString(bitmap : Bitmap) : String{
-        val stream = ByteArrayOutputStream()
-        val resized = resizeBitmap(bitmap, getPictureSize())
-        resized.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val image = stream.toByteArray()
-        return Base64.encodeToString(image, Base64.DEFAULT)
-    }
+
 
     private fun loadPhotoBatches(queueItem: QueueItem){
         val file = File(queueItem.photoPath)
@@ -109,7 +104,7 @@ class SendingService : Service(){
             ImageDecoder.decodeBitmap(source)
         }
 
-        val pictureString = getPhotoString(bitmap)
+        val pictureString = getPhotoString(bitmap, getPictureSize())
         val pictureBatches = pictureString.chunked(BATCH_SIZE)
 
         queueItem.picture = pictureBatches

@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.sign.SignActivity"></activity>
         <activity android:name=".ui.hose.HoseInfoActivity"></activity>
         <activity android:name=".ui.error.ErrorsActivity" />
         <activity

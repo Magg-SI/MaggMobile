@@ -20,10 +20,10 @@ class DocumentsDataSource(netAddressManager: NetAddressManager) : APISource(netA
     val service: DocumentService = retrofit.create(DocumentService::class.java)
 
 
-    fun sendDocument(token : String, ktrID : Int, items : List<DocumentItem>) : Result<Int> {
+    fun sendDocument(token : String, ktrID : Int, sign : String, comments : String, items : List<DocumentItem>) : Result<Int> {
 
         val result = service.sendDocument(
-            NewDocumentRequest.getNewOfferRequest(token, ktrID, items)
+            NewDocumentRequest.getNewOfferRequest(token, ktrID, sign, comments, items)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -33,10 +33,10 @@ class DocumentsDataSource(netAddressManager: NetAddressManager) : APISource(netA
         }
     }
 
-    fun sendShiftDocument(token : String, id : Int, items : List<DocumentItem>) : Result<Int> {
+    fun sendShiftDocument(token : String, id : Int, sign : String, comments : String, items : List<DocumentItem>) : Result<Int> {
 
         val result = service.sendDocument(
-            NewDocumentRequest.getNewShiftRequest(token, id, items)
+            NewDocumentRequest.getNewShiftRequest(token, id, sign, comments, items)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

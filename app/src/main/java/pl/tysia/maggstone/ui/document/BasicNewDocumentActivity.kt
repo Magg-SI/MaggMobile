@@ -5,28 +5,28 @@ import android.content.Intent
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.DocumentType
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.data.model.DocumentItem
-import pl.tysia.maggstone.data.model.Hose
-import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
+import pl.tysia.maggstone.ui.sign.SignActivity
 
 class BasicNewDocumentActivity : NewDocumentActivity() {
     protected var contractor : Contractor? = null
 
     override fun save() {
         if(contractor != null && adapter.allItems.isNotEmpty()) {
-            val token = LoginRepository(
-                LoginDataSource(NetAddressManager(this)),
-                this@BasicNewDocumentActivity
-            ).user!!.token
-
-            viewModel.sendDocument(token, contractor!!.id, adapter.allItems)
+            val intent = Intent(this, SignActivity::class.java)
+            intent.putExtra(Extras.CONTRACTOR_EXTRA, contractor)
+            intent.putExtra(Extras.DOCUMENT_ITEMS_EXTRA, adapter.allItems)
+            intent.putExtra(Extras.DOCUMENT_TYPE, DocumentType.OFFER)
+            startActivity(intent)
         }
     }
 

@@ -9,6 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.DocumentType
+import pl.tysia.maggstone.constants.Extras
+import pl.tysia.maggstone.constants.Extras.DOCUMENT_ITEMS_EXTRA
+import pl.tysia.maggstone.constants.Extras.WAREHOUSE_EXTRA
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.DocumentItem
@@ -19,6 +23,7 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
+import pl.tysia.maggstone.ui.sign.SignActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ShiftDocumentAdapter
 import pl.tysia.maggstone.ui.warehouses.WarehousesListActivity
@@ -33,12 +38,13 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
 
     override fun save() {
         if(warehouse != null && adapter.allItems.isNotEmpty()) {
-            val token = LoginRepository(
-                LoginDataSource(NetAddressManager(this)),
-                this@NewShiftDocumentActivity
-            ).user!!.token
 
-            viewModel.sendShiftDocument(token, warehouse!!.id, adapter.allItems)
+            val intent = Intent(this, SignActivity::class.java)
+            intent.putExtra(Extras.WAREHOUSE_EXTRA, warehouse)
+            intent.putExtra(Extras.DOCUMENT_ITEMS_EXTRA, adapter.allItems)
+            intent.putExtra(Extras.DOCUMENT_TYPE, DocumentType.SHIFT)
+            startActivity(intent)
+
         }
     }
 
