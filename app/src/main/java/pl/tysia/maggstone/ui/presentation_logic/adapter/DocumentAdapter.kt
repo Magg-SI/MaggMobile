@@ -20,6 +20,8 @@ import kotlin.math.round
 open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     CatalogAdapter<T, DocumentAdapter<T>.DocumentViewHolder>(items) {
 
+    override var selectedItem: T? = null
+
     inner class DocumentViewHolder(v: View) :
         RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener, TextWatcher {
 
@@ -33,8 +35,6 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         var lessButton: ImageView = v.findViewById(R.id.less_button)
         var numberET: EditText = v.findViewById(R.id.number_et)
         var checkImage: ImageView = v.findViewById(R.id.check_image)
-
-        private var lastEdited : DocumentItem? = null
 
         override fun onClick(v: View) {
             val pos = adapterPosition
@@ -67,42 +67,37 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         }
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
-            /*if (!hasFocus && lastEdited != null){
-                val item = lastEdited!!
-                try {
-                    val quantity = numberET.text.toString().toDouble()
-                    if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
-                } catch (ex: NumberFormatException) {
-                    numberET.setText("0")
-                }
-                numberET.clearFocus();
-            }*/
-
             if (!hasFocus) {
-                title.setText("0")
-                numberET.clearFocus();
+                numberET.clearFocus()
+
             }
         }
 
         override fun afterTextChanged(s: Editable?) {
-            //if(adapterPosition>=0) lastEdited = allItems[adapterPosition]
-
             val item = allItems[adapterPosition]
+            if (selectedItem != item)
+                selectedItem = item
+
             if(numberET.text.toString().isEmpty()) {
                 item.ilosc=0.0
-                item.iloscOk=false
+                fixCount(item)
+                showError(item, numberET)
             }
-            else if (numberET.hasFocus() ) {
+
+            else if (numberET.hasFocus()) {
                 try {
                     val quantity = numberET.text.toString().replace(',','.').toDouble()
-                    if (quantity >= 0) item.ilosc = quantity else numberET.setText("0")
-                    item.iloscOk=true
-                    setIloscState(item)
+
+                    if (quantity >= 0) item.ilosc = quantity
                 } catch (ex: NumberFormatException) {
                     item.ilosc=0.0
-                    item.iloscOk=false
-                    //numberET.setText("0")
+                } finally {
+                    if (numberET.text.toString().toDouble() != item.ilosc) numberET.setText(countToStr(item.ilosc))
+
+                    fixCount(item)
+                    showError(item, numberET)
                 }
+
             }
         }
 
@@ -111,6 +106,24 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         }
+    }
+
+    protected open fun isCountValid(item: T) : Boolean{
+        return item.ilosc > 0
+    }
+
+    private fun setCountValidity(item : T){
+        item.iloscOk = item.ilosc > 0.0
+
+        changeListeners.forEach { it.onListChanged() }
+    }
+
+    protected open fun fixCount(item: T){
+        if (!isCountValid(item)){
+            if (item.ilosc < 0) item.ilosc = 0.0
+        }
+
+        setCountValidity(item)
     }
 
     protected open fun onMoreClicked(item : DocumentItem){
@@ -140,19 +153,25 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     override fun onBindViewHolder(holder: DocumentViewHolder, position: Int) {
-        val item: DocumentItem = shownItems[position]
-        val context = holder.back.context
+        val item: T = shownItems[position]
+
         holder.title.text = item.getTitle()
         holder.description.text = item.getDescription()
         holder.name.text = item.getShortDescription()
-        //holder.numberET.setText(java.lang.Double.toString(item.ilosc))
-        holder.numberET.setText(iloscToStr(item.ilosc))
+        holder.numberET.setText(countToStr(item.ilosc))
+
+        showError(item, holder.numberET)
     }
 
-    protected open fun setIloscState(i: DocumentItem) {
+    private fun showError(item : DocumentItem, view : EditText){
+        if (!item.iloscOk){
+            view.error = "Liczba musi być większa niż 0"
+        }else{
+            view.error = null
+        }
     }
 
-    fun iloscToStr(ilo: Double): String {
+    fun countToStr(ilo: Double): String {
         val x = 1.0*ilo.toInt()
         if(x==ilo) return ilo.toInt().toString()
         return ilo.round(4).toString().replace('.',',')
