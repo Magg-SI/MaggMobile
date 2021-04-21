@@ -19,7 +19,7 @@ import java.util.ArrayList
 abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable> {
     protected lateinit var adapter : BasicCatalogAdapter
     protected open var filter: StringFilter<ICatalogable> = StringFilter<ICatalogable>(null){ filteredStrings, item ->
-        filteredStrings.count { item.getTitle()!!.toLowerCase().contains(it.toLowerCase()) }
+        filteredStrings.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase()) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
