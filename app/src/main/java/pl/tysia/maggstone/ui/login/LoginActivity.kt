@@ -22,7 +22,10 @@ import kotlinx.android.synthetic.main.activity_login.*
 import pl.tysia.maggstone.ui.main.MainActivity
 
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 
@@ -38,6 +41,14 @@ class LoginActivity : BaseActivity() {
             ViewModelFactory(this)
         )
             .get(LoginViewModel::class.java)
+
+        val mode = loginViewModel.loginRepository.mode
+
+        when(mode){
+            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
 
         setContentView(R.layout.activity_login)
 
@@ -133,6 +144,10 @@ class LoginActivity : BaseActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+
     }
 
     override fun showBlockingProgress(show: Boolean) {
