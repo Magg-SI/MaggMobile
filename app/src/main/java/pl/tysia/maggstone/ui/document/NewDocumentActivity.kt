@@ -80,7 +80,6 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
     }
 
     fun onSaveClick(view: View){
-        showBlockingProgress(true)
         save()
     }
 
