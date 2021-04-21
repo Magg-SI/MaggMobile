@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     tools:context=".ui.error.ErrorsActivity">
 
     <TextView
@@ -13,7 +12,6 @@
         android:layout_height="@dimen/top_label_size"
         android:padding="16dp"
         android:text="Problemy"
-        android:textColor="@color/lightGray"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

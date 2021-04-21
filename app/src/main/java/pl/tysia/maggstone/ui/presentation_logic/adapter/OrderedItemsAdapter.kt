@@ -88,7 +88,7 @@ class OrderedItemsAdapter(items : ArrayList<OrderedWare>) : CatalogAdapter<Order
             PackingState.STARTED -> {
                 catalogItemViewHolder.imageView.visibility = View.VISIBLE
                 catalogItemViewHolder.imageView.setImageResource(R.drawable.ic_baseline_more)
-                val color = ContextCompat.getColor(context, R.color.colorAccentRed);
+                val color = ContextCompat.getColor(context, R.color.colorAccentOrange);
                 ImageViewCompat.setImageTintList(catalogItemViewHolder.imageView, ColorStateList.valueOf(color));
             }
         }

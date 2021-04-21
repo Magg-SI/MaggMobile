@@ -28,7 +28,7 @@
                 android:right="16dp"
                 android:top="16dp" />
 
-            <solid android:color="@color/colorPrimary" />
+            <solid android:color="?colorPrimary" />
 
         </shape>
     </item>

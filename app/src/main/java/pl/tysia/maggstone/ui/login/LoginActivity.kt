@@ -2,6 +2,7 @@ package pl.tysia.maggstone.ui.login
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -14,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_login.*
@@ -26,10 +28,16 @@ import pl.tysia.maggstone.ui.ViewModelFactory
 
 class LoginActivity : BaseActivity() {
 
+    private var mode: String? = null
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loginViewModel = ViewModelProvider(this,
+            ViewModelFactory(this)
+        )
+            .get(LoginViewModel::class.java)
 
         setContentView(R.layout.activity_login)
 
@@ -39,14 +47,10 @@ class LoginActivity : BaseActivity() {
 
         NetworkChangeReceiver().enable(this)
 
-        loginViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        )
-            .get(LoginViewModel::class.java)
-
         NetworkChangeReceiver.internetConnection.observe(this, Observer {
             if (it && loginViewModel.loginRepository.isLoggedIn){
                 showBlockingProgress(true)
+
                 loginViewModel.testToken()
             }
         })
@@ -55,7 +59,9 @@ class LoginActivity : BaseActivity() {
             if (it) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
-            } else showBlockingProgress(false)
+            } else {
+                showBlockingProgress(false)
+            }
         })
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {

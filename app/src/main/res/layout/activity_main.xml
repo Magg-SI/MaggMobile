@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
 
     tools:context=".ui.main.MainActivity">
 
@@ -35,8 +34,8 @@
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:scrollbars="none"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/section_documents"
@@ -57,8 +56,8 @@
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:scrollbars="none"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/section_catalogs"
@@ -78,8 +77,8 @@
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:scrollbars="none"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/section_tools"
@@ -131,7 +130,7 @@
             android:clickable="true"
             android:onClick="onSynchroniseClicked"
             android:padding="16dp"
-            android:tint="@color/lightGray"
+            android:tint="?colorControlNormal"
             app:backgroundTint="@android:color/transparent"
             app:borderWidth="0dp"
             app:srcCompat="@drawable/round_loop_24" />
@@ -146,7 +145,7 @@
             android:clickable="true"
             android:onClick="onSendingClicked"
             android:padding="16dp"
-            android:tint="@color/lightGray"
+            android:tint="?colorControlNormal"
             app:backgroundTint="@android:color/transparent"
             app:borderWidth="0dp"
             app:srcCompat="@drawable/round_publish_24" />
@@ -157,11 +156,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:background="@drawable/fab_gradient_colors"
-            android:backgroundTint="@android:color/white"
+            android:backgroundTint="?colorControlNormal"
             android:clickable="true"
             android:onClick="onSettingsClicked"
             android:src="@drawable/round_settings_24"
-            android:tint="@color/colorPrimaryDark" />
+            android:tint="?colorPrimary" />
     </LinearLayout>
 
 

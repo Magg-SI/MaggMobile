@@ -61,7 +61,7 @@
             android:id="@+id/linearLayout4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:background="?colorPrimaryDark"
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,6 @@
                 android:paddingRight="16dp"
                 android:paddingBottom="16dp"
                 android:text="TextView"
-                android:textColor="@color/lightGray"
                 android:textSize="16dp" />
 
         </LinearLayout>

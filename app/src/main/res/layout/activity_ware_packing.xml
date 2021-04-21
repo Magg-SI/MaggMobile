@@ -11,7 +11,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="?colorPrimaryDark"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@color/colorPrimaryDark"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +49,6 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="TextView"
-                    android:textColor="#DDDDDD"
                     android:textSize="18sp" />
 
                 <TextView
@@ -70,7 +68,6 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="TextView"
-                    android:textColor="#DDDDDD"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -96,7 +93,8 @@
             android:paddingStart="16dp"
             android:text="TextView"
             android:textColor="?colorAccent"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -118,11 +116,10 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/button_half_round_outline"
-                android:backgroundTint="@color/colorPrimaryDark"
+                android:backgroundTint="?colorPrimaryDark"
                 android:gravity="center"
                 android:onClick="onOrderAllClicked"
                 android:text="Wszystko"
-                android:textColor="@color/lightGray"
                 app:layout_constraintBottom_toBottomOf="@+id/next_et"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/next_et" />
@@ -133,11 +130,10 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/button_half_round_outline"
-                android:backgroundTint="@color/colorPrimaryDark"
+                android:backgroundTint="?colorPrimaryDark"
                 android:gravity="center"
                 android:onClick="onCancelAllClicked"
                 android:text="Wszystko"
-                android:textColor="@color/lightGray"
                 app:layout_constraintBottom_toBottomOf="@+id/cancelled_et"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cancelled_et" />
@@ -149,7 +145,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Ilość zamówionych:"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -159,7 +154,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView24"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -171,7 +165,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -183,7 +176,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/button_half_round_outline_left"
-                android:backgroundTint="@color/lightGray"
                 android:hint="Zapakowane"
                 android:inputType="number|numberDecimal"
                 android:padding="16dp"
@@ -199,7 +191,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/button_half_round_outline_left"
-                android:backgroundTint="@color/lightGray"
                 android:hint="Następne zamówienie"
                 android:inputType="number|numberDecimal"
                 android:padding="16dp"
@@ -215,7 +206,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/button_half_round_outline_left"
-                android:backgroundTint="@color/lightGray"
                 android:hint="Anulowane"
                 android:inputType="number|numberDecimal"
                 android:padding="16dp"
@@ -259,11 +249,10 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/button_half_round_outline"
-                android:backgroundTint="@color/colorPrimaryDark"
+                android:backgroundTint="?colorPrimaryDark"
                 android:gravity="center"
                 android:onClick="onPackAllClicked"
                 android:text="Wszystko"
-                android:textColor="@color/lightGray"
                 app:layout_constraintBottom_toBottomOf="@+id/packed_et"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/packed_et" />
@@ -274,7 +263,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Ilość dostępnych:"
-                android:textColor="@color/lightGray"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />

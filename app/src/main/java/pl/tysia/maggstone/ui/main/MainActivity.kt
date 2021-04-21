@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -15,12 +16,15 @@ import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.constants.MenuTileType
 import pl.tysia.maggstone.data.Database
+import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.data.model.Error
 import pl.tysia.maggstone.data.model.UserAccessibilities
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.ContractorsDownloadService
 import pl.tysia.maggstone.data.service.WaresDownloadService
+import pl.tysia.maggstone.data.source.LoginDataSource
+import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.DownloadStateActivity
 import pl.tysia.maggstone.ui.SendingStateActivity
@@ -45,6 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val mode = LoginRepository(LoginDataSource(NetAddressManager(this)), this).mode
+
+        when(mode){
+            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
 
         setContentView(R.layout.activity_main)
 

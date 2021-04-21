@@ -32,17 +32,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:background="@drawable/round_edit_background"
-            android:backgroundTint="@color/lightGray"
+            android:backgroundTint="?colorPrimary"
             android:drawableLeft="@drawable/round_search_24"
             android:drawablePadding="6dp"
             android:elevation="6dp"
             android:ems="10"
-            android:foregroundTint="@color/colorPrimary"
             android:gravity="center_vertical"
             android:hint="Wyszukaj..."
             android:inputType="textPersonName"
-            android:textColor="@color/colorPrimaryDark"
-            android:textColorHint="#7A7979"
             android:textSize="16sp" />
     </FrameLayout>
 

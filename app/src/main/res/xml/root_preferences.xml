@@ -1,6 +1,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory android:title="Preference category">
+        <ListPreference
+            android:defaultValue="false"
+            app:entries="@array/mode_entries"
+            app:entryValues="@array/mode_values"
+            app:key="mode_preference"
+            app:title="Tryb ciemny" />
+    </PreferenceCategory>
     <PreferenceCategory app:title="Sieć">
 
         <SwitchPreference
