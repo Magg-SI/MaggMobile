@@ -38,8 +38,6 @@ import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 import pl.tysia.maggstone.ui.showYesNoDialog
 import pl.tysia.maggstone.ui.wares.WareInfoActivity
 
-
-
 class MainActivity : AppCompatActivity() {
     companion object{
         const val WARE_REQUEST_CODE = 1
@@ -86,6 +84,10 @@ class MainActivity : AppCompatActivity() {
                 section_tools.addView(MenuTile(type, this))
             }
         }
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack(true);
     }
 
     override fun onResume() {

@@ -31,7 +31,7 @@ import pl.tysia.maggstone.ui.ViewModelFactory
 
 class LoginActivity : BaseActivity() {
 
-    private var mode: String? = null
+    private var mode: Int? = null
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +42,7 @@ class LoginActivity : BaseActivity() {
         )
             .get(LoginViewModel::class.java)
 
-        val mode = loginViewModel.loginRepository.mode
-
-        when(mode){
+        when(loginViewModel.loginRepository.mode){
             "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
@@ -56,23 +54,12 @@ class LoginActivity : BaseActivity() {
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
 
-        NetworkChangeReceiver().enable(this)
-
-        NetworkChangeReceiver.internetConnection.observe(this, Observer {
-            if (it && loginViewModel.loginRepository.isLoggedIn){
-                showBlockingProgress(true)
-
-                loginViewModel.testToken()
-            }
-        })
-
         loginViewModel.result.observe(this@LoginActivity, Observer {
             if (it) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
-            } else {
-                showBlockingProgress(false)
             }
+            showBlockingProgress(false)
         })
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -144,6 +131,20 @@ class LoginActivity : BaseActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        NetworkChangeReceiver().enable(this)
+
+        NetworkChangeReceiver.internetConnection.observe(this, Observer {
+            if (it && loginViewModel.loginRepository.isLoggedIn){
+                showBlockingProgress(true)
+
+                loginViewModel.testToken()
+            }
+        })
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

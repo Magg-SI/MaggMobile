@@ -11,7 +11,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private val loadingFragment: LoadingFragment = LoadingFragment()
 
     protected open fun showBlockingProgress(show: Boolean){
-        if (show){
+        if (show && !loadingFragment.isAdded){
             loadingFragment.show(supportFragmentManager, LOADING_TAG)
         }else if (!show && loadingFragment.showsDialog){
             loadingFragment.dismiss()
