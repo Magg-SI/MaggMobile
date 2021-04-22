@@ -150,6 +150,7 @@ class LoginActivity : BaseActivity() {
 
     }
 
+
     override fun showBlockingProgress(show: Boolean) {
         container.children.forEach {
             if (!show) it.visibility = View.VISIBLE

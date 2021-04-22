@@ -144,17 +144,16 @@
             app:borderWidth="0dp"
             app:srcCompat="@drawable/round_publish_24" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/settings_fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:background="@drawable/fab_gradient_colors"
-            android:backgroundTint="?colorPrimaryDark"
+            android:backgroundTint="?colorControlNormal"
             android:clickable="true"
             android:onClick="onSettingsClicked"
             android:src="@drawable/round_settings_24"
-            android:tint="@color/colorPrimaryDark" />
+            app:tint="?colorPrimary" />
     </LinearLayout>
 
 
