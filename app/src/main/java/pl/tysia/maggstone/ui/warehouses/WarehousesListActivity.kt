@@ -11,6 +11,7 @@ import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Warehouse
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.orders.OrdersViewModel
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
@@ -32,6 +33,11 @@ class WarehousesListActivity : SimpleListActivity() {
             adapter.notifyDataSetChanged()
             showBlockingProgress(false)
         })
+
+        warehousesViewModel.warehousesResult.observe(this@WarehousesListActivity, Observer {
+                okDialog("Błąd", getString(it), this)
+                showBlockingProgress(false)
+            })
 
         warehousesViewModel.getWarehouses( LoginRepository(
             LoginDataSource(NetAddressManager(this)),

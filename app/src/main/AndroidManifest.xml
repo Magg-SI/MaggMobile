@@ -18,8 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.sign.SignActivity" android:theme="@style/AppThemeBlue"></activity>
-        <activity android:name=".ui.hose.HoseInfoActivity"></activity>
+
+        <activity android:name=".ui.technicians.TechniciansActivity" android:theme="@style/AppThemeBlue"></activity>
+        <activity
+            android:name=".ui.service.ServiceActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity
+            android:name=".ui.sign.SignActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity android:name=".ui.hose.HoseInfoActivity" />
         <activity android:name=".ui.error.ErrorsActivity" />
         <activity
             android:name=".ui.SettingsActivity"
@@ -85,7 +92,8 @@
         <activity
             android:name=".ui.picture.PictureEditorActivity"
             android:theme="@style/AppThemeOrange" />
-        <activity android:name=".ui.login.LoginActivity"
+        <activity
+            android:name=".ui.login.LoginActivity"
             android:configChanges="uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

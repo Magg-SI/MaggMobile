@@ -5,16 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.data.model.DocumentItem
 import pl.tysia.maggstone.data.model.Hose
+import pl.tysia.maggstone.data.model.Service
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.BaseActivity
@@ -24,6 +25,7 @@ import pl.tysia.maggstone.ui.wares.WareListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
+import pl.tysia.maggstone.ui.service.ServiceActivity
 
 
 abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeListener {
@@ -33,6 +35,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
     companion object{
         const val WARE_REQUEST_CODE  = 1337
         const val HOSE_REQUEST_CODE  = 1338
+        const val SERVICE_REQUEST_CODE  = 1339
         const val CONTRACTOR_REQUEST_CODE  = 842
         const val WAREHOUSE_REQUEST_CODE  = 843
     }
@@ -89,6 +92,11 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         startActivityForResult(intent, WARE_REQUEST_CODE)
     }
 
+    fun onServiceClick(view: View){
+        val intent = Intent(this, ServiceActivity::class.java)
+        startActivityForResult(intent, SERVICE_REQUEST_CODE)
+    }
+
     fun onWareFromListClick(view: View){
         val intent = Intent(this, WareListActivity::class.java)
         intent.putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.SELECT)
@@ -123,6 +131,13 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         checkIfSaveAllowed()
     }
 
+    open fun addService(service : Service){
+        adapter.addItem(DocumentItem(service))
+        adapter.filter()
+        adapter.notifyDataSetChanged()
+        checkIfSaveAllowed()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -132,6 +147,9 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         } else if (requestCode == HOSE_REQUEST_CODE && resultCode == Activity.RESULT_OK ){
             val hose = data!!.getSerializableExtra(Hose.HOSE_EXTRA) as Hose
             addHose(hose)
+        } else if (requestCode == SERVICE_REQUEST_CODE && resultCode == Activity.RESULT_OK ){
+            val service = data!!.getSerializableExtra(Service.SERVICE_EXTRA) as Service
+            addService(service)
         }
 
         checkIfSaveAllowed()

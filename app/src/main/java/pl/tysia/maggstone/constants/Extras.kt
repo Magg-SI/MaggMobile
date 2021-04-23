@@ -6,4 +6,6 @@ object Extras{
     const val CONTRACTOR_EXTRA ="pl.tysia.maggstone.contractor_extra"
     const val DOCUMENT_ITEMS_EXTRA ="pl.tysia.maggstone.document_items"
     const val DOCUMENT_TYPE ="pl.tysia.maggstone.document_type"
+    const val TECHNICIANS ="pl.tysia.maggstone.technicians"
+    const val SERVICE ="pl.tysia.maggstone.service"
 }

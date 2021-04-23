@@ -7,15 +7,13 @@ import java.io.Serializable
 data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Serializable {
     var ilosc : Double = 1.0
     var iloscOk : Int  = 0
-    val towID : Int = if (item is Hose) item.id!! else if (item is Ware) item.id!! else -1
-
-    fun getShortDescription() : String {
-        return when (item) {
-            is Hose -> item.cord!!.name
-            is Ware -> item.name
-            else -> item.getDescription()
-        }
+    val towID : Int = when (item) {
+        is Hose -> item.id!!
+        is Ware -> item.id!!
+        is Service -> item.id!!
+        else -> -1
     }
+
 
     fun getAvailabilities() : List<Availability>?{
         return when (item) {
@@ -38,7 +36,11 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
     }
 
     override fun getSubtitle(): String {
-        return ""
+        return when (item) {
+            is Hose -> item.cord!!.name
+            is Ware -> item.name
+            else -> item.getSubtitle()
+        }
     }
 
     override fun getDescription(): String {

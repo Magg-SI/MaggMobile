@@ -32,6 +32,25 @@ open class APIResponse {
         var warehouses  : ArrayList<Warehouse>? = null
     }
 
+    class Technicians : APIResponse() {
+        @SerializedName("lista")
+        var technicians  : ArrayList<Technician>? = null
+    }
+
+    class Service : APIResponse() {
+        @SerializedName("nazwa")
+        var name : String? = null
+
+        @SerializedName("cenaN")
+        var priceN : Double? = null
+
+        @SerializedName("cenaB")
+        var priceB : Double? = null
+
+        @SerializedName("serwisID")
+        var id : Int? = null
+    }
+
     class WaresPage : APIResponse() {
         @SerializedName("lista")
         var list : ArrayList<Ware>? = null

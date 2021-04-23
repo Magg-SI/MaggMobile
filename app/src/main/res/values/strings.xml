@@ -15,7 +15,6 @@
     <string name="err_orders_download">Nie udało się pobrać zamówień</string>
     <string name="err_wares_download">Nie udało się pobrać towarów</string>
     <string name="title_activity_main2">MainActivity</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -43,6 +42,7 @@
     <string name="notification_title">Trwa wysyłanie</string>
     <string name="error_cant_download_ontractors">Nie udało się pobrać kontrahentów</string>
     <string name="availability">Dostępność: %s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_coudnt_download_technicians">Nie udało się pobrać serwisantów</string>
+    <string name="error_couldnt_create_service">Nie udało się utworzyc serwisu</string>
+
 </resources>
