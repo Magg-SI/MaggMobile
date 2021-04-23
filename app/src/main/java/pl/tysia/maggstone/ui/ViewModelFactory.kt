@@ -15,6 +15,8 @@ import pl.tysia.maggstone.ui.orders.OrderedWaresViewModel
 import pl.tysia.maggstone.ui.picture.PictureViewModel
 import pl.tysia.maggstone.ui.scanner.ShelfScannerViewModel
 import pl.tysia.maggstone.ui.scanner.WaresShelfScannerViewModel
+import pl.tysia.maggstone.ui.service.ServiceViewModel
+import pl.tysia.maggstone.ui.technicians.TechniciansViewModel
 import pl.tysia.maggstone.ui.ware_ordering.WareOrderingViewModel
 import pl.tysia.maggstone.ui.warehouses.WarehousesViewModel
 import pl.tysia.maggstone.ui.wares.WareInfoViewModel
@@ -108,6 +110,16 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
             modelClass.isAssignableFrom(WarehousesViewModel::class.java) -> {
                 return WarehousesViewModel(
                     WarehousesDataSource(NetAddressManager(context))
+                ) as T
+            }
+            modelClass.isAssignableFrom(TechniciansViewModel::class.java) -> {
+                return TechniciansViewModel(
+                    TechniciansDataSource(NetAddressManager(context))
+                ) as T
+            }
+            modelClass.isAssignableFrom(ServiceViewModel::class.java) -> {
+                return ServiceViewModel(
+                    ServiceDataSource(NetAddressManager(context))
                 ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")

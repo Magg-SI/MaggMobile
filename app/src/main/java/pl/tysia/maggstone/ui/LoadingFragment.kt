@@ -1,5 +1,6 @@
 package pl.tysia.maggstone.ui
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
@@ -17,7 +18,11 @@ class LoadingFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        isCancelable = false
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        //requireActivity().onBackPressed()
     }
 
     override fun onCreateView(

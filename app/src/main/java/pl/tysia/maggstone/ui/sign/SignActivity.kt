@@ -19,12 +19,13 @@ import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.getPhotoString
 import pl.tysia.maggstone.okDialog
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.document.DocumentViewModel
 import pl.tysia.maggstone.ui.login.LoginActivity
 import pl.tysia.maggstone.ui.main.MainActivity
 
-class SignActivity : AppCompatActivity() {
+class SignActivity : BaseActivity() {
     private lateinit var viewModel: DocumentViewModel
     private lateinit var items: ArrayList<DocumentItem>
     private lateinit var warehouse: Warehouse
@@ -50,13 +51,12 @@ class SignActivity : AppCompatActivity() {
 
         viewModel.documentsError.observe(this@SignActivity, Observer {
             okDialog("Błąd", it, this@SignActivity)
-            showProgress(false)
+            showBlockingProgress(false)
         })
 
         viewModel.documentsResult.observe(this@SignActivity, Observer {
             Toast.makeText(this@SignActivity, it, Toast.LENGTH_SHORT).show()
-            showProgress(false)
-
+            showBlockingProgress(false)
             val intent = Intent(this@SignActivity, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
@@ -65,6 +65,8 @@ class SignActivity : AppCompatActivity() {
     }
 
     fun save(view : View){
+        showBlockingProgress(true)
+
         val token = LoginRepository(
             LoginDataSource(NetAddressManager(this)),
             this@SignActivity
@@ -80,15 +82,5 @@ class SignActivity : AppCompatActivity() {
             DocumentType.OFFER -> viewModel.sendOfferDocument(token, contractor.id, sign, comments, items)
         }
 
-    }
-
-    private fun showProgress(show : Boolean){
-        if (show){
-            progress_bar.visibility = View.VISIBLE
-            button.isEnabled = false
-        }else {
-            progress_bar.visibility = View.GONE
-            button.isEnabled = true
-        }
     }
 }

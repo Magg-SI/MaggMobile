@@ -61,6 +61,8 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
                 allItems.remove(allItems[adapterPosition])
                 filter()
                 notifyDataSetChanged()
+
+                changeListeners.forEach { it.onListChanged() }
             }
 
             v.setOnClickListener(this)
@@ -189,7 +191,7 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         holder.title.text = item.getTitle()
         holder.description.text = item.getDescription()
-        holder.name.text = item.getShortDescription()
+        holder.name.text = item.getSubtitle()
         holder.numberET.setText(countToStr(item.ilosc))
 
         showError(item, holder.numberET)

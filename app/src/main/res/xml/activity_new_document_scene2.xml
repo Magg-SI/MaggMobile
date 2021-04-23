@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="200">
+       <KeyFrameSet>
+           <KeyAttribute
+               motion:motionTarget="@+id/textView26"
+               motion:framePosition="49"
+               android:alpha="0.5" />
+       </KeyFrameSet>
+        <OnClick motion:targetId="@+id/floatingActionButton3" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/main_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/textView26"
+            motion:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:id="@+id/floatingActionButton4"
+            android:layout_marginBottom="16dp" />
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:id="@+id/floatingActionButton5"
+            motion:layout_constraintBottom_toTopOf="@+id/floatingActionButton4"
+            android:layout_marginBottom="16dp" />
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/textView25"
+            motion:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:id="@+id/floatingActionButton9"
+            android:layout_marginBottom="16dp" />
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:id="@+id/floatingActionButton6"
+            motion:layout_constraintBottom_toTopOf="@+id/floatingActionButton3"
+            android:layout_marginBottom="16dp" />
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="@id/floatingActionButton6"
+            motion:layout_constraintBottom_toBottomOf="@id/floatingActionButton6"
+            android:layout_width="wrap_content"
+            motion:layout_constraintStart_toStartOf="@+id/floatingActionButton6"
+            android:id="@+id/textView26"
+            android:layout_marginStart="24dp" />
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="@id/floatingActionButton5"
+            motion:layout_constraintBottom_toBottomOf="@id/floatingActionButton5"
+            android:layout_width="wrap_content"
+            motion:layout_constraintStart_toStartOf="@+id/floatingActionButton5"
+            android:id="@+id/textView25"
+            android:layout_marginStart="24dp"/>
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="@id/floatingActionButton4"
+            motion:layout_constraintBottom_toBottomOf="@id/floatingActionButton4"
+            android:layout_width="wrap_content"
+            motion:layout_constraintStart_toStartOf="@+id/floatingActionButton4"
+            android:id="@+id/textView20"
+            android:layout_marginStart="24dp"/>
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="@id/floatingActionButton9"
+            motion:layout_constraintBottom_toBottomOf="@id/floatingActionButton9"
+            android:layout_width="wrap_content"
+            motion:layout_constraintStart_toStartOf="@+id/floatingActionButton9"
+            android:id="@+id/textView22"
+            android:layout_marginStart="24dp"
+            motion:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="24dp"/>
+    </ConstraintSet>
+</MotionScene>

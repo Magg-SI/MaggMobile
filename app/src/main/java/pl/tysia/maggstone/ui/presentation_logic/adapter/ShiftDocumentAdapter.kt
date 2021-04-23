@@ -34,7 +34,7 @@ class ShiftDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
             holder.description.text = context.getString(R.string.availability, countToStr(availability.quantity))
         }
 
-        holder.name.text = item.getShortDescription()
+        holder.name.text = item.getSubtitle()
         holder.numberET.setText(countToStr(item.ilosc))
 
         if (item.iloscOk!=0){

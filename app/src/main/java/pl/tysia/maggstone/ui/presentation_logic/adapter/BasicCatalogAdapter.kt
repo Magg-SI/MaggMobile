@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.tysia.maggstone.R
 import java.util.*
 
-class BasicCatalogAdapter(items: ArrayList<ICatalogable>) :
+open class BasicCatalogAdapter(items: ArrayList<ICatalogable>) :
     CatalogAdapter<ICatalogable, BasicCatalogAdapter.BasicViewHolder>(
         items
     ) {
@@ -47,40 +47,44 @@ class BasicCatalogAdapter(items: ArrayList<ICatalogable>) :
         return BasicViewHolder(v)
     }
 
+    protected open fun applySelection(item : ICatalogable, holder : BasicViewHolder){
+        if (item === selectedItem) {
+            holder.back.setBackgroundResource(R.drawable.list_item_background_selected)
+        } else {
+            holder.back.setBackgroundResource(R.drawable.list_item_background)
+        }
+    }
+
     override fun onBindViewHolder(
-        catalogItemViewHolder: BasicViewHolder,
+        holder: BasicViewHolder,
         i: Int
     ) {
         val item = shownItems[i]!!
 
         if (item.getAdditionalInfo() != null && item.getAdditionalInfo()!!.isNotEmpty()) {
-            catalogItemViewHolder.additionalInfo.text = item.getAdditionalInfo()
-            catalogItemViewHolder.additionalInfo.visibility = View.VISIBLE
+            holder.additionalInfo.text = item.getAdditionalInfo()
+            holder.additionalInfo.visibility = View.VISIBLE
         } else {
-            catalogItemViewHolder.additionalInfo.visibility = View.GONE
+            holder.additionalInfo.visibility = View.GONE
         }
 
 
         if (item.getSubtitle()!!.isNotEmpty()) {
-            catalogItemViewHolder.subtitle.text = item.getSubtitle()
-            catalogItemViewHolder.subtitle.visibility = View.VISIBLE
+            holder.subtitle.text = item.getSubtitle()
+            holder.subtitle.visibility = View.VISIBLE
         } else {
-            catalogItemViewHolder.subtitle.visibility = View.GONE
+            holder.subtitle.visibility = View.GONE
         }
 
         if (item.getDescription()!!.isNotEmpty()) {
-            catalogItemViewHolder.description.text = item.getDescription()
-            catalogItemViewHolder.description.visibility = View.VISIBLE
+            holder.description.text = item.getDescription()
+            holder.description.visibility = View.VISIBLE
         } else {
-            catalogItemViewHolder.description.visibility = View.GONE
+            holder.description.visibility = View.GONE
         }
 
-        catalogItemViewHolder.title.text = item.getTitle()
+        holder.title.text = item.getTitle()
 
-        if (item === selectedItem) {
-            catalogItemViewHolder.back.setBackgroundResource(R.drawable.list_item_background_selected)
-        } else {
-            catalogItemViewHolder.back.setBackgroundResource(R.drawable.list_item_background)
-        }
+        applySelection(item, holder)
     }
 }
