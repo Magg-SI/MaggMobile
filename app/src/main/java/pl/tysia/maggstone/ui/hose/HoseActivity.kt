@@ -2,7 +2,6 @@ package pl.tysia.maggstone.ui.hose
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,23 +9,19 @@ import android.view.View
 import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_hose.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.Database
-import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.dao.WaresDAO
 import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.login.afterTextChanged
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.simple_list.SimpleListDialogFragment
+import javax.inject.Inject
 
 
 private const val FRAGMENT_TAG_CORD = "pl.tysia.maggstone.cord_fragment_tag"
@@ -36,22 +31,16 @@ private const val FRAGMENT_TAG_SLEEVE = "pl.tysia.maggstone.sleeve_fragment_tag"
 class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Ware> {
     private lateinit var dao : WaresDAO
 
-    private lateinit var viewModel: HoseViewModel
+    @Inject lateinit var viewModel: HoseViewModel
+    @Inject lateinit var db: Database
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hose)
 
-        val db = Room.databaseBuilder(
-            this,
-            Database::class.java, "pl.tysia.database"
-        ).build()
+        (application as MaggApp).appComponent.inject(this)
 
         dao = db.waresDao()
-
-        viewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(HoseViewModel::class.java)
 
         pipe_et.onFocusChange { focused ->
             run {
@@ -116,12 +105,7 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
     fun addHose(view: View){
         showBlockingProgress(true)
 
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token
-
-        viewModel.addHose(token, viewModel.hose)
+        viewModel.addHose(viewModel.hose)
     }
 
     private fun onFormEdited(){

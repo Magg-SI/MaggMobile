@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_new_document.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.constants.Extras
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.data.model.DocumentItem
@@ -19,18 +18,18 @@ import pl.tysia.maggstone.data.model.Service
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.hose.HoseActivity
 import pl.tysia.maggstone.ui.wares.WareListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 import pl.tysia.maggstone.ui.service.ServiceActivity
+import javax.inject.Inject
 
 
 abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeListener {
     protected lateinit var adapter : DocumentAdapter<DocumentItem>
-    protected lateinit var viewModel: DocumentViewModel
+    @Inject lateinit var viewModel: DocumentViewModel
 
     companion object{
         const val WARE_REQUEST_CODE  = 1337
@@ -48,10 +47,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(DocumentViewModel::class.java)
-
+        (application as MaggApp).appComponent.inject(this)
 
         wares_recycler.addItemDecoration(
             pl.tysia.maggstone.ui.RecyclerMarginDecorator(

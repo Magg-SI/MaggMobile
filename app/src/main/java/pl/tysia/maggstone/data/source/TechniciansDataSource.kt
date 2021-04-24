@@ -13,20 +13,16 @@ import pl.tysia.maggstone.data.model.Warehouse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class TechniciansDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
-    fun getTechnicians(token : String) : Result<ArrayList<Technician>> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
+class TechniciansDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider)  {
+    fun getTechnicians() : Result<ArrayList<Technician>> {
         val service = retrofit.create(TechniciansService::class.java)
 
 
         val result = service.getTechnicians(
-            GetTechniciansRequest(token)
+            GetTechniciansRequest(tokenProvider.getToken()!!)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

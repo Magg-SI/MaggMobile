@@ -18,19 +18,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class PictureDataSource(val context: Context, netAddressManager: NetAddressManager) : APISource(netAddressManager) {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private lateinit var service : WareService
-
-    init {
-        service = retrofit.create(WareService::class.java)
-    }
+class PictureDataSource @Inject constructor(val context: Context, val retrofit: Retrofit, val tokenProvider: TokenProvider) {
+    private var service : WareService = retrofit.create(WareService::class.java)
 
     companion object{
         private fun getPictureSize(context: Context) : Float{
@@ -41,9 +33,9 @@ class PictureDataSource(val context: Context, netAddressManager: NetAddressManag
         }
     }
 
-    fun sendPictureStart(wareID : Int, photoBatch : String, token : String) : Result<Int> {
+    fun sendPictureStart(wareID : Int, photoBatch : String) : Result<Int> {
         val result = service.updatePictureStart(
-            UpdatePictureRequest.Start(token = token, towID = wareID, photo = photoBatch)
+            UpdatePictureRequest.Start(token = tokenProvider.getToken()!!, towID = wareID, photo = photoBatch)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -53,9 +45,9 @@ class PictureDataSource(val context: Context, netAddressManager: NetAddressManag
         }
     }
 
-    fun sendPictureNext(photoID : Int, photoBatch : String, pageNr : Int, token : String) : Result<Boolean> {
+    fun sendPictureNext(photoID : Int, photoBatch : String, pageNr : Int) : Result<Boolean> {
         val result = service.updatePictureNext(
-            UpdatePictureRequest.Next(token = token, fotoID = photoID, photo = photoBatch, pageNo = pageNr)
+            UpdatePictureRequest.Next(token = tokenProvider.getToken()!!, fotoID = photoID, photo = photoBatch, pageNo = pageNr)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -65,9 +57,9 @@ class PictureDataSource(val context: Context, netAddressManager: NetAddressManag
         }
     }
 
-    fun sendPictureFin(token : String, photoID: Int) : Result<Boolean> {
+    fun sendPictureFin(photoID: Int) : Result<Boolean> {
         val result = service.updatePictureFin(
-            UpdatePictureRequest.Finalize(token = token, fotoID = photoID)
+            UpdatePictureRequest.Finalize(token = tokenProvider.getToken()!!, fotoID = photoID)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -77,9 +69,9 @@ class PictureDataSource(val context: Context, netAddressManager: NetAddressManag
         }
     }
 
-    fun getPicture(wareID: Int, token : String) : Result<Bitmap> {
+    fun getPicture(wareID: Int) : Result<Bitmap> {
         val result = service.getPicture(
-            GetPictureRequest(token = token, towID = wareID)
+            GetPictureRequest(token = tokenProvider.getToken()!!, towID = wareID)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

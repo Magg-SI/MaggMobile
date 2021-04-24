@@ -11,18 +11,14 @@ import pl.tysia.maggstone.data.api.service.WareService
 import pl.tysia.maggstone.data.model.Ware
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class ShelfDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    fun testShelf(qrCode: String, token: String) : Result<Boolean> {
+class ShelfDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider) {
+    fun testShelf(qrCode: String) : Result<Boolean> {
         val service = retrofit.create(ShelfService::class.java)
 
         val result = service.testShelf(
-            TestShelfRequest(token = token, localization = qrCode)
+            TestShelfRequest(token = tokenProvider.getToken()!!, localization = qrCode)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -32,11 +28,11 @@ class ShelfDataSource(netAddressManager: NetAddressManager) : APISource(netAddre
         }
     }
 
-    fun addToShelf(wareQr: String, shelfQr : String, token: String) : Result<String> {
+    fun addToShelf(wareQr: String, shelfQr : String) : Result<String> {
         val service = retrofit.create(ShelfService::class.java)
 
         val result = service.addToShelf(
-            ChangeWareLocationRequest(token = token, localization = shelfQr, towQR = wareQr)
+            ChangeWareLocationRequest(token = tokenProvider.getToken()!!, localization = shelfQr, towQR = wareQr)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

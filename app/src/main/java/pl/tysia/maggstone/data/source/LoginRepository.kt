@@ -3,9 +3,16 @@ package pl.tysia.maggstone.data.source
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.preference.PreferenceManager
+import pl.tysia.maggstone.constants.Preferences.LOGGED_USER_PREFERENCES
+import pl.tysia.maggstone.constants.Preferences.PREF_ID
+import pl.tysia.maggstone.constants.Preferences.PREF_MODE
+import pl.tysia.maggstone.constants.Preferences.PREF_PROMPT_MODE
+import pl.tysia.maggstone.constants.Preferences.PREF_TOKEN
+import pl.tysia.maggstone.constants.Preferences.PREF_USERNAME
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.model.LoggedInUser
 import pl.tysia.maggstone.data.api.model.LoginResponse
+import javax.inject.Inject
 
 
 /**
@@ -13,20 +20,8 @@ import pl.tysia.maggstone.data.api.model.LoginResponse
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-private const val LOGGED_USER_PREFERENCES = "pl.tysia.maggstone.logged_user_prefs"
 
-private const val PREF_USERNAME = "pl.tysia.maggstone.username"
-private const val PREF_TOKEN = "pl.tysia.maggstone.token"
-private const val PREF_ID = "pl.tysia.maggstone.id"
-private const val PREF_MODE = "mode_preference"
-private const val PREF_PROMPT_MODE = "mode_preference_prompt"
-
-class LoginRepository(val dataSource: LoginDataSource, val context: Context) {
-
-    companion object{
-
-    }
-
+class LoginRepository @Inject constructor(val context: Context, var dataSource: LoginDataSource) {
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
         private set
@@ -62,8 +57,8 @@ class LoginRepository(val dataSource: LoginDataSource, val context: Context) {
 
     }
 
-    fun testToken(token : String) : Result<Boolean>{
-        return dataSource.testToken(token)
+    fun testToken() : Result<Boolean>{
+        return dataSource.testToken()
     }
 
     fun logout() {

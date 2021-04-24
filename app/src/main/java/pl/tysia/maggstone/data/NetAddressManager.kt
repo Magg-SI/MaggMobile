@@ -5,8 +5,9 @@ import android.content.Intent
 import androidx.preference.PreferenceManager
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.SettingsActivity
+import javax.inject.Inject
 
-class NetAddressManager(context : Context) {
+class NetAddressManager @Inject constructor(context : Context) {
     private var privateNetAddress : String? = null
     private var globalNetAddress : String = "http://martech.magg.pl/"
     private var privateNetUsed : Boolean = false

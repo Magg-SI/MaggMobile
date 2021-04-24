@@ -9,19 +9,15 @@ import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 
-class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    fun findHose(token : String, hoseNumber : String) : Result<Hose>{
+class WareDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider)  {
+    fun findHose( hoseNumber : String) : Result<Hose>{
         val service = retrofit.create(WareService::class.java)
 
         val result = service.getHose(
-            GetHoseRequest(token = token, numer = hoseNumber)
+            GetHoseRequest(token = tokenProvider.getToken()!!, numer = hoseNumber)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -31,11 +27,11 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         }
     }
 
-    fun getWare(qrCode: String, token: String) : Result<Ware> {
+    fun getWare(qrCode: String) : Result<Ware> {
         val service = retrofit.create(WareService::class.java)
 
         val result = service.findBy(
-            FindWareRequest(token = token, keyCode = FindWareRequest.KEY_QR, keyValue = qrCode)
+            FindWareRequest(token = tokenProvider.getToken()!!, keyCode = FindWareRequest.KEY_QR, keyValue = qrCode)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -45,7 +41,7 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         }
     }
 
-    fun addHose(hose: Hose, token: String) : Result<Hose> {
+    fun addHose(hose: Hose) : Result<Hose> {
         val service = retrofit.create(WareService::class.java)
 
         val items = ArrayList<AddHoseRequest.RequestItem>()
@@ -56,7 +52,7 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         items.add(AddHoseRequest.RequestItem(hose.sleeve!!.hoseType!!, hose.sleeve!!.id!!, AddHoseRequest.SLEEVE_QUANTITY))
 
         val result = service.addHose(
-            AddHoseRequest(token, hose.code!!, hose.creator!!, hose.angle!!, items)
+            AddHoseRequest(tokenProvider.getToken()!!, hose.code!!, hose.creator!!, hose.angle!!, items)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -71,11 +67,11 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         }
     }
 
-    fun getAvailabilities(index: String, token: String) : Result<APIResponse.Availabilities> {
+    fun getAvailabilities(index: String) : Result<APIResponse.Availabilities> {
         val service = retrofit.create(WareService::class.java)
 
         val result = service.getAvailabilities(
-            GetAvailabilitiesRequest(token, index)
+            GetAvailabilitiesRequest(tokenProvider.getToken()!!, index)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -85,11 +81,11 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         }
     }
 
-    fun getWares(token: String, counter : Int) : Result<APIResponse.Pages> {
+    fun getWares(counter : Int) : Result<APIResponse.Pages> {
         val service = retrofit.create(PagesService::class.java)
 
         val result = service.pagesNumber(
-            PagesRequest.Wares(token = token, lastLicznik = counter)
+            PagesRequest.Wares(token = tokenProvider.getToken()!!, lastLicznik = counter)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -99,11 +95,11 @@ class WareDataSource(netAddressManager: NetAddressManager) : APISource(netAddres
         }
     }
 
-    fun getWaresPage(token: String, listID : Int, pageNumber : Int) : Result<APIResponse.WaresPage> {
+    fun getWaresPage(listID : Int, pageNumber : Int) : Result<APIResponse.WaresPage> {
         val service = retrofit.create(PagesService::class.java)
 
         val result = service.getWaresPage(
-            GetPageRequest(token = token, listaID = listID, pageNo = pageNumber)
+            GetPageRequest(token = tokenProvider.getToken()!!, listaID = listID, pageNo = pageNumber)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

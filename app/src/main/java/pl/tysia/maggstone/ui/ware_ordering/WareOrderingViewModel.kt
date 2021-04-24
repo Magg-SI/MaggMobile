@@ -10,16 +10,16 @@ import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.source.OrdersRepository
 import pl.tysia.maggstone.data.Result
 import java.io.IOException
+import javax.inject.Inject
 
-class WareOrderingViewModel(var repository: OrdersRepository) : ViewModel() {
+class WareOrderingViewModel @Inject constructor(var repository: OrdersRepository) : ViewModel() {
     private val _packResult = MutableLiveData<Boolean>()
     val packResult: LiveData<Boolean> = _packResult
 
     private val _waresResult = MutableLiveData<Int>()
     val waresResult: LiveData<Int> = _waresResult
 
-    fun packWare(token : String,
-                 id : Int,
+    fun packWare(id : Int,
                  packedNumber : Double,
                  postponedNumber : Double,
                  cancelledNumber : Double) {
@@ -28,7 +28,7 @@ class WareOrderingViewModel(var repository: OrdersRepository) : ViewModel() {
 
             try {
                 val result =
-                    repository.packWare(token, id, packedNumber, postponedNumber, cancelledNumber)
+                    repository.packWare( id, packedNumber, postponedNumber, cancelledNumber)
 
                 if (result is Result.Success) {
                     _packResult.postValue(result.data)

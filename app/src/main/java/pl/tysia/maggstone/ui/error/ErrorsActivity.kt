@@ -15,10 +15,12 @@ import kotlinx.android.synthetic.main.basic_catalog_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.model.Error
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.SendingService
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.RecyclerMarginDecorator
 import pl.tysia.maggstone.ui.login.afterTextChanged
 import pl.tysia.maggstone.ui.presentation_logic.adapter.BasicCatalogAdapter
@@ -26,13 +28,15 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.ErrorsAdapter
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import pl.tysia.maggstone.ui.showYesNoDialog
 import java.util.ArrayList
+import javax.inject.Inject
 
-class ErrorsActivity : AppCompatActivity(), ErrorsAdapter.ErrorsListener {
+class ErrorsActivity : BaseActivity(), ErrorsAdapter.ErrorsListener {
     private lateinit var adapter: ErrorsAdapter
     private lateinit var mService: SendingService
     private var mBound: Boolean = false
 
-    private lateinit var db : Database
+    @Inject
+    lateinit var db : Database
 
     private val connection = object : ServiceConnection {
 
@@ -52,10 +56,7 @@ class ErrorsActivity : AppCompatActivity(), ErrorsAdapter.ErrorsListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_errors)
 
-        db = Room.databaseBuilder(
-            this@ErrorsActivity,
-            Database::class.java, "pl.tysia.database"
-        ).build()
+        (application as MaggApp).appComponent.inject(this)
 
         adapter = ErrorsAdapter(ArrayList())
         adapter.listener = this

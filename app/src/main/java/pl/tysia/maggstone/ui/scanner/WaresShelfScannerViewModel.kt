@@ -11,8 +11,9 @@ import pl.tysia.maggstone.data.source.WareRepository
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.ShelfDataSource
 import java.io.IOException
+import javax.inject.Inject
 
-class WaresShelfScannerViewModel(val dataSource: ShelfDataSource) : ViewModel() {
+class WaresShelfScannerViewModel @Inject constructor(val dataSource: ShelfDataSource) : ViewModel() {
     private val _locationResult = MutableLiveData<String>()
     val locationResult: LiveData<String> = _locationResult
 
@@ -20,10 +21,10 @@ class WaresShelfScannerViewModel(val dataSource: ShelfDataSource) : ViewModel() 
     val locationError: LiveData<String> = _locationError
 
 
-    fun changeLocation(wareQr : String, shelfQr : String, token : String){
+    fun changeLocation(wareQr : String, shelfQr : String){
         viewModelScope.launch(Dispatchers.IO) {
            try {
-               val result = dataSource.addToShelf(wareQr, shelfQr, token)
+               val result = dataSource.addToShelf(wareQr, shelfQr)
 
                if (result is Result.Success) {
                    _locationResult.postValue(result.data)

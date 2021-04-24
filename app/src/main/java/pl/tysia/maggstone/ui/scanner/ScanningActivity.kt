@@ -21,9 +21,10 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import kotlinx.android.synthetic.main.activity_scanning.*
+import pl.tysia.maggstone.ui.BaseActivity
 import java.util.concurrent.Executors
 
-abstract class ScanningActivity : AppCompatActivity(),  ImageAnalysis.Analyzer {
+abstract class ScanningActivity : BaseActivity(),  ImageAnalysis.Analyzer {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private lateinit var scanner : BarcodeScanner
     private lateinit var cameraProvider : ProcessCameraProvider
@@ -99,7 +100,7 @@ abstract class ScanningActivity : AppCompatActivity(),  ImageAnalysis.Analyzer {
 
     }
 
-    @SuppressLint("UnsafeExperimentalUsageError")
+    @SuppressLint("UnsafeExperimentalUsageError", "UnsafeOptInUsageError")
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         if (mediaImage != null) {

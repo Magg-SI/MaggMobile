@@ -23,7 +23,7 @@
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:src="@drawable/ic_magg_black"
-            app:tint="@android:color/white" />
+            app:tint="?colorControlNormal" />
 
         <ImageView
             android:id="@+id/loading_iv"

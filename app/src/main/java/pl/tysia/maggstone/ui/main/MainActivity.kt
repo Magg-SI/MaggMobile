@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.constants.MenuTileType
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.NetAddressManager
@@ -26,37 +27,32 @@ import pl.tysia.maggstone.data.service.WaresDownloadService
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
-import pl.tysia.maggstone.ui.DownloadStateActivity
-import pl.tysia.maggstone.ui.SendingStateActivity
-import pl.tysia.maggstone.ui.SettingsActivity
+import pl.tysia.maggstone.ui.*
 import pl.tysia.maggstone.ui.document.BasicNewDocumentActivity
 import pl.tysia.maggstone.ui.error.ErrorsActivity
 import pl.tysia.maggstone.ui.orders.OrdersActivity
 import pl.tysia.maggstone.ui.presentation_logic.MenuTile
 import pl.tysia.maggstone.ui.scanner.ShelfScannerActivity
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
-import pl.tysia.maggstone.ui.showYesNoDialog
 import pl.tysia.maggstone.ui.wares.WareInfoActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     companion object{
         const val WARE_REQUEST_CODE = 1
     }
 
-    private lateinit var db : Database
+    @Inject lateinit var db : Database
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
+        (application as MaggApp).appComponent.inject(this)
+
         startService(Intent(this, WaresDownloadService::class.java))
         startService(Intent(this, ContractorsDownloadService::class.java))
-
-        db = Room.databaseBuilder(
-            this,
-            Database::class.java, "pl.tysia.database"
-        ).build()
 
         val userAccessibilities = UserAccessibilities()
 

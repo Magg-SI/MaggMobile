@@ -8,23 +8,27 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.dao.WaresDAO
 import pl.tysia.maggstone.data.source.WareRepository
 import pl.tysia.maggstone.data.model.Ware
 import java.io.IOException
+import javax.inject.Inject
 
-class WareViewModel(val wareRepository: WareRepository, val dao : WaresDAO) : ViewModel() {
+class WareViewModel @Inject constructor(val wareRepository: WareRepository, val db : Database) : ViewModel() {
     private val _wareResult = MutableLiveData<String>()
     val wareResult: LiveData<String> = _wareResult
 
     private val _ware = MutableLiveData<Ware>()
     val ware: LiveData<Ware> = _ware
 
-    fun getWare(qrCode: String, token : String) {
+    private val dao : WaresDAO = db.waresDao()
+
+    fun getWare(qrCode: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = wareRepository.getWare(qrCode, token)
+                val result = wareRepository.getWare(qrCode)
 
                 if (result is Result.Success) {
                     _ware.postValue(result.data)

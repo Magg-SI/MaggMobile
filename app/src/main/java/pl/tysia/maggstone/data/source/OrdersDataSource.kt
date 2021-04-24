@@ -9,20 +9,15 @@ import pl.tysia.maggstone.data.model.OrderedWare
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class OrdersDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
-    fun getOrders(token : String) : Result<ArrayList<Order>> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
+class OrdersDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider)  {
+    fun getOrders() : Result<ArrayList<Order>> {
         val service = retrofit.create(OrdersService::class.java)
 
-
         val result = service.getOrders(
-            GetOrdersRequest(token)
+            GetOrdersRequest(tokenProvider.getToken()!!)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -32,17 +27,11 @@ class OrdersDataSource(netAddressManager: NetAddressManager) : APISource(netAddr
         }
     }
 
-    fun getOrder(token : String, id : Int): Result<ArrayList<OrderedWare>> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
+    fun getOrder(id : Int): Result<ArrayList<OrderedWare>> {
         val service = retrofit.create(OrdersService::class.java)
 
-
         val result = service.getOrder(
-            GetOrderRequest(token, id)
+            GetOrderRequest(tokenProvider.getToken()!!, id)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -52,21 +41,15 @@ class OrdersDataSource(netAddressManager: NetAddressManager) : APISource(netAddr
         }
     }
 
-    fun packWare(token : String,
-                 id : Int,
+    fun packWare(id : Int,
                  packedNumber : Double,
                  postponedNumber : Double,
                  cancelledNumber : Double): Result<Boolean> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-        val service = retrofit.create(OrdersService::class.java)
-
+     val service = retrofit.create(OrdersService::class.java)
 
         val result = service.packWare(
-            PackWareRequest(token = token,
+            PackWareRequest(token = tokenProvider.getToken()!!,
                 id = id,
                 packedNumber = packedNumber,
                 postponedNumber = postponedNumber,

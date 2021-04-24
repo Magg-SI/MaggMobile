@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_scanning.*
 import kotlinx.android.synthetic.main.activity_scanning.previewView
 import kotlinx.android.synthetic.main.activity_take_picture.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.ui.BaseActivity
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -26,7 +27,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-class TakePictureActivity : AppCompatActivity() {
+class TakePictureActivity : BaseActivity() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraProvider : ProcessCameraProvider
     private val executor = Executors.newSingleThreadExecutor()

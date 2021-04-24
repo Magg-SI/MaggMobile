@@ -11,17 +11,14 @@ import pl.tysia.maggstone.data.model.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class ServiceDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
+class ServiceDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider)  {
     fun addService(service : Service) : Result<Service> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+       val retrofitService = retrofit.create(ServiceService::class.java)
 
-        val retrofitService = retrofit.create(ServiceService::class.java)
-
+        service.token = tokenProvider.getToken()!!
 
         val result = retrofitService.addService(
             service

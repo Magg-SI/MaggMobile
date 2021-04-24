@@ -11,8 +11,9 @@ import pl.tysia.maggstone.data.Result
 
 import pl.tysia.maggstone.R
 import java.io.IOException
+import javax.inject.Inject
 
-class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -25,11 +26,9 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
 
 
     fun testToken(){
-        val token = loginRepository.user!!.token
-
         viewModelScope.launch(Dispatchers.IO) {
             try{
-                val result = loginRepository.testToken(token)
+                val result = loginRepository.testToken()
 
                 if (result is Result.Success) {
                     _result.postValue(result.data)

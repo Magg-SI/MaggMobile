@@ -7,25 +7,23 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.source.OrdersRepository
 import pl.tysia.maggstone.data.Result
-import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.data.model.Warehouse
-import pl.tysia.maggstone.data.source.WareDataSource
 import pl.tysia.maggstone.data.source.WarehousesDataSource
 import java.io.IOException
+import javax.inject.Inject
 
-class WarehousesViewModel(var datasource: WarehousesDataSource) : ViewModel() {
+class WarehousesViewModel @Inject constructor(var datasource: WarehousesDataSource) : ViewModel() {
     private val _warehousesResult = MutableLiveData<Int>()
     val warehousesResult: LiveData<Int> = _warehousesResult
 
     private val _warehouses = MutableLiveData<ArrayList<Warehouse>>()
     val orders: LiveData<ArrayList<Warehouse>> = _warehouses
 
-    fun getWarehouses(token: String) {
+    fun getWarehouses() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = datasource.getWarehouses(token)
+                val result = datasource.getWarehouses()
 
                 if (result is Result.Success) {
                     _warehouses.postValue(result.data)

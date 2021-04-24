@@ -10,10 +10,10 @@ import pl.tysia.maggstone.R
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.source.WareRepository
 import pl.tysia.maggstone.data.model.Availability
-import pl.tysia.maggstone.data.service.notifyObserver
 import java.io.IOException
+import javax.inject.Inject
 
-class WareInfoViewModel(private val wareRepository: WareRepository) : ViewModel() {
+class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepository) : ViewModel() {
     private val _result = MutableLiveData<Int>()
     val result: LiveData<Int> = _result
 
@@ -21,11 +21,11 @@ class WareInfoViewModel(private val wareRepository: WareRepository) : ViewModel(
     val availability: LiveData<ArrayList<Availability>> = _availability
 
 
-    fun getAvailabilities(index: String, token: String) {
+    fun getAvailabilities(index: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = wareRepository.getAvailabilities(index, token)
+                val result = wareRepository.getAvailabilities(index)
 
                 if (result is Result.Success) {
                     _availability.postValue(result.data.availabilities)

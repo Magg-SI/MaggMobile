@@ -11,21 +11,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.lang.Exception
+import javax.inject.Inject
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 
-class LoginDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
+class LoginDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider)  {
 
     fun loginCall(username: String, password: String) : Call<LoginResponse> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
         val service = retrofit.create(LoginService::class.java)
-
 
         return service.login(
             LoginRequest(
@@ -35,17 +30,11 @@ class LoginDataSource(netAddressManager: NetAddressManager) : APISource(netAddre
         )
     }
 
-    fun testToken(token : String) : Result<Boolean>{
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
+    fun testToken() : Result<Boolean>{
         val service = retrofit.create(LoginService::class.java)
 
-
         val result = service.testToken(
-           TestTokenRequest(token)
+           TestTokenRequest(tokenProvider.getToken()!!)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

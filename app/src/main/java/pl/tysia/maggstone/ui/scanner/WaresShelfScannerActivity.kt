@@ -1,21 +1,15 @@
 package pl.tysia.maggstone.ui.scanner
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import com.google.mlkit.vision.barcode.Barcode
 import kotlinx.android.synthetic.main.activity_products_scanner.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.okDialog
-import pl.tysia.maggstone.ui.ViewModelFactory
+import javax.inject.Inject
+
 class WaresShelfScannerActivity : ScanningActivity() {
     companion object{
         const val SHELF_EXTRA = "pl.tysia.maggstone.shelf_extra"
@@ -29,14 +23,9 @@ class WaresShelfScannerActivity : ScanningActivity() {
     }
 
     override fun onSuccess(barcode: Barcode) {
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this@WaresShelfScannerActivity)),
-            this@WaresShelfScannerActivity
-        ).user!!.token
-
         val code = barcode.rawValue
         showSendingState(true)
-        viewModel.changeLocation(code, shelf, token)
+        viewModel.changeLocation(code, shelf)
     }
 
     override fun isValid(barcode: Barcode): Boolean {
@@ -49,14 +38,13 @@ class WaresShelfScannerActivity : ScanningActivity() {
 
     private lateinit var shelf: String
 
-    private lateinit var viewModel : WaresShelfScannerViewModel
+    @Inject lateinit var viewModel : WaresShelfScannerViewModel
 
 
     public override fun onCreate(state: Bundle?) {
         super.onCreate(state)
 
-        viewModel = ViewModelProvider(this, ViewModelFactory(this))
-            .get(WaresShelfScannerViewModel::class.java)
+        (application as MaggApp).appComponent.inject(this)
 
         shelf = intent.getStringExtra(SHELF_EXTRA)!!
 

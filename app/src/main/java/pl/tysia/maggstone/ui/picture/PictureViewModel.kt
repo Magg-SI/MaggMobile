@@ -12,18 +12,19 @@ import pl.tysia.maggstone.data.source.PictureDataSource
 import pl.tysia.maggstone.data.Result
 import java.io.IOException
 import java.lang.Exception
+import javax.inject.Inject
 
-class PictureViewModel(var pictureDataSource: PictureDataSource) : ViewModel() {
+class PictureViewModel @Inject constructor(var pictureDataSource: PictureDataSource) : ViewModel() {
     private val _pictureResult = MutableLiveData<Int>()
     val pictureResult: LiveData<Int> = _pictureResult
 
     private val _picture = MutableLiveData<Bitmap>()
     val picture: LiveData<Bitmap> = _picture
 
-    fun getPicture(wareID: Int, token : String) {
+    fun getPicture(wareID: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = pictureDataSource.getPicture(wareID, token)
+                val result = pictureDataSource.getPicture(wareID)
 
                 if (result is Result.Success) {
                     _picture.postValue(result.data)

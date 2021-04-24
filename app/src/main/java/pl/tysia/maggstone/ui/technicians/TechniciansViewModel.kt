@@ -16,18 +16,19 @@ import pl.tysia.maggstone.data.source.TechniciansDataSource
 import pl.tysia.maggstone.data.source.WareDataSource
 import pl.tysia.maggstone.data.source.WarehousesDataSource
 import java.io.IOException
+import javax.inject.Inject
 
-class TechniciansViewModel(var datasource: TechniciansDataSource) : ViewModel() {
+class TechniciansViewModel @Inject constructor(var datasource: TechniciansDataSource) : ViewModel() {
     private val _techniciansResult = MutableLiveData<Int>()
     val techniciansResult: LiveData<Int> = _techniciansResult
 
     private val _technicians = MutableLiveData<ArrayList<Technician>>()
     val orders: LiveData<ArrayList<Technician>> = _technicians
 
-    fun getTechnicians(token: String) {
+    fun getTechnicians() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = datasource.getTechnicians(token)
+                val result = datasource.getTechnicians()
 
                 if (result is Result.Success) {
                     _technicians.postValue(result.data)

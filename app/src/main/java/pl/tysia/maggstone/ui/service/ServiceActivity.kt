@@ -9,33 +9,28 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_service.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.constants.Extras
-import pl.tysia.maggstone.constants.Extras.SERVICE
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.constants.Extras.TECHNICIANS
-import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Service
 import pl.tysia.maggstone.data.model.Technician
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.login.afterTextChanged
 import pl.tysia.maggstone.ui.technicians.SelectedTechnicianButton
 import pl.tysia.maggstone.ui.technicians.TechniciansActivity
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
 const val TECHNICIANS_REQUEST = 7777
 
 class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveListener {
-    private lateinit var viewModel: ServiceViewModel
+    @Inject lateinit var viewModel: ServiceViewModel
+
     private val currentTime: Calendar = Calendar.getInstance()
     private var hour: Int = currentTime.get(Calendar.HOUR_OF_DAY)
     private var minute: Int = currentTime.get(Calendar.MINUTE)
@@ -93,17 +88,14 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service)
 
+        (application as MaggApp).appComponent.inject(this)
+
         start_time_tv.setOnClickListener(onTimeClickedListener)
         end_time_tv.setOnClickListener(onTimeClickedListener)
 
         date_tv.setOnClickListener(onDateClickedListener)
 
         setDate(date_tv)
-
-        viewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(ServiceViewModel::class.java)
-
 
         viewModel.service.observe(this@ServiceActivity, Observer {
             showBlockingProgress(false)
@@ -127,12 +119,7 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
     private fun getService() : Service{
         val serviceDate = SimpleDateFormat("yyyy.MM.dd").format(currentTime.time)
 
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token
-
-        return Service(token).apply {
+        return Service().apply {
             peopleCount = this@ServiceActivity.technicians.size
             date = serviceDate
             startTime = start_time_tv.text.toString()

@@ -1,36 +1,26 @@
 package pl.tysia.maggstone.ui.hose
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_hose.*
 import kotlinx.android.synthetic.main.activity_hose_info.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.constants.Extras
-import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Hose
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
-import pl.tysia.maggstone.ui.login.afterTextChanged
+import javax.inject.Inject
 
 class HoseInfoActivity : BaseActivity() {
-    private lateinit var viewModel: HoseViewModel
+    @Inject lateinit var viewModel: HoseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_hose_info)
+        (application as MaggApp).appComponent.inject(this)
 
-        viewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(HoseViewModel::class.java)
+        setContentView(R.layout.activity_hose_info)
 
         viewModel.hoseResult.observe(this@HoseInfoActivity, Observer {
             displayHose(it)
@@ -51,11 +41,7 @@ class HoseInfoActivity : BaseActivity() {
         if (hoseNr.isNotEmpty()){
             showLoading(true)
 
-            val token = LoginRepository(
-                LoginDataSource(NetAddressManager(this)),
-                this
-            ).user!!.token
-            viewModel.getHose(token, hoseNr)
+            viewModel.getHose(hoseNr)
         }
     }
 
