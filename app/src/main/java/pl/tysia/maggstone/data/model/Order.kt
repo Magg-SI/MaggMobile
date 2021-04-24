@@ -47,7 +47,7 @@ data class Order(
     override fun getDescription(): String {
         var res =  "Numer: $documentNr\n" +
                 "Data: $documentDate\n"
-        if (comments != null) res += "\nUwagi: $comments"
+        if (comments.isNotEmpty()) res += "\nUwagi: $comments"
 
         return res
     }
