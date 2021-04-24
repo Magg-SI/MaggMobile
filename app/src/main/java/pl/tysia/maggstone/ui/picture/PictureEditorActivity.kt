@@ -1,8 +1,6 @@
 package pl.tysia.maggstone.ui.picture
 
 import android.Manifest
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -17,28 +15,24 @@ import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_picture_editor.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.SendingService
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.rotateBitmap
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.presentation_logic.EditPictureView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
 class PictureEditorActivity : BaseActivity() {
@@ -47,7 +41,7 @@ class PictureEditorActivity : BaseActivity() {
     private lateinit var mService: SendingService
     private var mBound: Boolean = false
 
-    private lateinit var viewModel: PictureViewModel
+    @Inject lateinit var viewModel: PictureViewModel
 
     companion object{
         private const val MY_CAMERA_REQUEST_CODE = 100
@@ -72,6 +66,8 @@ class PictureEditorActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as MaggApp).appComponent.inject(this)
+
         setContentView(R.layout.activity_picture_editor)
 
         ware = intent.getSerializableExtra(Ware.WARE_EXTRA) as Ware
@@ -80,11 +76,6 @@ class PictureEditorActivity : BaseActivity() {
 
 
         setZoom(scale_button);
-
-        viewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(PictureViewModel::class.java)
-
 
         viewModel.pictureResult.observe(this@PictureEditorActivity, Observer {
             Toast.makeText(this, getString(it), Toast.LENGTH_LONG).show()
@@ -99,12 +90,7 @@ class PictureEditorActivity : BaseActivity() {
             edit_button.isEnabled = true
         })
 
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token
-
-        viewModel.getPicture(ware.id!!, token)
+        viewModel.getPicture(ware.id!!)
 
         checkPermission()
     }

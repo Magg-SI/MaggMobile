@@ -19,6 +19,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
@@ -37,6 +38,7 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 const val BATCH_SIZE = 5000
@@ -48,8 +50,8 @@ class SendingService : Service(){
 
     private var thread : Thread? = null
 
-    private lateinit var dataSource: PictureDataSource
-    private lateinit var db : Database
+    @Inject lateinit var dataSource: PictureDataSource
+    @Inject lateinit var db : Database
 
     var isRunning = false
 
@@ -114,12 +116,8 @@ class SendingService : Service(){
     fun getQueue() = queue
 
     override fun onCreate() {
-        db = Room.databaseBuilder(
-            this@SendingService,
-            Database::class.java, "pl.tysia.database"
-        ).build()
 
-        dataSource = PictureDataSource(this@SendingService, NetAddressManager(this@SendingService))
+        (application as MaggApp).appComponent.inject(this)
 
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
@@ -191,8 +189,8 @@ class SendingService : Service(){
         return START_STICKY
     }
 
-    fun sendPictureStart(item : QueueItem, token : String) : Int{
-        val result = dataSource.sendPictureStart(item.wareID, item.picture!![0], token)
+    fun sendPictureStart(item : QueueItem) : Int{
+        val result = dataSource.sendPictureStart(item.wareID, item.picture!![0])
         if (result is Result.Success){
             item.batchesSent++
             return result.data
@@ -211,9 +209,9 @@ class SendingService : Service(){
         return -1
     }
 
-    fun sendPictureNext(item : QueueItem, token : String) : Boolean{
+    fun sendPictureNext(item : QueueItem) : Boolean{
         val sent = item.batchesSent
-        val result = dataSource.sendPictureNext(item.photoID, item.picture!![sent], sent, token)
+        val result = dataSource.sendPictureNext(item.photoID, item.picture!![sent], sent)
         if (result is Result.Success) {
             item.batchesSent++
             return result.data
@@ -231,8 +229,8 @@ class SendingService : Service(){
         return false
     }
 
-    fun sendPictureFin(item : QueueItem, token : String) : Boolean{
-        val result = dataSource.sendPictureFin(token, item.photoID)
+    fun sendPictureFin(item : QueueItem) : Boolean{
+        val result = dataSource.sendPictureFin(item.photoID)
         if (result is Result.Success) return result.data
         else if (result is Result.Error) {
             val error = Error(Error.TYPE_PICTURE,
@@ -264,19 +262,18 @@ class SendingService : Service(){
 
                 loadPhotoBatches(item)
 
-                val token =  LoginRepository(LoginDataSource(NetAddressManager(this@SendingService)),this@SendingService).user!!.token
                 try {
                     if (item.photoID < 0) {
-                        item.photoID = sendPictureStart(item, token)
+                        item.photoID = sendPictureStart(item)
                     }
 
                     var sendingState = true
                     if (item.photoID >= 0 ) while (!item.allSent() && sendingState) {
-                        sendingState = sendPictureNext(item, token)
+                        sendingState = sendPictureNext(item)
                     }
 
                     if (item.allSent())
-                        item.finished = sendPictureFin(item, token)
+                        item.finished = sendPictureFin(item)
 
                     if(item.finished) {
                         deletePhoto(item.photoPath)

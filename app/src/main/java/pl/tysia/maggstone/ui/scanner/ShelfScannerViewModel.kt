@@ -11,18 +11,19 @@ import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.service.ShelfService
 import pl.tysia.maggstone.data.source.ShelfDataSource
 import java.io.IOException
+import javax.inject.Inject
 
-class ShelfScannerViewModel(private val dataSource : ShelfDataSource) : ViewModel(){
+class ShelfScannerViewModel @Inject constructor(private val dataSource : ShelfDataSource) : ViewModel(){
     private val _result = MutableLiveData<Boolean>()
     val result: LiveData<Boolean> = _result
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun testShelf(shelfCode: String, token : String) {
+    fun testShelf(shelfCode: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = dataSource.testShelf(shelfCode, token)
+                val result = dataSource.testShelf(shelfCode)
 
                 if (result is Result.Success) {
                     _result.postValue(true)

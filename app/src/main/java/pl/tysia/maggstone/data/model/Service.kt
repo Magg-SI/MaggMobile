@@ -6,7 +6,7 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import java.io.Serializable
 import java.lang.StringBuilder
 
-class Service(token: String) : APIRequest("addSerwis", token), Serializable, ICatalogable {
+class Service() : APIRequest("addSerwis"), Serializable, ICatalogable {
     companion object{
         const val SERVICE_EXTRA ="pl.tysia.maggstone.service"
     }

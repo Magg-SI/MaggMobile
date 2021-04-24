@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.dao.WaresDAO
 import pl.tysia.maggstone.data.model.Hose
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.WareDataSource
 import java.io.IOException
+import javax.inject.Inject
 
-class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDataSource) : ViewModel() {
+class HoseViewModel @Inject constructor(val db : Database, val remoteDataSource : WareDataSource) : ViewModel() {
     private val _hoseForm = MutableLiveData<HoseFormState>()
     val hoseForm: LiveData<HoseFormState> = _hoseForm
 
@@ -26,6 +28,8 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
 
     private val hoseFormState =  HoseFormState()
     val hose =  Hose()
+
+    private val localDataSource : WaresDAO = db.waresDao()
 
     fun formChanged(length : String, code: String, angle : String, creator : String){
         if (!length.isBlank()) {
@@ -114,10 +118,10 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
         }
     }
 
-    fun getHose(token : String, hoseNumber : String){
+    fun getHose( hoseNumber : String){
         viewModelScope.launch(Dispatchers.IO) {
             try{
-                val result = remoteDataSource.findHose(token, hoseNumber)
+                val result = remoteDataSource.findHose(hoseNumber)
 
                 if (result is Result.Success) {
                     _hoseResult.postValue(result.data)
@@ -131,10 +135,10 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
         }
     }
 
-    fun addHose(token : String, hose : Hose){
+    fun addHose( hose : Hose){
         viewModelScope.launch(Dispatchers.IO) {
             try{
-                val result = remoteDataSource.addHose(hose, token)
+                val result = remoteDataSource.addHose(hose)
 
                 if (result is Result.Success) {
                     _hoseResult.postValue(result.data)
@@ -154,7 +158,7 @@ class HoseViewModel(val loalDataSource : WaresDAO, val remoteDataSource : WareDa
 
 
     private fun getWareByID(wareId : String) : Ware? {
-        return loalDataSource.findByIndex(wareId)
+        return localDataSource.findByIndex(wareId)
     }
 
 }

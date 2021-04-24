@@ -1,34 +1,30 @@
 package pl.tysia.maggstone.ui.wares
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_info.*
 import pl.tysia.maggstone.ui.picture.PictureEditorActivity
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.constants.ListActivityMode
-import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Ware
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
-import pl.tysia.maggstone.ui.ViewModelFactory
+import pl.tysia.maggstone.ui.BaseActivity
+import javax.inject.Inject
 
-class WareInfoActivity : AppCompatActivity() {
+class WareInfoActivity : BaseActivity() {
     private lateinit var ware : Ware
-    private lateinit var viewModel : WareInfoViewModel
+
+    @Inject lateinit var viewModel : WareInfoViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ware_info)
 
-        viewModel = ViewModelProvider(this, ViewModelFactory(this))
-            .get(WareInfoViewModel::class.java)
+        (application as MaggApp).appComponent.inject(this)
 
         viewModel.availability.observe(this, Observer {
             ware.availabilities = it
@@ -39,13 +35,7 @@ class WareInfoActivity : AppCompatActivity() {
 
         displayWare()
 
-
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token
-
-        viewModel.getAvailabilities(ware.index!!, token)
+        viewModel.getAvailabilities(ware.index!!)
     }
 
     private fun displayWare(){

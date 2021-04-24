@@ -4,16 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.mlkit.vision.barcode.Barcode
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.okDialog
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.wares.WareViewModel
+import javax.inject.Inject
 
 
 class WareScannerActivity : ScanningActivity() {
@@ -22,7 +19,7 @@ class WareScannerActivity : ScanningActivity() {
         const val BARCODE_LENGTH = 9
     }
 
-    private lateinit var viewModel : WareViewModel
+    @Inject lateinit var viewModel : WareViewModel
 
     override fun setContentView() {
         setContentView(R.layout.activity_scanning)
@@ -31,12 +28,7 @@ class WareScannerActivity : ScanningActivity() {
     override fun onSuccess(barcode: Barcode) {
         val code = barcode.rawValue
 
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token
-
-        viewModel.getWare(code, token)
+        viewModel.getWare(code)
         showSendingState(true)
     }
 
@@ -51,8 +43,7 @@ class WareScannerActivity : ScanningActivity() {
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
 
-        viewModel = ViewModelProvider(this, ViewModelFactory(this))
-        .get(WareViewModel::class.java)
+        (application as MaggApp).appComponent.inject(this)
 
         viewModel.ware.observe(this, Observer {
             val returnIntent = Intent()

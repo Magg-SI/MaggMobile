@@ -11,19 +11,24 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.settings_activity.*
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.login.LoginActivity
 import pl.tysia.maggstone.ui.login.LoginViewModel
+import javax.inject.Inject
 
-class SettingsActivity : AppCompatActivity() {
-    private lateinit var loginViewModel: LoginViewModel
+class SettingsActivity : BaseActivity() {
+    @Inject lateinit var loginViewModel: LoginViewModel
     private lateinit var listener : SharedPreferences.OnSharedPreferenceChangeListener;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
+
+        (application as MaggApp).appComponent.inject(this)
+
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -31,14 +36,9 @@ class SettingsActivity : AppCompatActivity() {
                 .commit()
         }
 
-        loginViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        )
-            .get(LoginViewModel::class.java)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val user =  LoginRepository(LoginDataSource(NetAddressManager(this@SettingsActivity)),this@SettingsActivity).user!!
+        val user =  (application as MaggApp).userRepository.user!!
 
         title_username.text = user.displayName
 

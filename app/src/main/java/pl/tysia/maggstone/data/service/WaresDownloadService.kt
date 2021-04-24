@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.*
 import pl.tysia.maggstone.data.model.Error
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.source.WareDataSource
 import java.io.IOException
+import javax.inject.Inject
 
 private const val ERROR_SOURCE = "pl.tysia.maggstone.error_source_wares"
 
@@ -21,7 +23,8 @@ class WaresDownloadService : Service() {
     var progress: MutableLiveData<Int> = MutableLiveData()
     private var binder = SendingBinder()
 
-    private lateinit var db : Database;
+    @Inject lateinit var db : Database;
+    @Inject lateinit var dataSource : WareDataSource;
 
     override fun onBind(p0: Intent?): IBinder? {
         return binder
@@ -58,27 +61,20 @@ class WaresDownloadService : Service() {
             errorsDAO.clearSource(ERROR_SOURCE)
 
             try {
-                val dataSource = WareDataSource(NetAddressManager(this@WaresDownloadService))
-
-                val token = LoginRepository(
-                    LoginDataSource(NetAddressManager(this@WaresDownloadService)),
-                    this@WaresDownloadService
-                ).user!!.token
-
                 val dao = db.waresDao()
 
                 val maxCounter = dao.getMaxCounter()
 
 
 
-                val result = dataSource.getWares(token, maxCounter)
+                val result = dataSource.getWares(maxCounter)
                 if (result is Result.Success) {
                     val page = result.data
 
                     var pagesDownloaded = 0
 
                     for (i in 0..page.pageCount!!){
-                        val waresPage = dataSource.getWaresPage(token, page.listID!!, i)
+                        val waresPage = dataSource.getWaresPage(page.listID!!, i)
 
                         if (waresPage is Result.Success){
                             val wares = waresPage.data.list!!
@@ -115,10 +111,7 @@ class WaresDownloadService : Service() {
     }
 
     override fun onCreate() {
-        db = Room.databaseBuilder(
-            this@WaresDownloadService,
-            Database::class.java, "pl.tysia.database"
-        ).build()
+        (application as MaggApp).appComponent.inject(this)
 
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
             start()

@@ -5,29 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_technicians.*
 import kotlinx.android.synthetic.main.activity_technicians.headerLayout
 import kotlinx.android.synthetic.main.activity_technicians.recyclerView
 import kotlinx.android.synthetic.main.activity_technicians.search_et
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.constants.Extras.TECHNICIANS
-import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Technician
-import pl.tysia.maggstone.data.model.Ware
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.RecyclerMarginDecorator
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.login.afterTextChanged
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
-import pl.tysia.maggstone.ui.warehouses.WarehousesViewModel
 import java.util.ArrayList
+import javax.inject.Inject
 
 class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable>, SelectedTechnicianButton.OnButtonRemoveListener  {
     private lateinit var adapter : TechniciansAdapter
@@ -35,10 +30,14 @@ class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<
         filteredStrings.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase()) }
     }
 
+    @Inject
+    lateinit var techniciansViewModel : TechniciansViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_technicians)
+
+        (application as MaggApp).appComponent.inject(this)
 
         adapter = TechniciansAdapter(ArrayList())
 
@@ -59,11 +58,6 @@ class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<
 
         recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 0, mBottomLast = 64))
 
-        val techniciansViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(TechniciansViewModel::class.java)
-
-
         techniciansViewModel.orders.observe(this@TechniciansActivity, Observer {
             adapter.allItems.addAll(it)
             adapter.filter()
@@ -76,10 +70,7 @@ class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<
             showBlockingProgress(false)
         })
 
-        techniciansViewModel.getTechnicians( LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token)
+        techniciansViewModel.getTechnicians()
 
         showBlockingProgress(true)
     }

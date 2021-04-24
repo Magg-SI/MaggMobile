@@ -6,41 +6,35 @@ import android.content.res.Configuration
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.tysia.maggstone.ui.main.MainActivity
 
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.NetworkChangeReceiver
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
+import javax.inject.Inject
 
 class LoginActivity : BaseActivity() {
 
     private var mode: Int? = null
-    private lateinit var loginViewModel: LoginViewModel
+
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        loginViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        )
-            .get(LoginViewModel::class.java)
+        (application as MaggApp).appComponent.inject(this)
 
         when(loginViewModel.loginRepository.mode){
             "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

@@ -8,20 +8,16 @@ import pl.tysia.maggstone.data.api.model.PagesRequest
 import pl.tysia.maggstone.data.api.service.PagesService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 
-class ContractorsDataSource(netAddressManager: NetAddressManager) : APISource(netAddressManager) {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+class ContractorsDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider) {
 
-
-    fun getContractors(token: String, counter : Int) : Result<APIResponse.Pages> {
+    fun getContractors(counter : Int) : Result<APIResponse.Pages> {
         val service = retrofit.create(PagesService::class.java)
 
         val result = service.pagesNumber(
-            PagesRequest.Contractors(token = token, lastLicznik = counter)
+            PagesRequest.Contractors(token = tokenProvider.getToken()!!, lastLicznik = counter)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -31,11 +27,11 @@ class ContractorsDataSource(netAddressManager: NetAddressManager) : APISource(ne
         }
     }
 
-    fun getContractorsPage(token: String, listID : Int, pageNumber : Int) : Result<APIResponse.ContractorsPage> {
+    fun getContractorsPage(listID : Int, pageNumber : Int) : Result<APIResponse.ContractorsPage> {
         val service = retrofit.create(PagesService::class.java)
 
         val result = service.getContractorsPage(
-            GetPageRequest(token = token, listaID = listID, pageNo = pageNumber)
+            GetPageRequest(token = tokenProvider.getToken()!!, listaID = listID, pageNo = pageNumber)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

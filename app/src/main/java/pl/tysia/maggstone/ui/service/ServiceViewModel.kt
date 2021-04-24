@@ -11,8 +11,9 @@ import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.model.Service
 import pl.tysia.maggstone.data.source.*
 import java.io.IOException
+import javax.inject.Inject
 
-class ServiceViewModel(var datasource: ServiceDataSource) : ViewModel() {
+class ServiceViewModel @Inject constructor(var datasource: ServiceDataSource) : ViewModel() {
     private val _serviceResult = MutableLiveData<Int>()
     val serviceResult: LiveData<Int> = _serviceResult
 

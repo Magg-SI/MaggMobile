@@ -1,47 +1,35 @@
 package pl.tysia.maggstone.ui.ware_ordering
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_ware_packing.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
+import javax.inject.Inject
 
 class WareOrderingActivity : BaseActivity(), TextWatcher {
     private lateinit var orderedWare: OrderedWare
 
-    private lateinit var wareOrderingViewModel: WareOrderingViewModel
+    @Inject lateinit var wareOrderingViewModel: WareOrderingViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ware_packing)
 
+        (application as MaggApp).appComponent.inject(this)
+
         orderedWare = intent.getSerializableExtra(Ware.WARE_EXTRA) as OrderedWare
-
-        wareOrderingViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(WareOrderingViewModel::class.java)
-
 
         wareOrderingViewModel.packResult.observe(this@WareOrderingActivity, Observer {
             val returnIntent = Intent()
@@ -152,13 +140,8 @@ class WareOrderingActivity : BaseActivity(), TextWatcher {
     }
 
     fun onFinishClicked(view: View){
-        val token = LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token
-
         val ware = getOrderedWare()
-        wareOrderingViewModel.packWare(token,ware.id!!, ware.packedNumber!!, ware.postponedNumber!!, ware.cancelledNumber!!)
+        wareOrderingViewModel.packWare(ware.id!!, ware.packedNumber!!, ware.postponedNumber!!, ware.cancelledNumber!!)
 
         showBlockingProgress(true)
     }

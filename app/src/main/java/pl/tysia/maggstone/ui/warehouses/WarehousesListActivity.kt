@@ -4,28 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
-import pl.tysia.maggstone.data.Database
-import pl.tysia.maggstone.data.NetAddressManager
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Warehouse
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.okDialog
-import pl.tysia.maggstone.ui.ViewModelFactory
-import pl.tysia.maggstone.ui.orders.OrdersViewModel
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
+import javax.inject.Inject
 
 class WarehousesListActivity : SimpleListActivity() {
+    @Inject lateinit var warehousesViewModel : WarehousesViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showBlockingProgress(true)
 
-         val warehousesViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(WarehousesViewModel::class.java)
-
+        (application as MaggApp).appComponent.inject(this)
 
         warehousesViewModel.orders.observe(this@WarehousesListActivity, Observer {
             adapter.allItems.addAll(it as Collection<ICatalogable>)
@@ -39,10 +32,7 @@ class WarehousesListActivity : SimpleListActivity() {
                 showBlockingProgress(false)
             })
 
-        warehousesViewModel.getWarehouses( LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token)
+        warehousesViewModel.getWarehouses()
 
     }
 

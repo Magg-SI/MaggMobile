@@ -11,18 +11,19 @@ import pl.tysia.maggstone.data.source.OrdersRepository
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.model.Order
 import java.io.IOException
+import javax.inject.Inject
 
-class OrdersViewModel(var repository: OrdersRepository) : ViewModel() {
+class OrdersViewModel @Inject constructor(var repository: OrdersRepository) : ViewModel() {
     private val _ordersResult = MutableLiveData<Int>()
     val ordersResult: LiveData<Int> = _ordersResult
 
     private val _orders = MutableLiveData<ArrayList<Order>>()
     val orders: LiveData<ArrayList<Order>> = _orders
 
-    fun getOrders(token: String) {
+    fun getOrders() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = repository.getOrders(token)
+                val result = repository.getOrders()
 
                 if (result is Result.Success) {
                     _orders.postValue(result.data)

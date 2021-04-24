@@ -7,6 +7,7 @@ import android.os.*
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.*
 import pl.tysia.maggstone.data.model.Error
 import pl.tysia.maggstone.data.source.ContractorsDataSource
@@ -14,6 +15,7 @@ import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import java.io.IOException
 import java.lang.Exception
+import javax.inject.Inject
 
 private const val ERROR_SOURCE = "pl.tysia.maggstone.error_source_contractors"
 
@@ -21,7 +23,9 @@ class ContractorsDownloadService : Service() {
     var progress: MutableLiveData<Int> = MutableLiveData()
     private var binder = SendingBinder()
 
-    private lateinit var db : Database
+    @Inject lateinit var db : Database
+
+    @Inject lateinit var dataSource: ContractorsDataSource
 
     override fun onBind(p0: Intent?): IBinder? {
         return binder
@@ -56,26 +60,18 @@ class ContractorsDownloadService : Service() {
             errorsDAO.clearSource(ERROR_SOURCE)
 
             try {
-                val dataSource =
-                    ContractorsDataSource(NetAddressManager(this@ContractorsDownloadService))
-
-                val token = LoginRepository(
-                    LoginDataSource(NetAddressManager(this@ContractorsDownloadService)),
-                    this@ContractorsDownloadService
-                ).user!!.token
-
                 val dao = db.contractorsDao()
 
                 val maxCounter = dao.getMaxCounter()
 
-                val result = dataSource.getContractors(token, maxCounter)
+                val result = dataSource.getContractors(maxCounter)
                 if (result is Result.Success) {
                     val page = result.data
 
                     var pagesDownloaded = 0
 
                     for (i in 0..page.pageCount!!){
-                        val waresPage = dataSource.getContractorsPage(token, page.listID!!, i)
+                        val waresPage = dataSource.getContractorsPage(page.listID!!, i)
 
                         if (waresPage is Result.Success){
                             val wares = waresPage.data.list!!
@@ -113,10 +109,8 @@ class ContractorsDownloadService : Service() {
     }
 
     override fun onCreate() {
-        db = Room.databaseBuilder(
-            this@ContractorsDownloadService,
-            Database::class.java, "pl.tysia.database"
-        ).build()
+        (application as MaggApp).appComponent.inject(this)
+
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it

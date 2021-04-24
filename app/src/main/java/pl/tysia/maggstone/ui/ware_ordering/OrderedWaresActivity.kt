@@ -1,31 +1,22 @@
 package pl.tysia.maggstone.ui.ware_ordering
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_ordered_wares.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.BaseActivity
-import pl.tysia.maggstone.ui.ViewModelFactory
 import pl.tysia.maggstone.ui.orders.OrderedWaresViewModel
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
@@ -33,7 +24,7 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.OrderedItemsAdapter
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 import java.util.ArrayList
-
+import javax.inject.Inject
 
 
 class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListener<OrderedWare>,
@@ -43,7 +34,7 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
 
     private lateinit var recyclerView: RecyclerView
 
-    private lateinit var orderedWaresViewModel: OrderedWaresViewModel
+    @Inject lateinit var orderedWaresViewModel: OrderedWaresViewModel
 
     private lateinit var order : Order
 
@@ -57,12 +48,9 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ordered_wares)
 
+        (application as MaggApp).appComponent.inject(this)
+
         order = intent.getSerializableExtra(Order.ORDER_EXTRA) as Order
-
-        orderedWaresViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(OrderedWaresViewModel::class.java)
-
 
         adapter =
             OrderedItemsAdapter(
@@ -95,10 +83,7 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
             showBlockingProgress(false)
         })
 
-        orderedWaresViewModel.getOrder( LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token, order.id)
+        orderedWaresViewModel.getOrder(order.id)
         showBlockingProgress(true)
     }
 

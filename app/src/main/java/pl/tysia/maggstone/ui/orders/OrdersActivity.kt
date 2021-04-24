@@ -1,39 +1,33 @@
 package pl.tysia.maggstone.ui.orders
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_orders.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.data.NetAddressManager
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Order
-import pl.tysia.maggstone.ui.ViewModelFactory
+import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.CatalogAdapter
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.presentation_logic.adapter.OrdersAdapter
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import pl.tysia.maggstone.ui.ware_ordering.OrderedWaresActivity
 import java.util.ArrayList
+import javax.inject.Inject
 
-class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<Order>{
+class OrdersActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<Order>{
     private lateinit var adapter : OrdersAdapter
     private lateinit var filter: StringFilter<ICatalogable>
 
-    private lateinit var ordersViewModel: OrdersViewModel
+    @Inject lateinit var ordersViewModel: OrdersViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_orders)
 
-        ordersViewModel = ViewModelProvider(this,
-            ViewModelFactory(this)
-        ).get(OrdersViewModel::class.java)
-
+        (application as MaggApp).appComponent.inject(this)
 
         adapter = OrdersAdapter(ArrayList())
         adapter.addItemSelectedListener(this)
@@ -64,10 +58,7 @@ class OrdersActivity : AppCompatActivity(), CatalogAdapter.ItemSelectedListener<
         adapter.allItems.clear()
         adapter.notifyDataSetChanged()
 
-        ordersViewModel.getOrders( LoginRepository(
-            LoginDataSource(NetAddressManager(this)),
-            this
-        ).user!!.token)
+        ordersViewModel.getOrders()
     }
 
     override fun onItemSelected(item: Order) {
