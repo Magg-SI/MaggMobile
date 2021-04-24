@@ -84,7 +84,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
 
     fun onScanClick(view: View){
         val intent = Intent(this, WareScannerActivity::class.java)
-        intent.putExtra("theme", R.style.AppThemeRed)
+        intent.putExtra("theme", R.style.AppThemeYellow)
         startActivityForResult(intent, WARE_REQUEST_CODE)
     }
 

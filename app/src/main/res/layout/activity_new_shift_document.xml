@@ -95,7 +95,7 @@
         android:clickable="true"
         android:onClick="onScanClick"
         android:tint="@color/colorPrimaryDark"
-        app:backgroundTint="@color/colorAccentRed"
+        app:backgroundTint="@color/colorAccentGreen"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"

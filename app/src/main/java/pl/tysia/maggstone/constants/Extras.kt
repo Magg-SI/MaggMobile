@@ -9,4 +9,5 @@ object Extras{
     const val TECHNICIANS ="pl.tysia.maggstone.technicians"
     const val SERVICE ="pl.tysia.maggstone.service"
     const val ORDER ="pl.tysia.maggstone.order"
+    const val CALLING_ACTIVITY ="pl.tysia.maggstone.calling_activity"
 }

@@ -49,7 +49,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:background="@drawable/button_half_round_outline"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/colorAccentGreen"
             android:onClick="onSearchClicked"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"

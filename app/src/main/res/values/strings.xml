@@ -44,5 +44,6 @@
     <string name="availability">Dostępność: %s</string>
     <string name="error_coudnt_download_technicians">Nie udało się pobrać serwisantów</string>
     <string name="error_couldnt_create_service">Nie udało się utworzyc serwisu</string>
+    <string name="error_couldnt_download_history">Nie udało się pobrać historii</string>
 
 </resources>

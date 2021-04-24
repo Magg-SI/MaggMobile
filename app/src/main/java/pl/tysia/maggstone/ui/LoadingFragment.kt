@@ -22,7 +22,8 @@ class LoadingFragment : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        //requireActivity().onBackPressed()
+        requireActivity().onBackPressed()
+        dismiss()
     }
 
     override fun onCreateView(

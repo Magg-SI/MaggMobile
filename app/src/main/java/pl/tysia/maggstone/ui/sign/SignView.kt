@@ -16,7 +16,7 @@ class SignView(context : Context, attrs : AttributeSet) : View(context, attrs) {
     private var mCanvas = Canvas()
 
     private var linePaint : Paint = Paint().apply {
-        val color = context.resources.getColor(R.color.colorAccent)
+        val color = context.resources.getColor(R.color.colorAccentGreen)
         setColor(color)
         strokeWidth = 4f
         isAntiAlias = true

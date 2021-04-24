@@ -72,7 +72,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Narzędzia"
-                android:textColor="@color/colorAccentDark"
+                android:textColor="@color/colorAccentGreenDark"
                 android:textSize="18sp" />
 
             <HorizontalScrollView

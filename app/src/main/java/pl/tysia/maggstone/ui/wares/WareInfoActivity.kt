@@ -10,8 +10,10 @@ import kotlinx.android.synthetic.main.activity_ware_info.*
 import pl.tysia.maggstone.ui.picture.PictureEditorActivity
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.BaseActivity
+import pl.tysia.maggstone.ui.main.MainActivity
 import javax.inject.Inject
 
 class WareInfoActivity : BaseActivity() {
@@ -19,8 +21,10 @@ class WareInfoActivity : BaseActivity() {
 
     @Inject lateinit var viewModel : WareInfoViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        val callingActivity = intent.getStringExtra(Extras.CALLING_ACTIVITY)
+        setTheme(callingActivity!!)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ware_info)
 
@@ -36,6 +40,13 @@ class WareInfoActivity : BaseActivity() {
         displayWare()
 
         viewModel.getAvailabilities(ware.index!!)
+    }
+
+    private fun setTheme(callingActivity : String){
+        when(callingActivity){
+            MainActivity::class.java.simpleName ->  setTheme(R.style.AppTheme);
+            WareListActivity::class.java.simpleName ->  setTheme(R.style.AppThemeOrange);
+        }
     }
 
     private fun displayWare(){

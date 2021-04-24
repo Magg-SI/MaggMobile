@@ -7,13 +7,13 @@
 
     <color name="lightGray">#F3F3F3</color>
 
-    <color name="colorAccent">#01B31B</color>
-    <color name="colorAccentLight">#A5F6B1</color>
-    <color name="colorAccentDark">#037014</color>
+    <color name="colorAccentGreen">#01B31B</color>
+    <color name="colorAccentGreenLight">#A5F6B1</color>
+    <color name="colorAccentGreenDark">#037014</color>
 
-    <color name="colorAccentRed">#FFE500</color>
-    <color name="colorAccentRedLight">#FFF6A6</color>
-    <color name="colorAccentRedDark">#D3A500</color>
+    <color name="colorAccentYellow">#FFE500</color>
+    <color name="colorAccentYellowLight">#FFF6A6</color>
+    <color name="colorAccentYellowDark">#D3A500</color>
 
     <color name="colorAccentBlue">#03A9F4</color>
     <color name="colorAccentBlueLight">#8CDBFF</color>

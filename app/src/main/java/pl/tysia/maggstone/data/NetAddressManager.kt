@@ -2,6 +2,7 @@ package pl.tysia.maggstone.data
 
 import android.content.Context
 import android.content.Intent
+import android.webkit.URLUtil
 import androidx.preference.PreferenceManager
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.SettingsActivity
@@ -25,7 +26,7 @@ class NetAddressManager @Inject constructor(context : Context) {
                 "Wyłącz korzystanie z sieci prywatnej lub podaj jej adres",
                 context) {context.startActivity(Intent(context, SettingsActivity::class.java))}
 
-        else if (globalNetAddress != null){
+        else if (globalNetAddress != null && URLUtil.isValidUrl(globalNetAddress)){
             this.globalNetAddress = globalNetAddress
         }
 

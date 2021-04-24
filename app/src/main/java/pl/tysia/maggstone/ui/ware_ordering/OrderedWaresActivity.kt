@@ -8,11 +8,13 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_ordered_wares.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
@@ -90,6 +92,7 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
     override fun onItemSelected(item: OrderedWare) {
         val intent = Intent(this@OrderedWaresActivity, WareOrderingActivity::class.java)
         intent.putExtra(Ware.WARE_EXTRA, item)
+        intent.putExtra(Extras.ORDER, order)
         startActivityForResult(intent,
             PACK_REQUEST
         )

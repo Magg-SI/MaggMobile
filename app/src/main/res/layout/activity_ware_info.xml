@@ -14,7 +14,7 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:onClick="onChangePictureClick"
-        android:tint="?colorPrimary"
+        android:tint="?colorControlNormal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_round_image_24" />
@@ -118,6 +118,7 @@
                 android:id="@+id/availability_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical" />
 

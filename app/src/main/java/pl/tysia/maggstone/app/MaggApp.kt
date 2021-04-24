@@ -12,14 +12,10 @@ class MaggApp: Application() {
         super.onCreate()
         this.appComponent = this.initDagger()
 
-        appComponent.inject(this)
     }
 
     private fun initDagger() = DaggerApplicationComponent.builder()
         .appModule(AppModule(this))
         .build()
-
-    @Inject
-    lateinit var userRepository : LoginRepository
 
 }

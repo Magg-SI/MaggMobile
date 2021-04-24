@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.MenuTileType
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.NetAddressManager
@@ -82,9 +83,9 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        moveTaskToBack(true);
-    }
+//    override fun onBackPressed() {
+//        moveTaskToBack(true);
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -121,6 +122,7 @@ class MainActivity : BaseActivity() {
 
             val intent = Intent(this, WareInfoActivity::class.java)
             intent.putExtra(Ware.WARE_EXTRA, ware)
+            intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
             startActivity(intent)
         }
     }

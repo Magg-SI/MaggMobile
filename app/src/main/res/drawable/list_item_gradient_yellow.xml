@@ -13,9 +13,9 @@
         <solid android:color="@color/design_default_color_background" />
 
         <gradient
-            android:startColor="@color/colorAccentRed"
-            android:centerColor="@color/colorAccentRed"
-            android:endColor="@color/colorAccentRedDark"
+            android:startColor="@color/colorAccentYellow"
+            android:centerColor="@color/colorAccentYellow"
+            android:endColor="@color/colorAccentYellowDark"
             android:angle="0" />
     </shape>
 </item>

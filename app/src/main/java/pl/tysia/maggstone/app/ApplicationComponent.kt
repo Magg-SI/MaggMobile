@@ -11,6 +11,7 @@ import pl.tysia.maggstone.ui.DownloadStateActivity
 import pl.tysia.maggstone.ui.SendingStateActivity
 import pl.tysia.maggstone.ui.SettingsActivity
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
+import pl.tysia.maggstone.ui.cooperation.CooperationHistoryActivity
 import pl.tysia.maggstone.ui.document.BasicNewDocumentActivity
 import pl.tysia.maggstone.ui.document.NewDocumentActivity
 import pl.tysia.maggstone.ui.document.NewShiftDocumentActivity
@@ -64,6 +65,7 @@ interface ApplicationComponent {
     fun inject(activity: SendingStateActivity)
     fun inject(activity: SettingsActivity)
     fun inject(activity: NewDocumentActivity)
+    fun inject(activity: CooperationHistoryActivity)
 
     fun inject(service: WaresDownloadService)
     fun inject(service: ContractorsDownloadService)

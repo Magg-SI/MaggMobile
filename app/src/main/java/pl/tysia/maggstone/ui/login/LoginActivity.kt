@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 class LoginActivity : BaseActivity() {
 
-    private var mode: Int? = null
+    private var testingStarted : Boolean = false
 
     @Inject
     lateinit var loginViewModel: LoginViewModel
@@ -37,12 +37,24 @@ class LoginActivity : BaseActivity() {
         (application as MaggApp).appComponent.inject(this)
 
         when(loginViewModel.loginRepository.mode){
-            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            null, "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
 
         setContentView(R.layout.activity_login)
+
+        NetworkChangeReceiver().enable(this)
+
+        NetworkChangeReceiver.internetConnection.observe(this, Observer {
+            if (it && loginViewModel.loginRepository.isLoggedIn && !testingStarted){
+                showBlockingProgress(true)
+
+                loginViewModel.testToken()
+
+                testingStarted = true
+            }
+        })
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -125,20 +137,6 @@ class LoginActivity : BaseActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        NetworkChangeReceiver().enable(this)
-
-        NetworkChangeReceiver.internetConnection.observe(this, Observer {
-            if (it && loginViewModel.loginRepository.isLoggedIn){
-                showBlockingProgress(true)
-
-                loginViewModel.testToken()
-            }
-        })
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

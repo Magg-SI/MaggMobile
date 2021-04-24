@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_new_document.*
 import kotlinx.android.synthetic.main.basic_catalog_layout.*
+import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.model.Ware
@@ -52,6 +53,7 @@ class WareListActivity : SimpleListActivity() {
         }else if (mode == ListActivityMode.BROWSE){
             val intent = Intent(this, WareInfoActivity::class.java)
             intent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
+            intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
             startActivity(intent)
         }
 

@@ -105,4 +105,9 @@ open class APIResponse {
         var token: String? = null
     }
 
+    class CooperationHistory : APIResponse() {
+        @SerializedName("lista")
+        var cooperationHistory: ArrayList<Document>? = null
+    }
+
 }

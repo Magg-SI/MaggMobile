@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 class SettingsActivity : BaseActivity() {
     @Inject lateinit var loginViewModel: LoginViewModel
+    @Inject lateinit var userRepository: LoginRepository
     private lateinit var listener : SharedPreferences.OnSharedPreferenceChangeListener;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,9 +39,9 @@ class SettingsActivity : BaseActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val user =  (application as MaggApp).userRepository.user!!
+        val user = userRepository.user!!
 
-        title_username.text = user.displayName
+        title_username.text = user.displayName.capitalize()
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
