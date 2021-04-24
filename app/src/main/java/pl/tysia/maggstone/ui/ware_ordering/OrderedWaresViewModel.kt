@@ -20,10 +20,10 @@ class OrderedWaresViewModel @Inject constructor(var repository: OrdersRepository
     private val _wares = MutableLiveData<ArrayList<OrderedWare>>()
     val wares: LiveData<ArrayList<OrderedWare>> = _wares
 
-    fun getOrder(id: Int) {
+    fun getOrder(id: Int, warehouseID : Int) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val result = repository.getOrder(id)
+                val result = repository.getOrder(id, warehouseID)
 
                 if (result is Result.Success) {
                     _wares.postValue(result.data)

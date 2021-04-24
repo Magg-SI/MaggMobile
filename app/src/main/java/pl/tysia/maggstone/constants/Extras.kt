@@ -8,4 +8,5 @@ object Extras{
     const val DOCUMENT_TYPE ="pl.tysia.maggstone.document_type"
     const val TECHNICIANS ="pl.tysia.maggstone.technicians"
     const val SERVICE ="pl.tysia.maggstone.service"
+    const val ORDER ="pl.tysia.maggstone.order"
 }

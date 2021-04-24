@@ -11,6 +11,8 @@ data class Order(
     var id: Int,
     @SerializedName("magazyn")
     var warehouse: String,
+    @SerializedName("magazID")
+    var warehouseID: Int,
     @SerializedName("dataDok")
     var documentDate: String,
     @SerializedName("nrDok")
@@ -20,14 +22,14 @@ data class Order(
     : ICatalogable, Serializable{
 
     @SerializedName("ilePozZ")
-    var packedItems = 5;
+    var packedItems : Int? = null;
 
     @SerializedName("ilePoz")
-    var totalItems = 10;
+    var totalItems : Int? = null;
 
     fun getPackingState() : PackingState{
         return when {
-            packedItems >= totalItems -> PackingState.PACKED
+            packedItems!! >= totalItems!! -> PackingState.PACKED
             packedItems == 0 -> PackingState.UNTOUCHED
             else -> PackingState.STARTED
         }

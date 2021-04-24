@@ -1,5 +1,6 @@
 package pl.tysia.maggstone.data.source
 
+import com.google.gson.annotations.SerializedName
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.model.*
@@ -27,11 +28,11 @@ class OrdersDataSource @Inject constructor(val retrofit: Retrofit, val tokenProv
         }
     }
 
-    fun getOrder(id : Int): Result<ArrayList<OrderedWare>> {
+    fun getOrder(id : Int, warehouseID : Int): Result<ArrayList<OrderedWare>> {
         val service = retrofit.create(OrdersService::class.java)
 
         val result = service.getOrder(
-            GetOrderRequest(tokenProvider.getToken()!!, id)
+            GetOrderRequest(tokenProvider.getToken()!!, id, warehouseID)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -44,7 +45,11 @@ class OrdersDataSource @Inject constructor(val retrofit: Retrofit, val tokenProv
     fun packWare(id : Int,
                  packedNumber : Double,
                  postponedNumber : Double,
-                 cancelledNumber : Double): Result<Boolean> {
+                 cancelledNumber : Double,
+                 documentID : Int,
+                 warehouseID : Int,
+                 finished : Int
+    ): Result<Boolean> {
 
      val service = retrofit.create(OrdersService::class.java)
 
@@ -53,7 +58,10 @@ class OrdersDataSource @Inject constructor(val retrofit: Retrofit, val tokenProv
                 id = id,
                 packedNumber = packedNumber,
                 postponedNumber = postponedNumber,
-                cancelledNumber = cancelledNumber
+                cancelledNumber = cancelledNumber,
+                documentID = documentID,
+                warehouseID = warehouseID,
+                finished = finished
             )
         ).execute()
 

@@ -12,13 +12,17 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_ware_packing.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
+import pl.tysia.maggstone.constants.Extras
+import pl.tysia.maggstone.data.model.Order
 import pl.tysia.maggstone.data.model.OrderedWare
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.ui.BaseActivity
+import pl.tysia.maggstone.ui.service.toInt
 import javax.inject.Inject
 
 class WareOrderingActivity : BaseActivity(), TextWatcher {
     private lateinit var orderedWare: OrderedWare
+    private lateinit var order: Order
 
     @Inject lateinit var wareOrderingViewModel: WareOrderingViewModel
 
@@ -30,6 +34,7 @@ class WareOrderingActivity : BaseActivity(), TextWatcher {
         (application as MaggApp).appComponent.inject(this)
 
         orderedWare = intent.getSerializableExtra(Ware.WARE_EXTRA) as OrderedWare
+        order = intent.getSerializableExtra(Extras.ORDER) as Order
 
         wareOrderingViewModel.packResult.observe(this@WareOrderingActivity, Observer {
             val returnIntent = Intent()
@@ -141,7 +146,16 @@ class WareOrderingActivity : BaseActivity(), TextWatcher {
 
     fun onFinishClicked(view: View){
         val ware = getOrderedWare()
-        wareOrderingViewModel.packWare(ware.id!!, ware.packedNumber!!, ware.postponedNumber!!, ware.cancelledNumber!!)
+
+        val packed = (order.packedItems!! + 1) >= order.totalItems!!
+
+        wareOrderingViewModel.packWare(ware.id!!,
+            ware.packedNumber!!,
+            ware.postponedNumber!!,
+            ware.cancelledNumber!!,
+            order.id,
+            order.warehouseID,
+            packed.toInt())
 
         showBlockingProgress(true)
     }

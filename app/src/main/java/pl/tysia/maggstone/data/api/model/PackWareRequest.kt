@@ -14,5 +14,11 @@ class PackWareRequest(
     @SerializedName("ilNext")
     var postponedNumber : Double? = null,
     @SerializedName("ilAnul")
-    var cancelledNumber : Double? = null
+    var cancelledNumber : Double? = null,
+    @SerializedName("dokID")
+    var documentID : Int,
+    @SerializedName("magazID")
+    var warehouseID : Int,
+    @SerializedName("finished")
+    var finished : Int
     )

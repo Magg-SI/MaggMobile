@@ -10,12 +10,15 @@ class OrdersRepository @Inject constructor(private var dataSource : OrdersDataSo
     fun getOrders() : Result<ArrayList<Order>> = dataSource.getOrders()
 
 
-    fun getOrder(id : Int): Result<ArrayList<OrderedWare>> = dataSource.getOrder( id)
+    fun getOrder(id : Int, warehouseID : Int): Result<ArrayList<OrderedWare>> = dataSource.getOrder( id, warehouseID)
 
     fun packWare(id : Int,
                  packedNumber : Double,
                  postponedNumber : Double,
-                 cancelledNumber : Double): Result<Boolean> =
-        dataSource.packWare(id,packedNumber,postponedNumber,cancelledNumber)
+                 cancelledNumber : Double,
+                 documentID : Int,
+                 warehouseID : Int,
+                 finished : Int): Result<Boolean> =
+        dataSource.packWare(id,packedNumber,postponedNumber,cancelledNumber, documentID, warehouseID, finished)
 
 }

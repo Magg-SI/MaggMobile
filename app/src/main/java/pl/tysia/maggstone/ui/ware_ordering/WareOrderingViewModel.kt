@@ -22,13 +22,16 @@ class WareOrderingViewModel @Inject constructor(var repository: OrdersRepository
     fun packWare(id : Int,
                  packedNumber : Double,
                  postponedNumber : Double,
-                 cancelledNumber : Double) {
+                 cancelledNumber : Double,
+                 documentID : Int,
+                 warehouseID : Int,
+                 finished : Int) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
                 val result =
-                    repository.packWare( id, packedNumber, postponedNumber, cancelledNumber)
+                    repository.packWare( id, packedNumber, postponedNumber, cancelledNumber, documentID, warehouseID, finished)
 
                 if (result is Result.Success) {
                     _packResult.postValue(result.data)

@@ -83,7 +83,7 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
             showBlockingProgress(false)
         })
 
-        orderedWaresViewModel.getOrder(order.id)
+        orderedWaresViewModel.getOrder(order.id, order.warehouseID)
         showBlockingProgress(true)
     }
 
