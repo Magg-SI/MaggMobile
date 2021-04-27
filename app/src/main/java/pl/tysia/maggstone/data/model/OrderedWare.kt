@@ -36,21 +36,32 @@ class OrderedWare(name: String) : Ware(name) {
         val sb = StringBuilder()
 
 
-        sb.append("Zamówione: $orderedNumber\n")
+        sb.append("Zamówione: "+countToStr(orderedNumber)+"\n")
 
         if (packedNumber != 0.0){
-            sb.append("\nSpakowane: $packedNumber")
+            sb.append("\nSpakowane: "+countToStr(packedNumber))
         }
 
         if (postponedNumber != 0.0){
-            sb.append("\nNastępne zamówienie: $postponedNumber")
+            sb.append("\nNastępne zamówienie: "+countToStr(postponedNumber))
         }
 
         if (cancelledNumber != 0.0){
-            sb.append("\nAnulowane: $cancelledNumber")
+            sb.append("\nAnulowane: "+countToStr(cancelledNumber))
         }
 
         return sb.toString()
     }
 
+    fun countToStr(ilo: Double): String {
+        val x = 1.0*ilo.toInt()
+        if(x==ilo) return ilo.toInt().toString()
+        return ilo.round(4).toString().replace('.', ',')
+    }
+
+    fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return kotlin.math.round(this * multiplier) / multiplier
+    }
 }

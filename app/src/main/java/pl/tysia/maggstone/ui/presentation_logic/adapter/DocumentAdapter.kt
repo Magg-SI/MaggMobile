@@ -48,7 +48,9 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
             moreButton.setOnClickListener {
                 val item: DocumentItem = shownItems[adapterPosition]
                 numberET.clearFocus();
+                //fixCount(item,0)
                 onMoreClicked(item)
+                changeListeners.forEach { it.onListChanged() }
             }
 
             lessButton.setOnClickListener {
