@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_ordered_wares.*
@@ -62,9 +61,7 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
         adapter.addItemSelectedListener(this)
 
         val filterer = adapter.filterer
-        filter = StringFilter(null){ filteredStrings, item ->
-            filteredStrings.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase()) }
-        }
+        filter = StringFilter()
 
         filterer.addFilter(filter!!)
 
@@ -82,11 +79,11 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
             adapter.allItems.addAll(it)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         orderedWaresViewModel.getOrder(order.id, order.warehouseID)
-        showBlockingProgress(true)
+        showBlockingLoading(true)
     }
 
     override fun onItemSelected(item: OrderedWare) {
@@ -107,7 +104,7 @@ class OrderedWaresActivity : BaseActivity() , CatalogAdapter.ItemSelectedListene
     }
 
     override fun afterTextChanged(s: Editable) {
-        filter?.filteredStrings = s.toString().split(" ")
+        filter?.filteredString = s.toString()
         adapter.filter()
         adapter.notifyDataSetChanged()
 

@@ -33,10 +33,7 @@ class OrdersActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<Order
         adapter.addItemSelectedListener(this)
 
 
-        filter = StringFilter(null){ filteredStrings, item ->
-            filteredStrings.count { item.getFilteredValue()!!.toLowerCase().contains(it.toLowerCase()) }
-        }
-
+        filter = StringFilter()
         adapter.filterer.addFilter(filter)
 
         recycler.adapter = adapter

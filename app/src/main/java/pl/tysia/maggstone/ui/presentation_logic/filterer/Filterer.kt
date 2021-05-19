@@ -4,6 +4,9 @@ import java.util.*
 
 abstract class Filterer<T : IFilterable>(var basicList: MutableList<T>, var filteredList: MutableList<T>) {
 
+    var bestFit : Pair<T, Int>? = null
+        private set
+
     private var filters: LinkedList<Filter<T>> = LinkedList()
 
     fun addFilter(filter: Filter<T>) {
@@ -25,20 +28,27 @@ abstract class Filterer<T : IFilterable>(var basicList: MutableList<T>, var filt
 
         if (filters.isEmpty()) {
             filteredList.addAll(basicList)
-        }
-        else {
+        } else {
             for (filterable in basicList) {
                 var fits = true
+                var fitness = 0
 
                 for (filter in filters) {
-                    if (!filter.fitsFilter(filterable))
+                    if (!filter.fitsFilter(filterable)) {
                         fits = false
-                    break
+                        break
+                    }
+
+                   // fitness += filter.fitness(filterable)
+
                 }
 
-                if (fits)
+                if (fits) {
                     filteredList.add(filterable)
-
+                    /*if (bestFit == null || fitness > bestFit!!.second){
+                        bestFit = Pair(filterable, fitness)
+                    }*/
+                }
             }
         }
     }

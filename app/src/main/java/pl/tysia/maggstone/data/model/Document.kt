@@ -14,15 +14,15 @@ class Document(val dataDok: String,
     }
 
     override fun getSubtitle(): String {
-        return formaPl
+        return dataDok
     }
 
     override fun getDescription(): String {
-        return "Wartość netto: $netto\nWartość brutto: $brutto"
+        return "Cena netto: $netto\nCena brutto: $brutto"
     }
 
     override fun getAdditionalInfo(): String {
-        return dataDok
+        return formaPl
     }
 
     override fun getFilteredValue(): String {

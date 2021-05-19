@@ -48,7 +48,7 @@ class LoginActivity : BaseActivity() {
 
         NetworkChangeReceiver.internetConnection.observe(this, Observer {
             if (it && loginViewModel.loginRepository.isLoggedIn && !testingStarted){
-                showBlockingProgress(true)
+                showBlockingLoading(true)
 
                 loginViewModel.testToken()
 
@@ -65,7 +65,7 @@ class LoginActivity : BaseActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -99,7 +99,7 @@ class LoginActivity : BaseActivity() {
                 finish()
             }
 
-            showBlockingProgress(false)
+            showBlockingLoading(false)
 
         })
 
@@ -121,7 +121,7 @@ class LoginActivity : BaseActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->{
-                        showBlockingProgress(true)
+                        showBlockingLoading(true)
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
@@ -133,7 +133,7 @@ class LoginActivity : BaseActivity() {
             }
 
             login.setOnClickListener {
-                showBlockingProgress(true)
+                showBlockingLoading(true)
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
@@ -144,13 +144,13 @@ class LoginActivity : BaseActivity() {
     }
 
 
-    override fun showBlockingProgress(show: Boolean) {
+    override fun showBlockingLoading(show: Boolean) {
         container.children.forEach {
             if (!show) it.visibility = View.VISIBLE
             else it.visibility = View.INVISIBLE
         }
 
-        super.showBlockingProgress(show)
+        super.showBlockingLoading(show)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {

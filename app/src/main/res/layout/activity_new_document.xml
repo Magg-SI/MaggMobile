@@ -57,10 +57,10 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:onClick="onHoseClicked"
-        android:src="@drawable/ic_round_cable"
+        android:src="@drawable/ic_hose"
         android:tint="@color/colorPrimaryDark"
         android:visibility="visible"
-        app:backgroundTint="@color/colorAccentYellow"
+        app:backgroundTint="@color/colorAccentGreen"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
@@ -168,7 +168,7 @@
         android:onClick="onScanClick"
         android:src="@drawable/ic_qr_code_scanner"
         android:tint="@color/colorPrimaryDark"
-        app:backgroundTint="@color/colorAccentGreen"
+        app:backgroundTint="@color/colorAccentYellow"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
@@ -216,6 +216,50 @@
             android:textColorHint="@color/hintGray"
             android:textSize="18sp"
             app:drawableTint="?attr/colorControlNormal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.9"
+                android:text="Suma brutto:" />
+
+            <TextView
+                android:id="@+id/price_b_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1.9"
+                android:text="Suma netto:" />
+
+            <TextView
+                android:id="@+id/price_n_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00" />
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"

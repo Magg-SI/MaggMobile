@@ -1,5 +1,6 @@
 package pl.tysia.maggstone.data.source
 
+import android.graphics.Bitmap
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.model.*

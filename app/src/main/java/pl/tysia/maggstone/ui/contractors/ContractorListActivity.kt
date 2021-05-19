@@ -21,7 +21,7 @@ class ContractorListActivity : SimpleListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        showBlockingProgress(true)
+        showBlockingLoading(true)
         mode = intent.getStringExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA)!!
 
         (application as MaggApp).appComponent.inject(this)
@@ -31,7 +31,7 @@ class ContractorListActivity : SimpleListActivity() {
             adapter.addAll(it as Collection<ICatalogable>?)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
     }

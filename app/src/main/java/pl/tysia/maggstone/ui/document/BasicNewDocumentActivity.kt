@@ -11,6 +11,7 @@ import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.data.model.DocumentItem
+import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
@@ -34,6 +35,26 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
         val intent = Intent(this, ContractorListActivity::class.java)
         intent.putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.SELECT)
         startActivityForResult(intent, CONTRACTOR_REQUEST_CODE)
+    }
+
+    override fun addWare(ware: Ware) {
+        super.addWare(ware)
+
+        setSums()
+    }
+
+    override fun onListChanged() {
+        super.onListChanged()
+
+        setSums()
+    }
+
+    private fun setSums(){
+        val priceB = adapter.allItems.sumByDouble { it.priceB * it.ilosc }
+        val priceN = adapter.allItems.sumByDouble { it.priceN * it.ilosc }
+
+        price_b_tv.setText(priceB.toString())
+        price_n_tv.setText(priceN.toString())
     }
 
     override fun saveAllowed(): Boolean {

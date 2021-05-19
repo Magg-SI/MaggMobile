@@ -16,7 +16,7 @@ class WarehousesListActivity : SimpleListActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showBlockingProgress(true)
+        showBlockingLoading(true)
 
         (application as MaggApp).appComponent.inject(this)
 
@@ -24,12 +24,12 @@ class WarehousesListActivity : SimpleListActivity() {
             adapter.allItems.addAll(it as Collection<ICatalogable>)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         warehousesViewModel.warehousesResult.observe(this@WarehousesListActivity, Observer {
                 okDialog("Błąd", getString(it), this)
-                showBlockingProgress(false)
+                showBlockingLoading(false)
             })
 
         warehousesViewModel.getWarehouses()

@@ -6,6 +6,8 @@ import java.io.Serializable
 
 data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Serializable {
     var ilosc : Double = 1.0
+
+    @Transient
     var iloscOk : Int  = 0
     val towID : Int = when (item) {
         is Hose -> item.id!!
@@ -14,6 +16,19 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
         else -> -1
     }
 
+    val priceN : Double = when (item) {
+        is Hose -> item.priceN!!
+        is Ware -> item.priceN!!
+        is Service -> item.priceN!!
+        else -> 0.00
+    }
+
+    val priceB : Double = when (item) {
+        is Hose -> item.priceB!!
+        is Ware -> item.priceB!!
+        is Service -> item.priceB!!
+        else -> 0.00
+    }
 
     fun getAvailabilities() : List<Availability>?{
         return when (item) {

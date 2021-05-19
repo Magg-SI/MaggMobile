@@ -26,9 +26,7 @@ import javax.inject.Inject
 
 class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable>, SelectedTechnicianButton.OnButtonRemoveListener  {
     private lateinit var adapter : TechniciansAdapter
-    private var filter: StringFilter<ICatalogable> = StringFilter<ICatalogable>(null){ filteredStrings, item ->
-        filteredStrings.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase()) }
-    }
+    private var filter: StringFilter<ICatalogable> = StringFilter()
 
     @Inject
     lateinit var techniciansViewModel : TechniciansViewModel
@@ -46,7 +44,7 @@ class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<
         adapter.filterer.addFilter(filter)
 
         search_et.afterTextChanged {
-            filter.filteredStrings = search_et.text.toString().split(" ")
+            filter.filteredString = search_et.text.toString()
             adapter.filter()
             adapter.notifyDataSetChanged()
         }
@@ -62,17 +60,17 @@ class TechniciansActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<
             adapter.allItems.addAll(it)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         techniciansViewModel.techniciansResult.observe(this@TechniciansActivity, Observer {
             okDialog("Błąd", getString(it), this)
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         techniciansViewModel.getTechnicians()
 
-        showBlockingProgress(true)
+        showBlockingLoading(true)
     }
 
     private fun refreshSelectedTechnicians(){

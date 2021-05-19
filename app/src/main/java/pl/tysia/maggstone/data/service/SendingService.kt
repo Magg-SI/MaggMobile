@@ -83,15 +83,6 @@ class SendingService : Service(){
         queue.notifyObserver()
     }
 
-
-    private fun getPictureSize() : Float{
-        return PreferenceManager
-            .getDefaultSharedPreferences(this)
-            .getString("picture_size", "0.1")!!.toFloat()
-    }
-
-
-
     private fun loadPhotoBatches(queueItem: QueueItem){
         val file = File(queueItem.photoPath)
 
@@ -106,7 +97,7 @@ class SendingService : Service(){
             ImageDecoder.decodeBitmap(source)
         }
 
-        val pictureString = getPhotoString(bitmap, getPictureSize())
+        val pictureString = getPhotoString(bitmap)
         val pictureBatches = pictureString.chunked(BATCH_SIZE)
 
         queueItem.picture = pictureBatches

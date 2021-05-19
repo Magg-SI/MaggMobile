@@ -18,9 +18,7 @@ import java.util.ArrayList
 
 abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedListener<ICatalogable> {
     protected lateinit var adapter : BasicCatalogAdapter
-    protected open var filter: StringFilter<ICatalogable> = StringFilter<ICatalogable>(null){ filteredStrings, item ->
-        filteredStrings.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase()) }
-    }
+    protected open var filter: StringFilter<ICatalogable> = StringFilter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +33,23 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
         adapter.filterer.addFilter(filter)
 
         search_et.afterTextChanged {
-            filter.filteredStrings = search_et.text.toString().split(" ")
+            filter.filteredString = search_et.text.toString()
             adapter.filter()
             adapter.notifyDataSetChanged()
+
+            var scrollTo = adapter.shownItems.firstOrNull {
+                it.getTitle().toLowerCase()
+                    .startsWith(search_et.text.toString().toLowerCase())
+            }
+
+            if (scrollTo != null){
+                var index = adapter.shownItems.indexOf(scrollTo)
+                if (index > 0) index--
+                recyclerView.scrollToPosition(index)
+            }else{
+                recyclerView.scrollToPosition(0)
+            }
+
         }
 
         recyclerView.adapter = adapter

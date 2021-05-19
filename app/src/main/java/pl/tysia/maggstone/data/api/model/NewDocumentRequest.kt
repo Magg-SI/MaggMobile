@@ -12,6 +12,7 @@ class NewDocumentRequest private constructor(val token : String,
 
     lateinit var docType : String
     val func : String = "addDocum"
+    val byWorker = 1
 
     var uwagi : String? = null
     var podpis : String? = null

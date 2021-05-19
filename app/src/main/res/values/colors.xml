@@ -26,4 +26,5 @@
     <color name="selectionGray">#E6E6E6</color>
     <color name="hintGray">#7A7979</color>
     <color name="middleGray">#575757</color>
+    <color name="white">#FFFFFF</color>
 </resources>
