@@ -23,6 +23,7 @@ import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
 import java.util.ArrayList
 
 private const val TITLE = "title"
+private const val FILTERED = "filtered_string"
 
 class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedListener<ICatalogable> {
     private lateinit var searchET : EditText
@@ -34,6 +35,7 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
     private lateinit var filter: StringFilter<ICatalogable>
 
     private var title: String? = null
+    private lateinit var filteredString: String
 
     private lateinit var owner : SimpleListOwner<*>
 
@@ -41,6 +43,7 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
         super.onCreate(savedInstanceState)
         arguments?.let {
             title = it.getString(TITLE)
+            filteredString = it.getString(FILTERED)!!
         }
 
         if (activity is SimpleListOwner<*>)
@@ -54,9 +57,9 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
         adapter = BasicCatalogAdapter(ArrayList())
         adapter.addItemSelectedListener(this)
 
-        filter = StringFilter(null){ filteredStrings, item ->
-            filteredStrings.count { item.getFilteredValue()!!.toLowerCase().contains(it.toLowerCase()) }
-        }
+        filter = StringFilter()
+
+        filter.filteredString = filteredString
 
         adapter.filterer.addFilter(filter)
 
@@ -74,10 +77,12 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
             progressBar = it.findViewById(R.id.progressBar2)
 
             searchET.afterTextChanged {
-                filter.filteredStrings = searchET.text.toString().split(" ")
+                filter.filteredString = searchET.text.toString()
                 adapter.filter()
                 adapter.notifyDataSetChanged()
             }
+
+            searchET.setText(filteredString)
 
             recycler.adapter = adapter
 
@@ -118,10 +123,11 @@ class SimpleListDialogFragment : DialogFragment() , CatalogAdapter.ItemSelectedL
 
     companion object {
         @JvmStatic
-        fun newInstance(title: String) =
+        fun newInstance(title: String, filteredString : String) =
             SimpleListDialogFragment().apply {
                 arguments = Bundle().apply {
                     putString(TITLE, title)
+                    putString(FILTERED, filteredString)
                 }
             }
     }

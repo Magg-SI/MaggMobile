@@ -56,13 +56,17 @@ class SignActivity : BaseActivity() {
             startActivity(intent)
 
         })
+
+        viewModel.progress.observe(this@SignActivity, Observer {
+            setProgressValue(it)
+        })
     }
 
     fun save(view : View){
         showBlockingProgress(true)
 
         val bitmap = sign_view.bmp
-        val sign = getPhotoString(bitmap!!, 1f)
+        val sign = getPhotoString(bitmap!!)
 
         val comments = comments_et.text.toString()
 

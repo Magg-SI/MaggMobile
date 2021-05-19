@@ -33,4 +33,7 @@ interface WareService {
     @POST("json.aspx")
     fun getHose(@Body body : GetHoseRequest) : Call<Hose>
 
+    @POST("json.aspx")
+    fun getSmallPicture(@Body body : APIRequest.SmallPhotoRequest) : Call<APIResponse.Picture>
+
 }

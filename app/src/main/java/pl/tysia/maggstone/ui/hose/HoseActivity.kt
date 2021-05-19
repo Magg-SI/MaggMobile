@@ -12,6 +12,10 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_hose.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
+import pl.tysia.maggstone.constants.HosePartType.PART_CORD
+import pl.tysia.maggstone.constants.HosePartType.PART_SLEEVE
+import pl.tysia.maggstone.constants.HosePartType.PART_TIP1
+import pl.tysia.maggstone.constants.HosePartType.PART_TIP2
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.dao.WaresDAO
 import pl.tysia.maggstone.data.model.Hose
@@ -24,10 +28,6 @@ import pl.tysia.maggstone.ui.simple_list.SimpleListDialogFragment
 import javax.inject.Inject
 
 
-private const val FRAGMENT_TAG_CORD = "pl.tysia.maggstone.cord_fragment_tag"
-private const val FRAGMENT_TAG_TIP1 = "pl.tysia.maggstone.tip_fragment_tag1"
-private const val FRAGMENT_TAG_TIP2 = "pl.tysia.maggstone.tip_fragment_tag2"
-private const val FRAGMENT_TAG_SLEEVE = "pl.tysia.maggstone.sleeve_fragment_tag"
 class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Ware> {
     private lateinit var dao : WaresDAO
 
@@ -42,17 +42,7 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
 
         dao = db.waresDao()
 
-        pipe_et.onFocusChange { focused ->
-            run {
-
-                if (!focused){
-                    viewModel.onCordChanged(pipe_et.text.toString())
-                }
-            }
-        }
-        end1_et.onFocusChange { focused -> if (!focused) viewModel.onTip1Changed(end1_et.text.toString()) }
-        end2_et.onFocusChange { focused -> if (!focused) viewModel.onTip2Changed(end2_et.text.toString()) }
-        sleeve_et.onFocusChange { focused -> if (!focused) viewModel.onSleeveChanged(sleeve_et.text.toString()) }
+        setParts()
 
         length_et.afterTextChanged { onFormEdited() }
         hose_code_et.afterTextChanged { onFormEdited() }
@@ -62,27 +52,14 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
         viewModel.hoseForm.observe(this@HoseActivity, Observer {
             save_button.isEnabled = it.isFormValid()
 
-            if (it.cordError == null){
-                tips_layout.visibility = View.VISIBLE
-                sleeve_layout.visibility = View.VISIBLE
+            if (it.cordError == null && it.cordValid){
+                tip1_part.visibility = View.VISIBLE
+                tip2_part.visibility = View.VISIBLE
+                sleeve_part.visibility = View.VISIBLE
             }else{
-                sleeve_et.setText("")
-                end2_et.setText("")
-                end1_et.setText("")
-
-                viewModel.hose.tip1 = null
-                viewModel.hose.tip2 = null
-                viewModel.hose.sleeve = null
-
-                tips_layout.visibility = View.GONE
-                sleeve_layout.visibility = View.GONE
-            }
-
-            if (!it.isFormValid()){
-                pipe_et.error = if (it.cordError != null) getString(it.cordError!!) else null
-                end1_et.error = if (it.tip1Error != null) getString(it.tip1Error!!) else null
-                end2_et.error = if (it.tip2Error != null) getString(it.tip2Error!!) else null
-                sleeve_et.error = if (it.sleeveError != null) getString(it.sleeveError!!) else null
+                tip1_part.visibility = View.GONE
+                tip2_part.visibility = View.GONE
+                sleeve_part.visibility = View.GONE
             }
 
         })
@@ -97,15 +74,39 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
 
         viewModel.result.observe(this@HoseActivity, Observer {
             okDialog("Błąd", it, this@HoseActivity)
-            showBlockingProgress(false)
+            showBlockingLoading(false)
 
         })
     }
 
-    fun addHose(view: View){
-        showBlockingProgress(true)
+    private fun setParts(){
+        cord_part.viewModel = viewModel
+        tip1_part.viewModel = viewModel
+        tip2_part.viewModel = viewModel
+        sleeve_part.viewModel = viewModel
 
-        viewModel.addHose(viewModel.hose)
+        tip1_part.visibility = View.GONE
+        tip2_part.visibility = View.GONE
+        sleeve_part.visibility = View.GONE
+    }
+
+    fun addHose(view: View){
+        if (formValid()){
+            showBlockingLoading(true)
+
+            viewModel.addHose(viewModel.hose)
+        }else{
+            save_button.isEnabled = false
+        }
+
+    }
+
+    private fun formValid() : Boolean{
+        return viewModel.hoseForm.value!!.isFormValid()
+                && !cord_part.wasEdited
+                && !tip1_part.wasEdited
+                && !tip2_part.wasEdited
+                && !sleeve_part.wasEdited
     }
 
     private fun onFormEdited(){
@@ -116,38 +117,20 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
             creator_et.text.toString())
     }
 
-    fun onSearchClicked(view: View){
-        val tag = when (view.id){
-            R.id.tip_search_button -> FRAGMENT_TAG_TIP1
-            R.id.tip_search_button2 -> FRAGMENT_TAG_TIP2
-            R.id.cord_search_button -> FRAGMENT_TAG_CORD
-            R.id.sleeve_search_button -> FRAGMENT_TAG_SLEEVE
-            else -> null
-        }
-
-        SimpleListDialogFragment.newInstance("Wybór węża").show(supportFragmentManager, tag)
-    }
-
-
-
     override fun onItemSelected(item: ICatalogable, tag: String) {
         item as Ware
         when (tag){
-            FRAGMENT_TAG_CORD -> {
+            PART_CORD -> {
                 viewModel.onCordChanged(item)
-                pipe_et.setText(item.index)
             }
-            FRAGMENT_TAG_SLEEVE -> {
+            PART_SLEEVE -> {
                 viewModel.onSleeveChanged(item)
-                sleeve_et.setText(item.index)
             }
-            FRAGMENT_TAG_TIP1 -> {
+            PART_TIP1 -> {
                 viewModel.onTip1Changed(item)
-                end1_et.setText(item.index)
             }
-            FRAGMENT_TAG_TIP2 -> {
+            PART_TIP2 -> {
                 viewModel.onTip2Changed(item)
-                end2_et.setText(item.index)
             }
         }
     }
@@ -155,16 +138,12 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
     override fun getLiveData(tag: String): LiveData<List<Ware>>? {
         val hose = viewModel.hose
         return when (tag){
-            FRAGMENT_TAG_CORD -> dao.getAllCords()
-            FRAGMENT_TAG_SLEEVE -> dao.getSleevesFor(hose.cord!!.hoseFi!!, hose.cord!!.hoseIdx!!)
-            FRAGMENT_TAG_TIP1, FRAGMENT_TAG_TIP2 -> dao.getTipsFor(hose.cord!!.hoseFi!!)
+            PART_CORD -> dao.getAllCords()
+            PART_SLEEVE -> dao.getSleevesFor(hose.cord!!.hoseFi!!, hose.cord!!.hoseIdx!!)
+            PART_TIP1, PART_TIP2 -> dao.getTipsFor(hose.cord!!.hoseFi!!)
             else -> null
         }
     }
-}
-
-fun EditText.onFocusChange(onFocusChange: (Boolean) -> Unit) {
-    this.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus -> onFocusChange.invoke(hasFocus) }
 }
 
 fun EditText.afterTextChanged(afterTextChanged: () -> Unit) {

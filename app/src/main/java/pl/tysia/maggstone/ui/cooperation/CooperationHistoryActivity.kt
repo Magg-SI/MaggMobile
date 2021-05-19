@@ -8,7 +8,6 @@ import pl.tysia.maggstone.data.model.Contractor
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
-import pl.tysia.maggstone.ui.warehouses.WarehousesViewModel
 import javax.inject.Inject
 
 class CooperationHistoryActivity : SimpleListActivity() {
@@ -19,7 +18,7 @@ class CooperationHistoryActivity : SimpleListActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showBlockingProgress(true)
+        showBlockingLoading(true)
 
         (application as MaggApp).appComponent.inject(this)
 
@@ -29,12 +28,12 @@ class CooperationHistoryActivity : SimpleListActivity() {
             adapter.allItems.addAll(it as Collection<ICatalogable>)
             adapter.filter()
             adapter.notifyDataSetChanged()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         viewModel.contractorsResult.observe(this@CooperationHistoryActivity, Observer {
             okDialog("Błąd", getString(it), this)
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         viewModel.getCooperationHistory(contractor.id)

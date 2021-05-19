@@ -24,10 +24,9 @@ fun resizeBitmap(bitmap:Bitmap, percent : Float) : Bitmap{
 
 }
 
-fun getPhotoString(bitmap : Bitmap, pictureSize : Float) : String{
+fun getPhotoString(bitmap : Bitmap) : String{
     val stream = ByteArrayOutputStream()
-    val resized = resizeBitmap(bitmap, pictureSize)
-    resized.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
     val image = stream.toByteArray()
     return Base64.encodeToString(image, Base64.DEFAULT)
 }

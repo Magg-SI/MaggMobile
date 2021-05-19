@@ -35,16 +35,16 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     var location : String? = null
 
     @SerializedName("cenaN")
-    var priceN : String? = null
+    var priceN : Double? = null
 
     @SerializedName("cenaB")
-    var priceB : String? = null
+    var priceB : Double? = null
 
     @Ignore
     var availabilities : List<Availability>? = null
 
-    @SerializedName("isFoto")
-    var hasPhoto = false
+    @SerializedName("fotoID")
+    var photoID : Int? = null
 
     @Ignore
     var photoPath : String? = null

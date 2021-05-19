@@ -10,6 +10,8 @@ open class APIResponse {
         const val RESPONSE_OK = 0
         const val ERR_USERNAME = 1
         const val ERR_PASSWORD = 2
+
+        const val WORKER_IN_PROGRESS = 1
     }
 
     @SerializedName("retCode")
@@ -20,6 +22,14 @@ open class APIResponse {
     class GetOrders : APIResponse() {
         @SerializedName("listaZamow")
         var orders : ArrayList<Order>? = null
+    }
+
+    class Document : APIResponse(){
+        var workerID : Int? = null
+    }
+
+    class Worker : APIResponse(){
+        var procent : Int? = null
     }
 
     class GetOrderedWares : APIResponse() {
@@ -107,7 +117,7 @@ open class APIResponse {
 
     class CooperationHistory : APIResponse() {
         @SerializedName("lista")
-        var cooperationHistory: ArrayList<Document>? = null
+        var cooperationHistory: ArrayList<pl.tysia.maggstone.data.model.Document>? = null
     }
 
 }

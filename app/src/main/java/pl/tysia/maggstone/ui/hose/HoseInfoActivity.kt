@@ -51,7 +51,7 @@ class HoseInfoActivity : BaseActivity() {
             availability_sv.visibility = View.INVISIBLE
         }
 
-        showBlockingProgress(show)
+        showBlockingLoading(show)
     }
 
     fun displayHose(hose : Hose){

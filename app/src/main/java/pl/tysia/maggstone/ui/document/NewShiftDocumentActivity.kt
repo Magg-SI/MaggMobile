@@ -56,12 +56,12 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
                 super.addWare(lastWare!!)
             }
 
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         wareViewModel!!.result.observe(this@NewShiftDocumentActivity, Observer {
             Toast.makeText(this@NewShiftDocumentActivity, it, Toast.LENGTH_LONG).show()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
     }
@@ -83,7 +83,7 @@ class NewShiftDocumentActivity : NewDocumentActivity() {
 
     override fun addWare(ware: Ware) {
         lastWare = ware
-        showBlockingProgress(true)
+        showBlockingLoading(true)
 
         wareViewModel!!.getAvailabilities(ware.index!!)
 

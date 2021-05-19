@@ -13,4 +13,5 @@ class WareRepository @Inject constructor(val dataSource : WareDataSource) {
     fun getAvailabilities(index: String) : Result<APIResponse.Availabilities> {
         return dataSource.getAvailabilities(index)
     }
+
 }

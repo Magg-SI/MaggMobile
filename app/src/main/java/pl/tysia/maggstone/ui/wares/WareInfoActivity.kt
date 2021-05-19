@@ -4,9 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_ware_info.*
+import kotlinx.android.synthetic.main.content_ware_details.*
 import pl.tysia.maggstone.ui.picture.PictureEditorActivity
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
@@ -30,9 +33,14 @@ class WareInfoActivity : BaseActivity() {
 
         (application as MaggApp).appComponent.inject(this)
 
-        viewModel.availability.observe(this, Observer {
+        viewModel.availability.observe(this, {
             ware.availabilities = it
             displayAvailability()
+        })
+
+        viewModel.photo.observe(this, {
+            picture_image_view.scaleType = ImageView.ScaleType.FIT_XY
+            picture_image_view.setImageBitmap(it)
         })
 
         ware = intent.getSerializableExtra(Ware.WARE_EXTRA) as Ware
@@ -40,6 +48,9 @@ class WareInfoActivity : BaseActivity() {
         displayWare()
 
         viewModel.getAvailabilities(ware.index!!)
+
+        if (ware.photoID!=null)
+            viewModel.getSmallPicture(ware.photoID!!)
     }
 
     private fun setTheme(callingActivity : String){
@@ -55,8 +66,8 @@ class WareInfoActivity : BaseActivity() {
         location_tv.text = ware.location
         if (ware.priceN != null && ware.priceB != null)
             price_tv.text =
-                "netto: ${ware.priceN.toString()}"+
-                "      brutto: ${ware.priceB.toString()}"
+                "netto:  ${ware.priceN.toString()}\n"+
+                "brutto: ${ware.priceB.toString()}"
     }
 
     private fun displayAvailability(){

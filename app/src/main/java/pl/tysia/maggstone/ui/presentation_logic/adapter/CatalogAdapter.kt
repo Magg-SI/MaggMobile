@@ -8,9 +8,11 @@ import java.util.*
 
 abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var allItems: ArrayList<T>) :
     RecyclerView.Adapter<H>() {
-
-    protected var shownItems: ArrayList<T> = ArrayList()
     var filterer: Filterer<T>
+
+    var shownItems: ArrayList<T> = ArrayList()
+        protected set
+
     open var selectedItem: T? = null
 
     val listeners: ArrayList<ItemSelectedListener<T>>

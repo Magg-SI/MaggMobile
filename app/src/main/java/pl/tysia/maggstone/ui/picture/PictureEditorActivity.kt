@@ -19,11 +19,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_picture_editor.*
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.SendingService
+import pl.tysia.maggstone.resizeBitmap
 import pl.tysia.maggstone.rotateBitmap
 import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.presentation_logic.EditPictureView
@@ -90,7 +92,11 @@ class PictureEditorActivity : BaseActivity() {
             edit_button.isEnabled = true
         })
 
-        viewModel.getPicture(ware.id!!)
+        if (ware.photoID != null) {
+            viewModel.getPicture(ware.photoID!!)
+        }else{
+            imageProgressBar.visibility = View.INVISIBLE
+        }
 
         checkPermission()
     }
@@ -164,13 +170,21 @@ class PictureEditorActivity : BaseActivity() {
         val file = File(path)
         val uri = Uri.fromFile(file)
 
-        val bitmap = MediaStore.Images.Media.getBitmap(
+        var bitmap = MediaStore.Images.Media.getBitmap(
             this.contentResolver,
             uri
         )
 
+        bitmap = resizeBitmap(bitmap, getPictureSize())
+
         product_image.bitmap = bitmap
 
+    }
+
+    private fun getPictureSize() : Float{
+        return PreferenceManager
+            .getDefaultSharedPreferences(this)
+            .getString("picture_size", "0.1")!!.toFloat()
     }
 
     fun takePicture(view : View){
@@ -255,7 +269,7 @@ class PictureEditorActivity : BaseActivity() {
 
 
     fun attemptSave(view : View) {
-        showBlockingProgress(true)
+        showBlockingLoading(true)
 
         var bitmap : Bitmap? = null
         if (product_image.bitmap != null)
@@ -290,7 +304,7 @@ class PictureEditorActivity : BaseActivity() {
             editingEnabled(false)
 
         }
-        showBlockingProgress(false)
+        showBlockingLoading(false)
 
     }
 

@@ -65,12 +65,12 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
 
         viewModel.documentsError.observe(this@NewDocumentActivity, Observer {
             okDialog("Błąd", it, this@NewDocumentActivity)
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         viewModel.documentsResult.observe(this@NewDocumentActivity, Observer {
             Toast.makeText(this@NewDocumentActivity, it, Toast.LENGTH_SHORT).show()
-            showBlockingProgress(false)
+            showBlockingLoading(false)
             finish()
 
         })

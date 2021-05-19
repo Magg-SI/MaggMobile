@@ -44,6 +44,11 @@
     <string name="availability">Dostępność: %s</string>
     <string name="error_coudnt_download_technicians">Nie udało się pobrać serwisantów</string>
     <string name="error_couldnt_create_service">Nie udało się utworzyc serwisu</string>
+
+    <string name="PART_CORD">pl.tysia.maggstone.cord_fragment_tag</string>
+    <string name="PART_TIP1">pl.tysia.maggstone.tip_fragment_tag1</string>
+    <string name="PART_TIP2">pl.tysia.maggstone.tip_fragment_tag2</string>
+    <string name="PART_SLEEVE">pl.tysia.maggstone.sleeve_fragment_tag</string>
     <string name="error_couldnt_download_history">Nie udało się pobrać historii</string>
 
 </resources>

@@ -98,7 +98,7 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
         setDate(date_tv)
 
         viewModel.service.observe(this@ServiceActivity, Observer {
-            showBlockingProgress(false)
+            showBlockingLoading(false)
 
             val service = it as Service
             intent.putExtra(Service.SERVICE_EXTRA, service)
@@ -108,7 +108,7 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
 
         viewModel.serviceResult.observe(this@ServiceActivity, Observer {
             okDialog("Błąd", getString(it), this)
-            showBlockingProgress(false)
+            showBlockingLoading(false)
         })
 
         km_et.afterTextChanged {
@@ -136,7 +136,7 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
         if (isFormValid()){
             viewModel.addService(getService())
 
-            showBlockingProgress(true)
+            showBlockingLoading(true)
         }
     }
 

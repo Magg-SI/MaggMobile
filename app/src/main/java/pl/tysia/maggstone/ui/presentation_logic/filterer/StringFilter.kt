@@ -4,22 +4,30 @@ import android.widget.Filterable
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 
 
-class StringFilter<in T : ICatalogable>(var filteredStrings : List<String>?,
-                                     private var predicate : ( List<String>, T) -> Int) : Filter<T>(){
+class StringFilter<in T : ICatalogable> : Filter<T>(){
 
+    var filteredString : String? = null
+        set(value) {
+            field = value
+
+            filteredStrings = value?.split(" ")
+        }
+
+    private var filteredStrings : List<String>? = null
 
     override fun fitsFilter(item: T): Boolean {
-        return if (filteredStrings == null)
+        return if (filteredStrings == null) {
             true
-        else
-            predicate(filteredStrings!!, item) == filteredStrings!!.size
+        }else {
+            filteredStrings!!.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase())} == filteredStrings!!.size
+        }
     }
 
     override fun fitness(item: T): Int {
         return if (filteredStrings == null)
             1
         else
-            predicate(filteredStrings!!, item)
+            filteredStrings!!.count { item.getFilteredValue().toLowerCase().contains(it.toLowerCase())}
     }
 
 }

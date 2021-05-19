@@ -40,7 +40,7 @@ class WareOrderingActivity : BaseActivity(), TextWatcher {
             val returnIntent = Intent()
             returnIntent.putExtra(Ware.WARE_EXTRA, orderedWare)
             setResult(Activity.RESULT_OK, returnIntent)
-            showBlockingProgress(false)
+            showBlockingLoading(false)
             finish()
         })
 
@@ -157,7 +157,7 @@ class WareOrderingActivity : BaseActivity(), TextWatcher {
             order.warehouseID,
             packed.toInt())
 
-        showBlockingProgress(true)
+        showBlockingLoading(true)
     }
 
     private fun getOrderedWare() : OrderedWare{

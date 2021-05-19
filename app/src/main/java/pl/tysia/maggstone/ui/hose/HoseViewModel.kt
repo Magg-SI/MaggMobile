@@ -46,10 +46,16 @@ class HoseViewModel @Inject constructor(val db : Database, val remoteDataSource 
 
     }
 
-    fun onCordChanged(cord : Ware){
+    fun onCordChanged(cord : Ware?){
         hose.cord = cord
+        hose.sleeve = null
+        hose.tip1 = null
+        hose.tip2 = null
+
         hoseFormState.cordError = null
-        hoseFormState.cordValid = true
+
+        if (cord != null) hoseFormState.cordValid = true
+
         _hoseForm.postValue(hoseFormState)
     }
 
@@ -64,7 +70,7 @@ class HoseViewModel @Inject constructor(val db : Database, val remoteDataSource 
         }
     }
 
-    fun onSleeveChanged(sleeve : Ware){
+    fun onSleeveChanged(sleeve : Ware?){
         hose.sleeve = sleeve
         hoseFormState.sleeveValid = true
         hoseFormState.sleeveError = null
@@ -82,7 +88,7 @@ class HoseViewModel @Inject constructor(val db : Database, val remoteDataSource 
         }
     }
 
-    fun onTip1Changed(tip : Ware){
+    fun onTip1Changed(tip : Ware?){
         hose.tip1 = tip
         hoseFormState.tip1Valid = true
         hoseFormState.tip1Error = null
@@ -100,7 +106,7 @@ class HoseViewModel @Inject constructor(val db : Database, val remoteDataSource 
         }
     }
 
-    fun onTip2Changed(tip : Ware){
+    fun onTip2Changed(tip : Ware?){
         hose.tip2 = tip
         hoseFormState.tip2Valid = true
         hoseFormState.tip2Error = null
