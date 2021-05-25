@@ -96,6 +96,7 @@ class PictureEditorActivity : BaseActivity() {
             viewModel.getPicture(ware.photoID!!)
         }else{
             imageProgressBar.visibility = View.INVISIBLE
+            edit_button.isEnabled = true
         }
 
         checkPermission()
@@ -124,8 +125,7 @@ class PictureEditorActivity : BaseActivity() {
             editor_layout.visibility = View.INVISIBLE
             edit_button.visibility = View.VISIBLE
 
-            //TODO: pozbyć się magicznych cyferek
-            product_image.setMode(1)
+            product_image.setMode(EditPictureView.MODE_SCALE)
         }
     }
 

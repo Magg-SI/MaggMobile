@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-const val BATCH_SIZE = 5000
+const val BATCH_SIZE = 50000
 const val NOTIFICATION_ID = 101
 
 class SendingService : Service(){

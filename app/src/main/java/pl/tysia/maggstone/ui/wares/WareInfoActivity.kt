@@ -79,7 +79,7 @@ class WareInfoActivity : BaseActivity() {
 
             stringBuilder.append(availability.warehouse)
             stringBuilder.append(": ")
-            stringBuilder.append(availability.quantity)
+            stringBuilder.append(countToStr(availability.quantity))
 
             textView.text = stringBuilder.toString()
             textView.textSize = 16f
@@ -93,6 +93,29 @@ class WareInfoActivity : BaseActivity() {
             stringBuilder.clear()
 
         }
+        val textView = TextView(this)
+
+        textView.text = "  "
+        textView.textSize = 32f
+
+        availability_ll.addView(textView)
+
+        val param = textView.layoutParams as ViewGroup.MarginLayoutParams
+        param.setMargins(0,32,8,32)
+        textView.layoutParams = param
+
+    }
+
+    fun countToStr(ilo: Double): String {
+        val x = 1.0*ilo.toInt()
+        if(x==ilo) return ilo.toInt().toString()
+        return ilo.round(4).toString().replace('.', ',')
+    }
+
+    fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return kotlin.math.round(this * multiplier) / multiplier
     }
 
     fun onChangePictureClick(view : View){
