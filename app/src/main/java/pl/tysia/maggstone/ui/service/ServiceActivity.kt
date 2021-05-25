@@ -63,8 +63,8 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
 
     private var onDateClickedListener = View.OnClickListener { v ->
         val textView = v as TextView
-        day = currentTime.get(Calendar.HOUR_OF_DAY)
-        month = currentTime.get(Calendar.MINUTE)
+        day = currentTime.get(Calendar.DAY_OF_MONTH)
+        month = currentTime.get(Calendar.MONTH)
         year = currentTime.get(Calendar.YEAR)
 
         val mTimePicker = DatePickerDialog(this@ServiceActivity,
