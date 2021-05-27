@@ -45,6 +45,7 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
             MenuTileType.FIND_HOSE -> inflater.inflate(R.layout.tile_find_hose, this)
             MenuTileType.CHANGE_LOCATION -> inflater.inflate(R.layout.tile_change_location, this)
             MenuTileType.SCAN_WARE -> inflater.inflate(R.layout.tile_scan_ware, this)
+            MenuTileType.DOCUMENT_ORDER -> inflater.inflate(R.layout.tile_document_order, this)
         }
 
         setOnClickListener { onTileClicked() }
@@ -71,11 +72,18 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
             MenuTileType.FIND_HOSE -> onSearchHoseClicked()
             MenuTileType.CHANGE_LOCATION -> onChangeLocationClicked()
             MenuTileType.SCAN_WARE -> onScanWareClicked()
+            MenuTileType.DOCUMENT_ORDER -> onOrderClicked()
         }
     }
 
     fun nic() {
         Toast.makeText(activity, "Funkcja w przygotowaniu", Toast.LENGTH_LONG).show()
+    }
+
+    private fun onOrderClicked(){
+        activity.startActivity(Intent(activity, WareListActivity::class.java).apply {
+            putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.ORDER)
+        })
     }
 
     private fun onSearchHoseClicked(){

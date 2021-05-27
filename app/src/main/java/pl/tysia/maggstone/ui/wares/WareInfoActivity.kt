@@ -19,8 +19,8 @@ import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.main.MainActivity
 import javax.inject.Inject
 
-class WareInfoActivity : BaseActivity() {
-    private lateinit var ware : Ware
+open class WareInfoActivity : BaseActivity() {
+    protected lateinit var ware : Ware
 
     @Inject lateinit var viewModel : WareInfoViewModel
 
@@ -29,19 +29,12 @@ class WareInfoActivity : BaseActivity() {
         setTheme(callingActivity!!)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ware_info)
+
+        setLayout()
 
         (application as MaggApp).appComponent.inject(this)
 
-        viewModel.availability.observe(this, {
-            ware.availabilities = it
-            displayAvailability()
-        })
-
-        viewModel.photo.observe(this, {
-            picture_image_view.scaleType = ImageView.ScaleType.FIT_XY
-            picture_image_view.setImageBitmap(it)
-        })
+        setObservers()
 
         ware = intent.getSerializableExtra(Ware.WARE_EXTRA) as Ware
 
@@ -51,6 +44,22 @@ class WareInfoActivity : BaseActivity() {
 
         if (ware.photoID!=null)
             viewModel.getSmallPicture(ware.photoID!!)
+    }
+
+    protected open fun setLayout(){
+        setContentView(R.layout.activity_ware_info)
+    }
+
+    protected open fun setObservers(){
+        viewModel.availability.observe(this, {
+            ware.availabilities = it
+            displayAvailability()
+        })
+
+        viewModel.photo.observe(this, {
+            picture_image_view.scaleType = ImageView.ScaleType.FIT_XY
+            picture_image_view.setImageBitmap(it)
+        })
     }
 
     private fun setTheme(callingActivity : String){
@@ -70,7 +79,7 @@ class WareInfoActivity : BaseActivity() {
                 "brutto: ${ware.priceB.toString()}"
     }
 
-    private fun displayAvailability(){
+    protected fun displayAvailability(){
         availability_ll.removeAllViews()
         val stringBuilder = StringBuilder()
 

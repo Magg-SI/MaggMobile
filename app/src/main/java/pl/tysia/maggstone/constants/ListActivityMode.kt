@@ -5,4 +5,5 @@ object ListActivityMode {
 
     const val SELECT = "Select"
     const val BROWSE = "Browse"
+    const val ORDER = "Order"
 }

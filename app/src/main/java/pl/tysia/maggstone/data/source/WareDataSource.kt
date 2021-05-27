@@ -28,6 +28,20 @@ class WareDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvid
         }
     }
 
+    fun orderWare(id : Int, number : Double, comments : String) : Result<Boolean> {
+        val service = retrofit.create(WareService::class.java)
+
+        val result = service.orderWare(
+            APIRequest.OrderWare(id, number, comments, tokenProvider.getToken()!!)
+        ).execute()
+
+        return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            Result.Success(true)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
+
     fun getWare(qrCode: String) : Result<Ware> {
         val service = retrofit.create(WareService::class.java)
 

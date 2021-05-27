@@ -8,6 +8,7 @@ enum class MenuTileType {
     DOCUMENT_PACKING,
     DOCUMENT_RECEIVE,
     DOCUMENT_SHIFT,
+    DOCUMENT_ORDER,
     FIND_HOSE,
     SCAN_WARE,
 }

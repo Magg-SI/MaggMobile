@@ -68,6 +68,7 @@ class MainActivity : BaseActivity() {
             MenuTileType.DOCUMENT_SHIFT,
             MenuTileType.DOCUMENT_RECEIVE,
             MenuTileType.DOCUMENT_PACKING,
+            MenuTileType.DOCUMENT_ORDER,
             MenuTileType.DOCUMENT_OFFER -> {
                 section_documents.addView(MenuTile(type, this))
             }
