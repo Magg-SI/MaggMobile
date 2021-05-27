@@ -10,6 +10,11 @@ class WareRepository @Inject constructor(val dataSource : WareDataSource) {
         return dataSource.getWare(qrCode)
     }
 
+    fun orderWare(id : Int, number : Double, comments : String) : Result<Boolean> {
+        return dataSource.orderWare(id, number, comments)
+    }
+
+
     fun getAvailabilities(index: String) : Result<APIResponse.Availabilities> {
         return dataSource.getAvailabilities(index)
     }

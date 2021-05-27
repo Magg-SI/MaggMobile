@@ -6,4 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".ui.order_ware.OrderWareActivity">
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimaryDark"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/textView41"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Zamawianie towaru" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/order_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:clickable="false"
+            android:enabled="true"
+            android:onClick="onSendClick"
+            app:elevation="6dp"
+            app:srcCompat="@drawable/round_check_24" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/list_item_background"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/number_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_text"
+                android:ems="8"
+                android:hint="Liczba"
+                android:inputType="numberSigned"
+                android:paddingStart="20dp"
+                android:paddingLeft="20dp" />
+
+            <EditText
+                android:id="@+id/comments_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/edit_text"
+                android:hint="Uwagi"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_ware_details"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

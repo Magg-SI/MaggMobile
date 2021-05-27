@@ -13,4 +13,6 @@ abstract class APIRequest(val func : String) : Serializable {
 
     class TestWorker(val workerID : Int, token : String) : APIRequest("testWorker", token)
 
+    class OrderWare(val towID : Int, val ilosc : Double, val uwagi : String, token : String) : APIRequest("zamowOnePoz", token)
+
 }

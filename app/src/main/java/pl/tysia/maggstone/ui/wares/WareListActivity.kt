@@ -9,6 +9,7 @@ import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.model.Ware
+import pl.tysia.maggstone.ui.order_ware.OrderWareActivity
 import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
@@ -40,16 +41,25 @@ class WareListActivity : SimpleListActivity() {
 
 
     override fun onItemSelected(item: ICatalogable) {
-        if (mode == ListActivityMode.SELECT){
-            val returnIntent = Intent()
-            returnIntent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
-            setResult(Activity.RESULT_OK, returnIntent)
-            finish()
-        }else if (mode == ListActivityMode.BROWSE){
-            val intent = Intent(this, WareInfoActivity::class.java)
-            intent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
-            intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
-            startActivity(intent)
+        when (mode) {
+            ListActivityMode.SELECT -> {
+                val returnIntent = Intent()
+                returnIntent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
+                setResult(Activity.RESULT_OK, returnIntent)
+                finish()
+            }
+            ListActivityMode.BROWSE -> {
+                val intent = Intent(this, WareInfoActivity::class.java)
+                intent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
+                intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
+                startActivity(intent)
+            }
+            ListActivityMode.ORDER -> {
+                val intent = Intent(this, OrderWareActivity::class.java)
+                intent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
+                intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
+                startActivity(intent)
+            }
         }
 
     }

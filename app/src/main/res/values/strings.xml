@@ -50,5 +50,6 @@
     <string name="PART_TIP2">pl.tysia.maggstone.tip_fragment_tag2</string>
     <string name="PART_SLEEVE">pl.tysia.maggstone.sleeve_fragment_tag</string>
     <string name="error_couldnt_download_history">Nie udało się pobrać historii</string>
+    <string name="ordering_err">Nie udało się zamówić towaru</string>
 
 </resources>

@@ -25,6 +25,27 @@ class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepo
     private val _photo = MutableLiveData<Bitmap>()
     val photo: LiveData<Bitmap> = _photo
 
+    private val _orderResult = MutableLiveData<Boolean>()
+    val orderResult: LiveData<Boolean> = _orderResult
+
+    fun orderWare(id : Int, number : Double, comments : String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = wareRepository.orderWare(id, number, comments)
+
+                if (result is Result.Success) {
+                    _orderResult.postValue(result.data)
+                } else if (result is Result.Error){
+                    _result.postValue(R.string.ordering_err)
+                }
+            }catch (ex : IOException){
+                _result.postValue(R.string.connection_error)
+            }
+
+        }
+
+    }
+
     fun getAvailabilities(index: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
