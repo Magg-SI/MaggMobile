@@ -52,7 +52,7 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
 
     override fun getSubtitle(): String {
         return when (item) {
-            is Hose -> item.cord!!.name
+            //is Hose -> item.cord!!.name
             is Ware -> item.name
             else -> item.getSubtitle()
         }
@@ -61,11 +61,11 @@ data class DocumentItem(@Transient val item : ICatalogable) : ICatalogable, Seri
     override fun getDescription(): String {
         return when (item) {
             is Hose ->
-                "Końcówki: ${item.tip1!!.index} / ${item.tip2!!.index}\n" +
-                        "Tulejki: ${item.sleeve!!.index}\n" +
-                        "Długość: ${item.length}\n" +
-                        "Cena brutto: ${item.priceB}\n" +
-                        "Cena netto: ${item.priceN}"
+                //"Końcówki: ${item.tip1!!.index} / ${item.tip2!!.index}\n" +
+                  //      "Tulejki: ${item.sleeve!!.index}\n" +
+                    //    "Długość: ${item.length}\n\n" +
+                        "Cena netto: ${item.priceN}\n" +
+                        "Cena brutto: ${item.priceB}"
 
             is Ware -> item.getDescription()
             else -> item.getDescription()

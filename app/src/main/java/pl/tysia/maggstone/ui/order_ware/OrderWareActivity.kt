@@ -38,7 +38,7 @@ class OrderWareActivity : WareInfoActivity() {
     override fun setObservers() {
         viewModel.availability.observe(this) {
             ware.availabilities = it
-            displayAvailability()
+            displayAvailability(false)
         }
 
         viewModel.orderResult.observe(this) {

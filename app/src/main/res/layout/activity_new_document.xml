@@ -228,10 +228,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.9"
-                android:text="Suma brutto:" />
+                android:text="Suma netto:" />
 
             <TextView
-                android:id="@+id/price_b_tv"
+                android:id="@+id/price_n_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -251,10 +251,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="1.9"
-                android:text="Suma netto:" />
+                android:text="Suma brutto:" />
 
             <TextView
-                android:id="@+id/price_n_tv"
+                android:id="@+id/price_b_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

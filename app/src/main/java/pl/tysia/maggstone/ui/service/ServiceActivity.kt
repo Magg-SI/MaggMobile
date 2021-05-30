@@ -69,9 +69,9 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
 
         val mTimePicker = DatePickerDialog(this@ServiceActivity,
             DatePickerDialog.OnDateSetListener{ _, selectedYear, selectedMonth, selectedDay  ->
-                currentTime.set(Calendar.DAY_OF_YEAR, selectedDay)
-                currentTime.set(Calendar.DAY_OF_MONTH, selectedMonth)
                 currentTime.set(Calendar.YEAR, selectedYear)
+                currentTime.set(Calendar.MONTH, selectedMonth)
+                currentTime.set(Calendar.DAY_OF_MONTH, selectedDay)
 
                 setDate(textView)
                 checkAndDisplaySave()
@@ -120,6 +120,7 @@ class ServiceActivity : BaseActivity(), SelectedTechnicianButton.OnButtonRemoveL
         val serviceDate = SimpleDateFormat("yyyy.MM.dd").format(currentTime.time)
 
         return Service().apply {
+            ktrID= getIntent().getIntExtra("ktrID", 0);
             peopleCount = this@ServiceActivity.technicians.size
             date = serviceDate
             startTime = start_time_tv.text.toString()

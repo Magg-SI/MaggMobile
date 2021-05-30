@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:gravity="center"
-        android:text="Zamów"
+        android:text="Zamawianie"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
 </LinearLayout>

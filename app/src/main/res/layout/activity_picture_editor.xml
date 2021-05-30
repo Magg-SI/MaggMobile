@@ -79,7 +79,7 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_index"
+            app:layout_constraintTop_toBottomOf="@+id/product_name"
             tools:visibility="visible">
 
             <ImageButton
@@ -121,7 +121,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/product_name"
+            android:id="@+id/product_index"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?colorPrimaryDark"
@@ -137,7 +137,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/product_index"
+            android:id="@+id/product_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?colorPrimaryDark"
@@ -149,7 +149,7 @@
             android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_name"
+            app:layout_constraintTop_toBottomOf="@+id/product_index"
             tools:text="lorem ipsum" />
 
         <LinearLayout

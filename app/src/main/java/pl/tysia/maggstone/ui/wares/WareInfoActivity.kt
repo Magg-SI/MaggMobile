@@ -53,7 +53,7 @@ open class WareInfoActivity : BaseActivity() {
     protected open fun setObservers(){
         viewModel.availability.observe(this, {
             ware.availabilities = it
-            displayAvailability()
+            displayAvailability(true)
         })
 
         viewModel.photo.observe(this, {
@@ -79,7 +79,7 @@ open class WareInfoActivity : BaseActivity() {
                 "brutto: ${ware.priceB.toString()}"
     }
 
-    protected fun displayAvailability(){
+    protected fun displayAvailability(withMargin: Boolean){
         availability_ll.removeAllViews()
         val stringBuilder = StringBuilder()
 
@@ -102,17 +102,19 @@ open class WareInfoActivity : BaseActivity() {
             stringBuilder.clear()
 
         }
-        val textView = TextView(this)
 
-        textView.text = "  "
-        textView.textSize = 32f
+        if(withMargin) {
+            val textView = TextView(this)
 
-        availability_ll.addView(textView)
+            textView.text = "  "
+            textView.textSize = 32f
 
-        val param = textView.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0,32,8,32)
-        textView.layoutParams = param
+            availability_ll.addView(textView)
 
+            val param = textView.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(0, 32, 8, 32)
+            textView.layoutParams = param
+        }
     }
 
     fun countToStr(ilo: Double): String {

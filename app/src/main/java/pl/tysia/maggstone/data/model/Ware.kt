@@ -86,7 +86,7 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
         }
 
         if (priceB != null){
-            sb.append("\nCena brutto: $priceB")
+            sb.append("Cena brutto: $priceB")
         }
 
         return sb.toString()

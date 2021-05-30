@@ -11,6 +11,9 @@ class Service() : APIRequest("addSerwis"), Serializable, ICatalogable {
         const val SERVICE_EXTRA ="pl.tysia.maggstone.service"
     }
 
+    @SerializedName("ktrID")
+    var ktrID : Int = 0
+
     @SerializedName("ileOsob")
     var peopleCount : Int = 0
 
@@ -44,11 +47,11 @@ class Service() : APIRequest("addSerwis"), Serializable, ICatalogable {
     var id : Int? = null
 
     override fun getTitle(): String {
-        return name!!
+        return "(${peopleCount} os.), $startTime - $endTime"
     }
 
     override fun getSubtitle(): String {
-        return "${date}, $startTime - $endTime"
+        return name!!
     }
 
     override fun getDescription(): String {
@@ -59,7 +62,7 @@ class Service() : APIRequest("addSerwis"), Serializable, ICatalogable {
         }
 
         if (priceB != null){
-            sb.append("\nCena brutto: $priceB")
+            sb.append("Cena brutto: $priceB")
         }
 
         return sb.toString()

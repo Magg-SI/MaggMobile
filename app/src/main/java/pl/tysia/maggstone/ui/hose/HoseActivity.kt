@@ -94,6 +94,7 @@ class HoseActivity : BaseActivity(), SimpleListDialogFragment.SimpleListOwner<Wa
         if (formValid()){
             showBlockingLoading(true)
 
+            viewModel.hose.ktrID = getIntent().getIntExtra("ktrID", 0);
             viewModel.addHose(viewModel.hose)
         }else{
             save_button.isEnabled = false

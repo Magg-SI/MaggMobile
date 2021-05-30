@@ -19,7 +19,6 @@ import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.sign.SignActivity
 
 class BasicNewDocumentActivity : NewDocumentActivity() {
-    protected var contractor : Contractor? = null
 
     override fun save() {
         if(contractor != null && adapter.allItems.isNotEmpty()) {
@@ -37,24 +36,31 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
         startActivityForResult(intent, CONTRACTOR_REQUEST_CODE)
     }
 
-    override fun addWare(ware: Ware) {
-        super.addWare(ware)
-
-        setSums()
-    }
-
     override fun onListChanged() {
         super.onListChanged()
 
         setSums()
     }
 
-    private fun setSums(){
-        val priceB = adapter.allItems.sumByDouble { it.priceB * it.ilosc }
-        val priceN = adapter.allItems.sumByDouble { it.priceN * it.ilosc }
+    override fun setSums(){
+        val priceN = adapter.allItems.sumByDouble { (it.priceN * it.ilosc).round(2) }
+        val priceB = adapter.allItems.sumByDouble { ((it.priceN * it.ilosc).round(2)*1.23).round(2) }
 
-        price_b_tv.setText(priceB.toString())
-        price_n_tv.setText(priceN.toString())
+        price_n_tv.setText(priceToStr(priceN))
+        price_b_tv.setText(priceToStr(priceB))
+    }
+
+    fun priceToStr(price: Double): String {
+        var x = price.round(2).toString().replace('.',',')
+        if (!x.contains(',')) x+=",00"
+        else if ( !x.substring(x.length-3,x.length-2).equals(",")) x += "0"
+        return x
+    }
+
+    fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return kotlin.math.round(this * multiplier) / multiplier
     }
 
     override fun saveAllowed(): Boolean {

@@ -10,6 +10,9 @@ class Hose : ICatalogable, Serializable, APIResponse() {
     var tip1 : Ware? = null
     var tip2 : Ware? = null
     var sleeve : Ware? = null
+
+    @SerializedName("ktrID")
+    var ktrID : Int = 0
     @SerializedName("ilosc")
     var length : Int? = null
     var code : String? = null
@@ -38,7 +41,9 @@ class Hose : ICatalogable, Serializable, APIResponse() {
     override fun getTitle(): String = name!!
 
     override fun getSubtitle(): String {
-        return ""
+        return  "Końcówki: ${tip1!!.index} / ${tip2!!.index}\n" +
+                "Tulejki: ${sleeve!!.index}\n" +
+                "Długość: ${length}";
     }
 
     override fun getDescription(): String{

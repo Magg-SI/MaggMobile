@@ -12,10 +12,7 @@ import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.NetworkChangeReceiver
-import pl.tysia.maggstone.data.model.DocumentItem
-import pl.tysia.maggstone.data.model.Hose
-import pl.tysia.maggstone.data.model.Service
-import pl.tysia.maggstone.data.model.Ware
+import pl.tysia.maggstone.data.model.*
 import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.BaseActivity
 import pl.tysia.maggstone.ui.hose.HoseActivity
@@ -29,6 +26,7 @@ import javax.inject.Inject
 
 abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeListener {
     protected lateinit var adapter : DocumentAdapter<DocumentItem>
+    protected var contractor : Contractor? = null
     @Inject lateinit var viewModel: DocumentViewModel
 
     companion object{
@@ -90,6 +88,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
 
     fun onServiceClick(view: View){
         val intent = Intent(this, ServiceActivity::class.java)
+        if(contractor != null) intent.putExtra("ktrID", contractor!!.id)
         startActivityForResult(intent, SERVICE_REQUEST_CODE)
     }
 
@@ -104,8 +103,11 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
     }
 
     fun onHoseClicked(view: View) {
-        if (NetworkChangeReceiver.internetConnection.value!!)
-            startActivityForResult(Intent(this, HoseActivity::class.java), HOSE_REQUEST_CODE)
+        if (NetworkChangeReceiver.internetConnection.value!!) {
+            val intent = Intent(this, HoseActivity::class.java)
+            if(contractor != null) intent.putExtra("ktrID", contractor!!.id)
+            startActivityForResult(intent, HOSE_REQUEST_CODE)
+        }
         else okDialog("Brak połączenia z internetem", "Żeby utworzyć wąż konieczne jest połączenie z internetem.", this)
     }
 
@@ -117,6 +119,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         adapter.addItem(DocumentItem(ware))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        setSums()
         checkIfSaveAllowed()
     }
 
@@ -124,6 +127,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         adapter.addItem(DocumentItem(hose))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        setSums()
         checkIfSaveAllowed()
     }
 
@@ -131,8 +135,13 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
         adapter.addItem(DocumentItem(service))
         adapter.filter()
         adapter.notifyDataSetChanged()
+        setSums()
         checkIfSaveAllowed()
     }
+
+    open fun setSums(){
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
