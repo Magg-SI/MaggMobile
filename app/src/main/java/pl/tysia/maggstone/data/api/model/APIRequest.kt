@@ -9,7 +9,8 @@ abstract class APIRequest(val func : String) : Serializable {
         this.token = token
     }
 
-    class SmallPhotoRequest(val fotoID : Int, token : String) : APIRequest("getFotoMini", token)
+    //class SmallPhotoRequest(val fotoID : Int, token : String) : APIRequest("getFotoMini", token)
+    class SmallPhotoRequest(val towID : Int, token : String) : APIRequest("getFotoMini2", token)
 
     class TestWorker(val workerID : Int, token : String) : APIRequest("testWorker", token)
 

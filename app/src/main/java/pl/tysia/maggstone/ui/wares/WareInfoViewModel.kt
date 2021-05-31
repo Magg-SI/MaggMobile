@@ -64,11 +64,11 @@ class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepo
         }
     }
 
-    fun getSmallPicture(photoID: Int) {
+    fun getSmallPicture(towID: Int) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = pictureDataSource.getSmallPhoto(photoID)
+                val result = pictureDataSource.getSmallPhoto(towID)
 
                 if (result is Result.Success) {
                     _photo.postValue(result.data)

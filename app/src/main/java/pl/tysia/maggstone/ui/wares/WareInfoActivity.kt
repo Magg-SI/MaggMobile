@@ -41,9 +41,11 @@ open class WareInfoActivity : BaseActivity() {
         displayWare()
 
         viewModel.getAvailabilities(ware.index!!)
+    }
 
-        if (ware.photoID!=null)
-            viewModel.getSmallPicture(ware.photoID!!)
+    override fun onStart() {
+        super.onStart()
+        viewModel.getSmallPicture(ware.id!!)
     }
 
     protected open fun setLayout(){
@@ -69,7 +71,7 @@ open class WareInfoActivity : BaseActivity() {
         }
     }
 
-    private fun displayWare(){
+    private fun displayWare() {
         index_tv.text = ware.index
         name_tv.text = ware.name
         location_tv.text = ware.location

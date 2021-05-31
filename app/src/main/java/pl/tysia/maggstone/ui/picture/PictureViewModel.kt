@@ -21,10 +21,10 @@ class PictureViewModel @Inject constructor(var pictureDataSource: PictureDataSou
     private val _picture = MutableLiveData<Bitmap>()
     val picture: LiveData<Bitmap> = _picture
 
-    fun getPicture(wareID: Int) {
+    fun getPicture(towID: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = pictureDataSource.getPicture(wareID)
+                val result = pictureDataSource.getPicture(towID)
 
                 if (result is Result.Success) {
                     _picture.postValue(result.data)

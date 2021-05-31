@@ -92,12 +92,15 @@ class PictureEditorActivity : BaseActivity() {
             edit_button.isEnabled = true
         })
 
-        if (ware.photoID != null) {
+        /*if (ware.photoID != null) {
             viewModel.getPicture(ware.photoID!!)
         }else{
             imageProgressBar.visibility = View.INVISIBLE
             edit_button.isEnabled = true
-        }
+        }*/
+
+        viewModel.getPicture(ware.id!!)
+        imageProgressBar.visibility = View.INVISIBLE
 
         checkPermission()
     }

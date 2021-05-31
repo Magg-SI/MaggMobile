@@ -38,7 +38,7 @@
     <string name="tip_not_found">Nie znaleziono takiej kocówki</string>
     <string name="hose_error_check_connection">Nie udało się dodac węża. Sprawdź połączenie z internetem i spróbuj ponownie.</string>
     <string name="no_picture">Brak zdjęcia</string>
-    <string name="availability_err">Nie udało się pobrac dostępnsci.</string>
+    <string name="availability_err">Nie udało się pobrać dostępności.</string>
     <string name="notification_title">Trwa wysyłanie</string>
     <string name="error_cant_download_ontractors">Nie udało się pobrać kontrahentów</string>
     <string name="availability">Dostępność: %s</string>

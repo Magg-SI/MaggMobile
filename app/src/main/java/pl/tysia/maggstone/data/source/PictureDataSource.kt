@@ -18,11 +18,11 @@ import javax.inject.Inject
 class PictureDataSource @Inject constructor(val context: Context, val retrofit: Retrofit, val tokenProvider: TokenProvider) {
     private var service : WareService = retrofit.create(WareService::class.java)
 
-    fun getSmallPhoto(photoID : Int) : Result<Bitmap> {
+    fun getSmallPhoto(towID : Int) : Result<Bitmap> {
         val service = retrofit.create(WareService::class.java)
 
         val result = service.getSmallPicture(
-            APIRequest.SmallPhotoRequest(photoID, tokenProvider.getToken()!!)
+            APIRequest.SmallPhotoRequest(towID, tokenProvider.getToken()!!)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
@@ -68,9 +68,9 @@ class PictureDataSource @Inject constructor(val context: Context, val retrofit: 
         }
     }
 
-    fun getPicture(photoID: Int) : Result<Bitmap> {
+    fun getPicture(towID: Int) : Result<Bitmap> {
         val result = service.getPicture(
-            GetPictureRequest(token = tokenProvider.getToken()!!, fotoID = photoID)
+            GetPictureRequest(token = tokenProvider.getToken()!!, towID = towID)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
