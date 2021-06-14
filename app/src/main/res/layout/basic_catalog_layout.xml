@@ -17,14 +17,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:elevation="6dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/search_et_pill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_half_round_dark_left"
+            android:backgroundTint="?colorPrimary"
+            android:drawableLeft="@drawable/round_search_24"
+            android:drawablePadding="6dp"
+            android:elevation="6dp"
+            android:ems="10"
+            android:gravity="center_vertical"
+            android:hint="Wyszukaj..."
+            android:inputType="textPersonName"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/scan_bt_pill"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="0"
+            android:background="@drawable/button_half_round_dark_right"
+            android:backgroundTint="?colorPrimary"
+            android:elevation="6dp"
+            android:onClick="onScanClicked"
+            android:src="@drawable/ic_qr_code_scanner"
+            android:tint="?colorControlNormal"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/search_et"
@@ -40,8 +77,9 @@
             android:gravity="center_vertical"
             android:hint="Wyszukaj..."
             android:inputType="textPersonName"
-            android:textSize="16sp" />
-    </FrameLayout>
+            android:textSize="16sp"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
