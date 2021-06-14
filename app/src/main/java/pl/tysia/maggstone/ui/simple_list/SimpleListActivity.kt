@@ -2,7 +2,6 @@ package pl.tysia.maggstone.ui.simple_list
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.basic_catalog_layout.*
 import pl.tysia.maggstone.R
@@ -33,23 +32,11 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
         adapter.filterer.addFilter(filter)
 
         search_et.afterTextChanged {
-            filter.filteredString = search_et.text.toString()
-            adapter.filter()
-            adapter.notifyDataSetChanged()
+            onTextChanged(it)
+        }
 
-            var scrollTo = adapter.shownItems.firstOrNull {
-                it.getTitle().toLowerCase()
-                    .startsWith(search_et.text.toString().toLowerCase())
-            }
-
-            if (scrollTo != null){
-                var index = adapter.shownItems.indexOf(scrollTo)
-                if (index > 0) index--
-                recyclerView.scrollToPosition(index)
-            }else{
-                recyclerView.scrollToPosition(0)
-            }
-
+        search_et_pill.afterTextChanged {
+            onTextChanged(it)
         }
 
         recyclerView.adapter = adapter
@@ -58,6 +45,42 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
         recyclerView.layoutManager = linearLayoutManager
 
         recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 200, mBottomLast = 64))
+
+    }
+
+    private fun onTextChanged(filteredString : String){
+        filter.filteredString = filteredString
+        adapter.filter()
+        adapter.notifyDataSetChanged()
+
+        var scrollTo = adapter.shownItems.firstOrNull {
+            it.getTitle().toLowerCase()
+                .startsWith(filteredString.toLowerCase())
+        }
+
+        if (scrollTo != null){
+            var index = adapter.shownItems.indexOf(scrollTo)
+            if (index > 0) index--
+            recyclerView.scrollToPosition(index)
+        }else{
+            recyclerView.scrollToPosition(0)
+        }
+
+    }
+
+    public open fun onScanClicked(view : View){
+    }
+
+    protected fun setScanVisible(visible : Boolean){
+        if (visible){
+            search_et_pill.visibility = View.VISIBLE
+            scan_bt_pill.visibility = View.VISIBLE
+            search_et.visibility = View.GONE
+        }else{
+            search_et_pill.visibility = View.GONE
+            scan_bt_pill.visibility = View.GONE
+            search_et.visibility = View.VISIBLE
+        }
 
     }
 
