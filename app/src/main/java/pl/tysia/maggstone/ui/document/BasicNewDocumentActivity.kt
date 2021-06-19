@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_new_document.*
+import androidx.lifecycle.Observer
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.constants.DocumentType
 import pl.tysia.maggstone.constants.Extras
@@ -14,6 +15,7 @@ import pl.tysia.maggstone.data.model.DocumentItem
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.LoginDataSource
 import pl.tysia.maggstone.data.source.LoginRepository
+import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.DocumentAdapter
 import pl.tysia.maggstone.ui.sign.SignActivity
@@ -34,6 +36,21 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
         val intent = Intent(this, ContractorListActivity::class.java)
         intent.putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.SELECT)
         startActivityForResult(intent, CONTRACTOR_REQUEST_CODE)
+    }
+
+    override fun addWare(ware : Ware){
+        showBlockingLoading(true)
+        if (contractor==null) viewModel.getWarePrice(ware,0);
+        else viewModel.getWarePrice(ware,contractor!!.id);
+    }
+
+    fun addWarePrice(ware : Ware){
+        ware.priceB=(ware.priceN!!*1.23).round(2)
+        adapter.addItem(DocumentItem(ware))
+        adapter.filter()
+        adapter.notifyDataSetChanged()
+        setSums()
+        checkIfSaveAllowed()
     }
 
     override fun onListChanged() {
@@ -75,8 +92,12 @@ class BasicNewDocumentActivity : NewDocumentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_new_document)
-
         super.onCreate(savedInstanceState)
+
+        viewModel.getPriceResult.observe(this@BasicNewDocumentActivity, Observer {
+            addWarePrice(it)
+            showBlockingLoading(false)
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

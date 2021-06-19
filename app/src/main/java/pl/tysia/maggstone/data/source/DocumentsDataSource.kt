@@ -7,6 +7,7 @@ import pl.tysia.maggstone.data.api.model.APIResponse
 import pl.tysia.maggstone.data.api.model.NewDocumentRequest
 import pl.tysia.maggstone.data.api.service.DocumentService
 import pl.tysia.maggstone.data.model.DocumentItem
+import pl.tysia.maggstone.data.model.Ware
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
@@ -24,6 +25,21 @@ class DocumentsDataSource @Inject constructor(val retrofit: Retrofit, val tokenP
 
         return result.body()!!
     }
+
+    fun getWarePrice(ware : Ware, ktrID : Int) : Result<Ware> {
+
+        val result = service.getWarePrice(
+            APIRequest.GetWarePrice(ware.id!!, ktrID, tokenProvider.getToken()!!)
+        ).execute()
+
+        return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            ware.priceN=result.body()!!.cena!!
+            Result.Success(ware)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
+
 
     fun sendDocument(ktrID : Int, sign : String, comments : String, items : List<DocumentItem>) : Result<Int> {
 

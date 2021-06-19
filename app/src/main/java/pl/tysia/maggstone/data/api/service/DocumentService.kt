@@ -11,4 +11,7 @@ interface DocumentService {
 
     @POST("json.aspx")
     fun testWorker(@Body body: APIRequest.TestWorker): Call<APIResponse.Worker>
+
+    @POST("json.aspx")
+    fun getWarePrice(@Body body: APIRequest.GetWarePrice): Call<APIResponse.WarePrice>
 }

@@ -14,6 +14,8 @@ class NetAddressManager @Inject constructor(context : Context) {
     private var privateNetUsed : Boolean = false
 
     init {
+
+        /*
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         privateNetUsed = prefs.getBoolean("private_net_usage", false)
@@ -31,7 +33,7 @@ class NetAddressManager @Inject constructor(context : Context) {
         }
 
         this.privateNetAddress = privateNetAddress
-
+        */
     }
 
     fun getNetAddress() : String {

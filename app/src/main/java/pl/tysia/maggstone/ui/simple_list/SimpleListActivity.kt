@@ -22,8 +22,7 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.basic_catalog_layout)
-
+        setLayout()
 
         adapter = BasicCatalogAdapter(ArrayList())
 
@@ -32,11 +31,23 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
         adapter.filterer.addFilter(filter)
 
         search_et.afterTextChanged {
-            onTextChanged(it)
-        }
+            filter.filteredString = search_et.text.toString()
+            adapter.filter()
+            adapter.notifyDataSetChanged()
 
-        search_et_pill.afterTextChanged {
-            onTextChanged(it)
+            var scrollTo = adapter.shownItems.firstOrNull {
+                it.getTitle().toLowerCase()
+                    .startsWith(search_et.text.toString().toLowerCase())
+            }
+
+            if (scrollTo != null){
+                var index = adapter.shownItems.indexOf(scrollTo)
+                if (index > 0) index--
+                recyclerView.scrollToPosition(index)
+            }else{
+                recyclerView.scrollToPosition(0)
+            }
+
         }
 
         recyclerView.adapter = adapter
@@ -48,41 +59,10 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
 
     }
 
-    private fun onTextChanged(filteredString : String){
-        filter.filteredString = filteredString
-        adapter.filter()
-        adapter.notifyDataSetChanged()
-
-        var scrollTo = adapter.shownItems.firstOrNull {
-            it.getTitle().toLowerCase()
-                .startsWith(filteredString.toLowerCase())
-        }
-
-        if (scrollTo != null){
-            var index = adapter.shownItems.indexOf(scrollTo)
-            if (index > 0) index--
-            recyclerView.scrollToPosition(index)
-        }else{
-            recyclerView.scrollToPosition(0)
-        }
-
+    protected open fun setLayout(){
+        setContentView(R.layout.basic_catalog_layout)
     }
 
-    public open fun onScanClicked(view : View){
-    }
-
-    protected fun setScanVisible(visible : Boolean){
-        if (visible){
-            search_et_pill.visibility = View.VISIBLE
-            scan_bt_pill.visibility = View.VISIBLE
-            search_et.visibility = View.GONE
-        }else{
-            search_et_pill.visibility = View.GONE
-            scan_bt_pill.visibility = View.GONE
-            search_et.visibility = View.VISIBLE
-        }
-
-    }
 
 }
 

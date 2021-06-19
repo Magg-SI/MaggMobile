@@ -4,20 +4,20 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.room.Room
+import pl.tysia.maggstone.R
 import pl.tysia.maggstone.constants.Extras
 import pl.tysia.maggstone.constants.ListActivityMode
 import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.model.Ware
+import pl.tysia.maggstone.ui.main.MainActivity
 import pl.tysia.maggstone.ui.order_ware.OrderWareActivity
 import pl.tysia.maggstone.ui.simple_list.SimpleListActivity
 import pl.tysia.maggstone.ui.presentation_logic.adapter.ICatalogable
 import pl.tysia.maggstone.ui.presentation_logic.filterer.StringFilter
-import pl.tysia.maggstone.ui.scanner.ScanningActivity
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
-
-private const val WARE_REQUEST_CODE = 23445
 
 class WareListActivity : SimpleListActivity() {
     private lateinit var mode: String
@@ -42,22 +42,10 @@ class WareListActivity : SimpleListActivity() {
             adapter.notifyDataSetChanged()
             showBlockingLoading(false)
         })
-
-        setScanVisible(true)
     }
 
-    override fun onScanClicked(view : View){
-        val intent  = Intent(this, WareScannerActivity::class.java)
-        startActivityForResult(intent, WARE_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == WARE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            val ware = data?.getSerializableExtra(Ware.WARE_EXTRA) as Ware?
-            if (ware != null) onItemSelected(ware)
-        }
+    override fun setLayout(){
+        setContentView(R.layout.ware_catalog_layout)
     }
 
     override fun onItemSelected(item: ICatalogable) {
@@ -84,4 +72,17 @@ class WareListActivity : SimpleListActivity() {
 
     }
 
+    fun onScanWareClicked(view : View){
+        this.startActivityForResult(Intent(this, WareScannerActivity::class.java),
+            MainActivity.WARE_REQUEST_CODE
+        )
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == MainActivity.WARE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            val ware = data!!.getSerializableExtra(Ware.WARE_EXTRA) as Ware
+            onItemSelected(ware)
+        }
+    }
 }

@@ -11,6 +11,7 @@ import pl.tysia.maggstone.data.Result
 import pl.tysia.maggstone.data.api.model.APIRequest
 import pl.tysia.maggstone.data.api.model.APIResponse
 import pl.tysia.maggstone.data.model.DocumentItem
+import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.source.DocumentsDataSource
 import java.io.IOException
 import javax.inject.Inject
@@ -24,6 +25,25 @@ class DocumentViewModel @Inject constructor(val dataSource : DocumentsDataSource
 
     private val _documentsError = MutableLiveData<String>()
     val documentsError: LiveData<String> = _documentsError
+
+    private val _getPriceResult = MutableLiveData<Ware>()
+    val getPriceResult: LiveData<Ware> = _getPriceResult
+
+    fun getWarePrice(ware : Ware, ktrID : Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = dataSource.getWarePrice(ware,ktrID)
+
+                if (result is Result.Success) {
+                    _getPriceResult.postValue(ware)
+                } else {
+                    _documentsError.postValue((result as Result.Error).exception.message)
+                }
+            }catch (e : IOException){
+                _documentsError.postValue("Brak połączenia z internetem.")
+            }
+        }
+    }
 
     private fun testWorker(workerID : Int) : Boolean {
         val result = dataSource.testWorker(workerID)
