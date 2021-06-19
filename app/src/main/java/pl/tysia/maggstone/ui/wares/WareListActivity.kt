@@ -52,21 +52,18 @@ class WareListActivity : SimpleListActivity() {
         when (mode) {
             ListActivityMode.SELECT -> {
                 val returnIntent = Intent()
-                //returnIntent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
                 returnIntent.putExtra(Ware.WARE_EXTRA, item as Ware)
                 setResult(Activity.RESULT_OK, returnIntent)
                 finish()
             }
             ListActivityMode.BROWSE -> {
                 val intent = Intent(this, WareInfoActivity::class.java)
-                //intent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
                 intent.putExtra(Ware.WARE_EXTRA, item as Ware)
                 intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
                 startActivity(intent)
             }
             ListActivityMode.ORDER -> {
                 val intent = Intent(this, OrderWareActivity::class.java)
-                //intent.putExtra(Ware.WARE_EXTRA, adapter.selectedItem as Ware)
                 intent.putExtra(Ware.WARE_EXTRA, item as Ware)
                 intent.putExtra(Extras.CALLING_ACTIVITY, this::class.java.simpleName)
                 startActivity(intent)
