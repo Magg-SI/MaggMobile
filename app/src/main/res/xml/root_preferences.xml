@@ -12,6 +12,7 @@
             app:title="Motyw"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
+    <!--
     <PreferenceCategory app:title="Sieć">
 
         <SwitchPreference
@@ -34,6 +35,7 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+    -->
 
     <PreferenceCategory app:title="Obrazy">
 

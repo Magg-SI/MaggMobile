@@ -23,8 +23,7 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.basic_catalog_layout)
-
+        setLayout()
 
         adapter = BasicCatalogAdapter(ArrayList())
 
@@ -60,6 +59,11 @@ abstract class SimpleListActivity : BaseActivity(), CatalogAdapter.ItemSelectedL
         recyclerView.addItemDecoration(RecyclerMarginDecorator(mTopFirst = 200, mBottomLast = 64))
 
     }
+
+    protected open fun setLayout(){
+        setContentView(R.layout.basic_catalog_layout)
+    }
+
 
 }
 

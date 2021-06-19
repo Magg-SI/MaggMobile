@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_order_ware.*
 import pl.tysia.maggstone.R
@@ -21,9 +22,13 @@ class OrderWareActivity : WareInfoActivity() {
             if (number_tv.text.isNotBlank()) {
                 order_bt.visibility = View.VISIBLE
             }else{
-                order_bt.visibility = View.INVISIBLE
+                order_bt.visibility = INVISIBLE
             }
         }
+        order_bt.visibility = INVISIBLE
+    }
+
+    override fun initReadData() {
     }
 
     override fun setLayout() {

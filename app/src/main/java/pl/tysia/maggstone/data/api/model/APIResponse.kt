@@ -32,6 +32,11 @@ open class APIResponse {
         var procent : Int? = null
     }
 
+    class WarePrice : APIResponse(){
+        var cena : Double? = null
+        var rabat : Double? = null
+    }
+
     class GetOrderedWares : APIResponse() {
         @SerializedName("readOneZamow")
         var wares : ArrayList<OrderedWare>? = null

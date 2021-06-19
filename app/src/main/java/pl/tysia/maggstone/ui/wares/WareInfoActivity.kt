@@ -45,6 +45,10 @@ open class WareInfoActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
+        initReadData()
+    }
+
+    protected open fun initReadData() {
         viewModel.getSmallPicture(ware.id!!)
     }
 

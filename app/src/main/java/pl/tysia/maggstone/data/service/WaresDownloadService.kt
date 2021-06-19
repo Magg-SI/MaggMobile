@@ -73,13 +73,14 @@ class WaresDownloadService : Service() {
 
                     var pagesDownloaded = 0
 
-                    for (i in 0..page.pageCount!!){
-                        val waresPage = dataSource.getWaresPage(page.listID!!, i)
+                    for (i in 1..page.pageCount!!){
+                        val waresPage = dataSource.getWaresPage(page.listID!!, i-1)
 
                         if (waresPage is Result.Success){
                             val wares = waresPage.data.list!!
 
-                            pagesDownloaded += wares.size
+                            //pagesDownloaded += wares.size
+                            pagesDownloaded++
 
                             val inserted = dao.insertAll(wares)
                             wares.removeAll { inserted.contains(it.id!!.toLong()) }

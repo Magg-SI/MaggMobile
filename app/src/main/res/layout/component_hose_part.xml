@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:inputType="textCapCharacters"
         android:background="@drawable/button_half_round_dark_left"
         android:backgroundTint="?colorPrimary"
         android:drawableLeft="@drawable/ic_round_close"
