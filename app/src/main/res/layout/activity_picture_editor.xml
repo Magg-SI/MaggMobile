@@ -90,6 +90,9 @@
                 android:background="@null"
                 android:onClick="onRotateClicked"
                 android:padding="8dp"
+                android:rotation="0"
+                android:rotationX="0"
+                android:rotationY="-180"
                 android:src="@drawable/ic_round_rotate_left"
                 android:tint="?colorControlNormal" />
 
