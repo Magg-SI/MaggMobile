@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream
 fun rotateBitmap(bitmap : Bitmap?) : Bitmap?{
     if (bitmap!=null){
         val matrix = Matrix()
-        matrix.postRotate(270f)
+        matrix.postRotate(90f)
 
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
