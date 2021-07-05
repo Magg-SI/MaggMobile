@@ -38,6 +38,7 @@ import javax.inject.Inject
 
 
 class PictureEditorActivity : BaseActivity() {
+    private var path: String? = null
     private var currentPhotoPath: String? = null
     private lateinit var ware : Ware
     private lateinit var mService: SendingService
@@ -98,6 +99,10 @@ class PictureEditorActivity : BaseActivity() {
             imageProgressBar.visibility = View.INVISIBLE
             edit_button.isEnabled = true
         }*/
+
+        if (path != null){
+            setProductImageBitmap(path)
+        }
 
         viewModel.getPicture(ware.id!!)
         imageProgressBar.visibility = View.INVISIBLE
@@ -265,7 +270,7 @@ class PictureEditorActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            val path = data!!.extras!!.getString("Photo_path")
+            path = data!!.extras!!.getString("Photo_path")
             setProductImageBitmap(path)
         }
     }
