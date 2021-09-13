@@ -26,6 +26,18 @@ class DocumentsDataSource @Inject constructor(val retrofit: Retrofit, val tokenP
         return result.body()!!
     }
 
+    fun testStocktakingPosition(documentID : Int, wareID : Int) : Result<Double>{
+        val result = service.testStocktakingPosition(
+            APIRequest.TestStocktakingPosition(documentID, wareID, tokenProvider.getToken()!!)
+        ).execute()
+
+        return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            Result.Success(result.body()!!.count!!)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
+
     fun getWarePrice(ware : Ware, ktrID : Int) : Result<Ware> {
 
         val result = service.getWarePrice(
@@ -40,6 +52,41 @@ class DocumentsDataSource @Inject constructor(val retrofit: Retrofit, val tokenP
         }
     }
 
+    fun addStocktakingWares(documentID : Int, wareID: Int, count : Double) : Result<Boolean> {
+        val result = service.addStocktakingWares(
+            APIRequest.AddStocktakingWare(documentID, wareID, count, tokenProvider.getToken())
+        ).execute()
+
+        return if (result.body() != null && result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            Result.Success(true)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
+
+    fun updateStocktakingWares(documentID : Int, wareID : Int, count : Double) : Result<Boolean> {
+        val result = service.updateStocktakingWares(
+            APIRequest.UpdateStocktakingWare(documentID, wareID, count, tokenProvider.getToken())
+        ).execute()
+
+        return if (result.body() != null && result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            Result.Success(true)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
+
+    fun getStocktakingWares() : Result<APIResponse.Stocktaking> {
+        val result = service.getStocktakingWares(
+            APIRequest.GetStocktakingWares(tokenProvider.getToken())
+        ).execute()
+
+        return if (result.body() != null && result.body()!!.retCode == APIResponse.RESPONSE_OK){
+            Result.Success(result.body()!!)
+        }else{
+            Result.Error(Exception(result.body()!!.retMessage))
+        }
+    }
 
     fun sendDocument(ktrID : Int, sign : String, comments : String, items : List<DocumentItem>) : Result<Int> {
 

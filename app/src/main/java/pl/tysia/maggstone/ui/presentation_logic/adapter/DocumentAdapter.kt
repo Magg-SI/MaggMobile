@@ -22,7 +22,7 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
     override var selectedItem: T? = null
 
-    inner class DocumentViewHolder(v: View) :
+    open inner class DocumentViewHolder(v: View) :
         RecyclerView.ViewHolder(v), View.OnClickListener, View.OnFocusChangeListener, TextWatcher {
 
         var title: TextView = v.findViewById(R.id.title_tv)
@@ -62,14 +62,18 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
             }
 
             deleteButton.setOnClickListener {
-                allItems.remove(allItems[adapterPosition])
-                filter()
-                notifyDataSetChanged()
-
-                changeListeners.forEach { it.onListChanged() }
+               onDelete()
             }
 
             v.setOnClickListener(this)
+        }
+
+        open fun onDelete(){
+            allItems.remove(allItems[adapterPosition])
+            filter()
+            notifyDataSetChanged()
+
+            changeListeners.forEach { it.onListChanged() }
         }
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
@@ -153,21 +157,24 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     fun getErrorTx(err: Int): String {
-        if (err==-1) {
-            return "Nieprawidłowy format danych"
+        return when (err) {
+            -1 -> {
+                "Nieprawidłowy format danych"
+            }
+            1 -> {
+                "Ilość musi być większa niż 0"
+            }
+            2 -> {
+                "Zbyt duża ilość"
+            }
+            else -> ""
         }
-        else if (err==1) {
-            return "Ilość musi być większa niż 0"
-        }
-        else if (err==2){
-            return "Zbyt duża ilość"
-        }
-        return "";
     }
+
     protected open fun onMoreClicked(item: DocumentItem){
         if (item.ilosc < MAX_VALUE) {
             item.ilosc = item.ilosc + 1
-            item.iloscOk=0
+            item.iloscOk = 0
         }
         notifyDataSetChanged()
     }

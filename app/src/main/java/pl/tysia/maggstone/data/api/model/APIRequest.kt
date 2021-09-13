@@ -18,4 +18,12 @@ abstract class APIRequest(val func : String) : Serializable {
 
     class OrderWare(val towID : Int, val ilosc : Double, val uwagi : String, token : String) : APIRequest("zamowOnePoz", token)
 
+    class GetStocktakingWares(token : String) : APIRequest("documOpenInw", token)
+
+    class AddStocktakingWare(val dokID : Int, val towID : Int, val ilosc : Double, token : String) : APIRequest("documAddPoz", token)
+
+    class UpdateStocktakingWare(val dokID : Int, val towID : Int, val ilosc : Double, token : String) : APIRequest("documZmienPoz", token)
+
+    class TestStocktakingPosition(val dokID : Int, val towID : Int, token : String) : APIRequest("documTestPoz", token)
+
 }

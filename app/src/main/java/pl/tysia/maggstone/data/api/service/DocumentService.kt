@@ -14,4 +14,16 @@ interface DocumentService {
 
     @POST("json.aspx")
     fun getWarePrice(@Body body: APIRequest.GetWarePrice): Call<APIResponse.WarePrice>
+
+    @POST("json.aspx")
+    fun getStocktakingWares(@Body body: APIRequest.GetStocktakingWares): Call<APIResponse.Stocktaking>
+
+    @POST("json.aspx")
+    fun addStocktakingWares(@Body body: APIRequest.AddStocktakingWare): Call<APIResponse>
+
+    @POST("json.aspx")
+    fun updateStocktakingWares(@Body body: APIRequest.UpdateStocktakingWare): Call<APIResponse>
+
+    @POST("json.aspx")
+    fun testStocktakingPosition(@Body body: APIRequest.TestStocktakingPosition): Call<APIResponse.TestStocktakingPosition>
 }

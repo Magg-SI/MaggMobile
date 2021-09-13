@@ -4,37 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.children
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import pl.tysia.maggstone.R
 import pl.tysia.maggstone.app.MaggApp
+import pl.tysia.maggstone.constants.AccessibleFunctionsTypes
 import pl.tysia.maggstone.constants.Extras
-import pl.tysia.maggstone.constants.MenuTileType
 import pl.tysia.maggstone.data.Database
-import pl.tysia.maggstone.data.NetAddressManager
 import pl.tysia.maggstone.data.NetworkChangeReceiver
-import pl.tysia.maggstone.data.model.Error
-import pl.tysia.maggstone.data.model.UserAccessibilities
+import pl.tysia.maggstone.data.logic.UserAccessLogic
 import pl.tysia.maggstone.data.model.Ware
 import pl.tysia.maggstone.data.service.ContractorsDownloadService
 import pl.tysia.maggstone.data.service.WaresDownloadService
-import pl.tysia.maggstone.data.source.LoginDataSource
-import pl.tysia.maggstone.data.source.LoginRepository
-import pl.tysia.maggstone.okDialog
 import pl.tysia.maggstone.ui.*
-import pl.tysia.maggstone.ui.document.BasicNewDocumentActivity
 import pl.tysia.maggstone.ui.error.ErrorsActivity
-import pl.tysia.maggstone.ui.orders.OrdersActivity
 import pl.tysia.maggstone.ui.presentation_logic.MenuTile
-import pl.tysia.maggstone.ui.scanner.ShelfScannerActivity
-import pl.tysia.maggstone.ui.scanner.WareScannerActivity
 import pl.tysia.maggstone.ui.wares.WareInfoActivity
 import javax.inject.Inject
 
@@ -44,6 +28,7 @@ class MainActivity : BaseActivity() {
     }
 
     @Inject lateinit var db : Database
+    @Inject lateinit var userAccessLogic : UserAccessLogic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,38 +40,32 @@ class MainActivity : BaseActivity() {
         startService(Intent(this, WaresDownloadService::class.java))
         startService(Intent(this, ContractorsDownloadService::class.java))
 
-        val userAccessibilities = UserAccessibilities()
-
-        userAccessibilities.accessibleTiles.forEach {
+        userAccessLogic.getAccessibleFunctions().getAccessibleMenuTiles().forEach {
             addTile(it)
         }
-
     }
 
-    private fun addTile(type : MenuTileType){
+    private fun addTile(type : AccessibleFunctionsTypes){
         when (type) {
-            MenuTileType.DOCUMENT_SHIFT,
-            MenuTileType.DOCUMENT_RECEIVE,
-            MenuTileType.DOCUMENT_PACKING,
-            MenuTileType.DOCUMENT_ORDER,
-            MenuTileType.DOCUMENT_OFFER -> {
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_SHIFT,
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_RECEIVE,
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_PACKING,
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_ORDER,
+            AccessibleFunctionsTypes.MENU_TILE_STOCKTAKING,
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_OFFER -> {
                 section_documents.addView(MenuTile(type, this))
             }
-            MenuTileType.CATALOG_WARES,
-            MenuTileType.CATALOG_CONTACTORS-> {
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_WARES,
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_CONTACTORS-> {
                 section_catalogs.addView(MenuTile(type, this))
             }
-            MenuTileType.SCAN_WARE,
-            MenuTileType.CHANGE_LOCATION,
-            MenuTileType.FIND_HOSE-> {
+            AccessibleFunctionsTypes.MENU_TILE_SCAN_WARE,
+            AccessibleFunctionsTypes.MENU_TILE_CHANGE_LOCATION,
+            AccessibleFunctionsTypes.MENU_TILE_FIND_HOSE-> {
                 section_tools.addView(MenuTile(type, this))
             }
         }
     }
-
-//    override fun onBackPressed() {
-//        moveTaskToBack(true);
-//    }
 
     override fun onResume() {
         super.onResume()

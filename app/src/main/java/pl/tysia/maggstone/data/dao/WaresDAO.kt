@@ -31,13 +31,16 @@ interface WaresDAO {
     fun getSleevesFor(fi : String, hoseIdx : String): LiveData<List<Ware>>
 
     @Query("SELECT * FROM ware WHERE id = :id")
-    fun findByID(id : Int): Ware
+    fun findByID(id : Int): Ware?
 
     @Query("SELECT * FROM ware WHERE `index` = :idx")
     fun findByIndex(idx : String): Ware?
 
     @Query("SELECT * FROM ware WHERE `qrCode` = :qr")
     fun findByQr(qr : String): Ware?
+
+    @Query("SELECT * FROM ware WHERE id IN (:ids)")
+    fun selectByIDs(ids : List<Int>) : List<Ware>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(wares: List<Ware>) : List<Long>
