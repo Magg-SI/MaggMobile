@@ -24,6 +24,9 @@
             android:name=".ui.cooperation.CooperationHistoryActivity"
             android:theme="@style/AppThemeOrange" />
         <activity
+            android:name=".ui.stocktaking.StocktakingActivity"
+            android:theme="@style/AppThemeBlue" />
+        <activity
             android:name=".ui.technicians.TechniciansActivity"
             android:theme="@style/AppThemeBlue" />
         <activity

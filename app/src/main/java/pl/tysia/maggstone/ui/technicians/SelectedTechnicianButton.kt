@@ -2,14 +2,11 @@ package pl.tysia.maggstone.ui.technicians
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.selected_person_button.view.*
 import pl.tysia.maggstone.R
-import pl.tysia.maggstone.constants.MenuTileType
 import pl.tysia.maggstone.data.model.Technician
 
 class SelectedTechnicianButton(val technician : Technician, val activity : AppCompatActivity) : LinearLayout(activity) {

@@ -2,19 +2,15 @@ package pl.tysia.maggstone.ui.presentation_logic
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Canvas
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.constants.AccessibleFunctionsTypes
 import pl.tysia.maggstone.constants.ListActivityMode
-import pl.tysia.maggstone.constants.MenuTileType
 import pl.tysia.maggstone.data.NetworkChangeReceiver
 import pl.tysia.maggstone.okDialog
-import pl.tysia.maggstone.ui.DownloadStateActivity
 import pl.tysia.maggstone.ui.contractors.ContractorListActivity
 import pl.tysia.maggstone.ui.document.BasicNewDocumentActivity
 import pl.tysia.maggstone.ui.document.NewShiftDocumentActivity
@@ -23,29 +19,31 @@ import pl.tysia.maggstone.ui.main.MainActivity
 import pl.tysia.maggstone.ui.orders.OrdersActivity
 import pl.tysia.maggstone.ui.scanner.ShelfScannerActivity
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
+import pl.tysia.maggstone.ui.stocktaking.StocktakingActivity
 import pl.tysia.maggstone.ui.wares.WareListActivity
 
 
-class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity) : LinearLayout(activity) {
+class MenuTile(private val type : AccessibleFunctionsTypes, val activity : AppCompatActivity) : LinearLayout(activity) {
 
     init{
         val inflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         when(type) {
-            MenuTileType.CATALOG_CONTACTORS -> inflater.inflate(
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_CONTACTORS -> inflater.inflate(
                 R.layout.tile_contractors_catalog,
                 this
             )
-            MenuTileType.CATALOG_WARES -> inflater.inflate(R.layout.tile_wares_catalog, this)
-            MenuTileType.DOCUMENT_OFFER -> inflater.inflate(R.layout.tile_document_offer, this)
-            MenuTileType.DOCUMENT_PACKING -> inflater.inflate(R.layout.tile_document_packing, this)
-            MenuTileType.DOCUMENT_RECEIVE -> inflater.inflate(R.layout.tile_document_recevie, this)
-            MenuTileType.DOCUMENT_SHIFT -> inflater.inflate(R.layout.tile_document_shift, this)
-            MenuTileType.FIND_HOSE -> inflater.inflate(R.layout.tile_find_hose, this)
-            MenuTileType.CHANGE_LOCATION -> inflater.inflate(R.layout.tile_change_location, this)
-            MenuTileType.SCAN_WARE -> inflater.inflate(R.layout.tile_scan_ware, this)
-            MenuTileType.DOCUMENT_ORDER -> inflater.inflate(R.layout.tile_document_order, this)
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_WARES -> inflater.inflate(R.layout.tile_wares_catalog, this)
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_OFFER -> inflater.inflate(R.layout.tile_document_offer, this)
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_PACKING -> inflater.inflate(R.layout.tile_document_packing, this)
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_RECEIVE -> inflater.inflate(R.layout.tile_document_recevie, this)
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_SHIFT -> inflater.inflate(R.layout.tile_document_shift, this)
+            AccessibleFunctionsTypes.MENU_TILE_FIND_HOSE -> inflater.inflate(R.layout.tile_find_hose, this)
+            AccessibleFunctionsTypes.MENU_TILE_CHANGE_LOCATION -> inflater.inflate(R.layout.tile_change_location, this)
+            AccessibleFunctionsTypes.MENU_TILE_SCAN_WARE -> inflater.inflate(R.layout.tile_scan_ware, this)
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_ORDER -> inflater.inflate(R.layout.tile_document_order, this)
+            AccessibleFunctionsTypes.MENU_TILE_STOCKTAKING -> inflater.inflate(R.layout.tile_stocktaking, this)
         }
 
         setOnClickListener { onTileClicked() }
@@ -63,16 +61,17 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
 
     private fun onTileClicked(){
         when(type) {
-            MenuTileType.CATALOG_CONTACTORS -> onContractorsCatalogClicked()
-            MenuTileType.CATALOG_WARES -> onWareCatalogClicked()
-            MenuTileType.DOCUMENT_OFFER -> onNewOfferClicked()
-            MenuTileType.DOCUMENT_PACKING -> onOrdersClicked()
-            MenuTileType.DOCUMENT_RECEIVE -> nic()
-            MenuTileType.DOCUMENT_SHIFT -> onNewShiftClicked()
-            MenuTileType.FIND_HOSE -> onSearchHoseClicked()
-            MenuTileType.CHANGE_LOCATION -> onChangeLocationClicked()
-            MenuTileType.SCAN_WARE -> onScanWareClicked()
-            MenuTileType.DOCUMENT_ORDER -> onOrderClicked()
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_CONTACTORS -> onContractorsCatalogClicked()
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_WARES -> onWareCatalogClicked()
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_OFFER -> onNewOfferClicked()
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_PACKING -> onOrdersClicked()
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_RECEIVE -> nic()
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_SHIFT -> onNewShiftClicked()
+            AccessibleFunctionsTypes.MENU_TILE_FIND_HOSE -> onSearchHoseClicked()
+            AccessibleFunctionsTypes.MENU_TILE_CHANGE_LOCATION -> onChangeLocationClicked()
+            AccessibleFunctionsTypes.MENU_TILE_SCAN_WARE -> onScanWareClicked()
+            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_ORDER -> onOrderClicked()
+            AccessibleFunctionsTypes.MENU_TILE_STOCKTAKING -> onStocktakingClicked()
         }
     }
 
@@ -84,6 +83,10 @@ class MenuTile(private val type : MenuTileType, val activity : AppCompatActivity
         activity.startActivity(Intent(activity, WareListActivity::class.java).apply {
             putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.ORDER)
         })
+    }
+
+    private fun onStocktakingClicked(){
+        activity.startActivity(Intent(activity, StocktakingActivity::class.java))
     }
 
     private fun onSearchHoseClicked(){

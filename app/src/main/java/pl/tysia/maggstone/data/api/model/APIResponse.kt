@@ -1,6 +1,7 @@
 package pl.tysia.maggstone.data.api.model
 
 import com.google.gson.annotations.SerializedName
+import org.json.JSONObject
 import pl.tysia.maggstone.data.model.*
 import retrofit2.Retrofit
 
@@ -22,6 +23,24 @@ open class APIResponse {
     class GetOrders : APIResponse() {
         @SerializedName("listaZamow")
         var orders : ArrayList<Order>? = null
+    }
+
+    class Stocktaking : APIResponse() {
+        @SerializedName("dokID")
+        var documentID : Int? = null
+
+        @SerializedName("pozycje")
+        var wares : ArrayList<SimpleWare>? = null
+
+        class SimpleWare{
+            var towID : Int? = null
+            var ilosc : Double? = null
+        }
+    }
+
+    class TestStocktakingPosition : APIResponse() {
+        @SerializedName("ilosc")
+        var count : Double? = null
     }
 
     class Document : APIResponse(){

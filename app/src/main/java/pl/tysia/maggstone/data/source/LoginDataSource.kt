@@ -17,7 +17,7 @@ import javax.inject.Inject
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 
-class LoginDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvider: TokenProvider)  {
+class LoginDataSource @Inject constructor(val retrofit: Retrofit)  {
 
     fun loginCall(username: String, password: String) : Call<LoginResponse> {
         val service = retrofit.create(LoginService::class.java)
@@ -30,11 +30,11 @@ class LoginDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvi
         )
     }
 
-    fun testToken() : Result<Boolean>{
+    fun testToken(token : String) : Result<Boolean>{
         val service = retrofit.create(LoginService::class.java)
 
         val result = service.testToken(
-           TestTokenRequest(tokenProvider.getToken()!!)
+           TestTokenRequest(token)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

@@ -14,4 +14,7 @@ class LoginResponse : APIResponse() {
 
     @SerializedName("token")
     var token: String? = null
+
+    @SerializedName("upraw")
+    var userTypeInt: Int? = null
 }

@@ -2,16 +2,17 @@ package pl.tysia.maggstone.data.source
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
 import pl.tysia.maggstone.constants.Preferences.LOGGED_USER_PREFERENCES
-import pl.tysia.maggstone.constants.Preferences.PREF_ID
+import pl.tysia.maggstone.constants.Preferences.PREF_LOGGED_USER
 import pl.tysia.maggstone.constants.Preferences.PREF_MODE
 import pl.tysia.maggstone.constants.Preferences.PREF_PROMPT_MODE
-import pl.tysia.maggstone.constants.Preferences.PREF_TOKEN
-import pl.tysia.maggstone.constants.Preferences.PREF_USERNAME
+import pl.tysia.maggstone.data.Database
 import pl.tysia.maggstone.data.Result
-import pl.tysia.maggstone.data.model.LoggedInUser
 import pl.tysia.maggstone.data.api.model.LoginResponse
+import pl.tysia.maggstone.data.model.LoggedInUser
 import javax.inject.Inject
 
 
@@ -21,7 +22,11 @@ import javax.inject.Inject
  */
 
 
-class LoginRepository @Inject constructor(val context: Context, var dataSource: LoginDataSource) {
+class LoginRepository @Inject constructor(
+    val context: Context,
+    var dataSource: LoginDataSource,
+    var db: Database
+) {
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
         private set
@@ -39,36 +44,34 @@ class LoginRepository @Inject constructor(val context: Context, var dataSource: 
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
 
-        val preferences = context.getSharedPreferences(LOGGED_USER_PREFERENCES, MODE_PRIVATE)
-        val username = preferences.getString(PREF_USERNAME, null)
-        val id = preferences.getInt(PREF_ID, -1)
-        val token =preferences.getString(PREF_TOKEN, null)
-
         val appPreferences = PreferenceManager
             .getDefaultSharedPreferences(context)
 
         mode = appPreferences.getString(PREF_MODE, null)
         promptedDarkMode = appPreferences.getString(PREF_PROMPT_MODE, null)
 
-        user =
-            if (username != null && token !=null && id > -1)
-                LoggedInUser(id, username, token)
-            else null
+        val preferences = context.getSharedPreferences(LOGGED_USER_PREFERENCES, MODE_PRIVATE)
 
+        val gson = Gson()
+        val json: String? = preferences.getString(PREF_LOGGED_USER, null)
+
+        if (json != null){
+            user = gson.fromJson(json, LoggedInUser::class.java)
+        }
     }
 
     fun testToken() : Result<Boolean>{
-        return dataSource.testToken()
+        return dataSource.testToken(user!!.token)
     }
 
     fun logout() {
         val preferences = context.getSharedPreferences(LOGGED_USER_PREFERENCES, MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putString(PREF_USERNAME, null)
-        editor.putInt(PREF_ID, -1)
-        editor.putString(PREF_TOKEN, null)
-        editor.apply()
-        user = null
+        preferences.edit().clear().apply()
+
+        Thread {
+            db.waresDao().deleteAll()
+        }.start()
+
         dataSource.logout()
     }
 
@@ -85,7 +88,8 @@ class LoginRepository @Inject constructor(val context: Context, var dataSource: 
                 LoggedInUser(
                     loginResponse.userID!!,
                     username,
-                    loginResponse.token!!
+                    loginResponse.token!!,
+                    loginResponse.userTypeInt!!
                 )
             )
             setLoggedInUser(result.data)
@@ -101,11 +105,12 @@ class LoginRepository @Inject constructor(val context: Context, var dataSource: 
         this.user = loggedInUser
 
         val preferences = context.getSharedPreferences(LOGGED_USER_PREFERENCES, MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putString(PREF_USERNAME, loggedInUser.displayName)
-        editor.putInt(PREF_ID, loggedInUser.userId)
-        editor.putString(PREF_TOKEN, loggedInUser.token)
-        editor.apply()
+
+        val prefsEditor: SharedPreferences.Editor = preferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(loggedInUser)
+        prefsEditor.putString(PREF_LOGGED_USER, json)
+        prefsEditor.apply()
 
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore

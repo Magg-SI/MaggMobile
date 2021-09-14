@@ -33,7 +33,7 @@ abstract class CatalogAdapter<T : ICatalogable, H : RecyclerView.ViewHolder>(var
         changeListeners.add(listener)
     }
 
-    fun addItem(item: T) {
+    open fun addItem(item: T) {
         allItems.add(0, item)
     }
 

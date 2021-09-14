@@ -10,10 +10,11 @@ import pl.tysia.maggstone.data.source.LoginRepository
 import pl.tysia.maggstone.data.Result
 
 import pl.tysia.maggstone.R
+import pl.tysia.maggstone.data.Database
 import java.io.IOException
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(val loginRepository: LoginRepository, db : Database) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -23,7 +24,6 @@ class LoginViewModel @Inject constructor(val loginRepository: LoginRepository) :
 
     private val _result = MutableLiveData<Boolean>()
     val result: LiveData<Boolean> = _result
-
 
     fun testToken(){
         viewModelScope.launch(Dispatchers.IO) {
