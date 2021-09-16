@@ -57,7 +57,7 @@ class DocumentsDataSource @Inject constructor(val retrofit: Retrofit, val tokenP
             APIRequest.AddStocktakingWare(documentID, wareID, count, tokenProvider.getToken())
         ).execute()
 
-        return if (result.body() != null && result.body()!!.retCode == APIResponse.RESPONSE_OK){
+        return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){
             Result.Success(true)
         }else{
             Result.Error(Exception(result.body()!!.retMessage))

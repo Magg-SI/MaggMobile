@@ -66,12 +66,16 @@ class StocktakingActivity : NewDocumentActivity(), StocktakingDocumentAdapter.On
 
             val editedItem = (adapter as StocktakingDocumentAdapter<DocumentItem>).editedItem!!
 
+            editedItem.alreadyAdded = count
+
             if (count > 0){
                 showYesNoDialog(this@StocktakingActivity,
                     "Do inwentaryzacji dodano już ${editedItem.item.item.getTitle()} w ilości $count",
                 "Czy chcesz dodać kolejne ${editedItem.quantity}?",
                     { addWare(); it.dismiss() },
                     {it.dismiss()})
+            }else{
+                addWare()
             }
 
             showBlockingLoading(false)
@@ -123,12 +127,13 @@ class StocktakingActivity : NewDocumentActivity(), StocktakingDocumentAdapter.On
         adapter.addItem(item)
     }
 
-    override fun editConfirmed(item: DocumentItem, quantity: Double) {
-        if (item.ilosc > 0){
-            stocktakingViewModel.updateDocumentItem(documentID, item.towID, quantity)
-        }else {
-            stocktakingViewModel.testStocktakingPosition(documentID, item.towID)
+    override fun editConfirmed(item: StocktakingDocumentAdapter.EditedItem) {
+        if (!item.new){
+            stocktakingViewModel.updateDocumentItem(documentID, item.item.towID, item.quantity)
+        }else{
+            stocktakingViewModel.testStocktakingPosition(documentID, item.item.towID)
         }
+
         showBlockingLoading(true)
     }
 
