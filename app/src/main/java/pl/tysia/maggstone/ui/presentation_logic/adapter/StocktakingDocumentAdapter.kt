@@ -19,7 +19,9 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
     var editedItem : EditedItem? = null
 
-    class EditedItem (val item: DocumentItem, var quantity : Double = item.ilosc)
+    class EditedItem (val item: DocumentItem, var new : Boolean = false, var quantity : Double = item.ilosc){
+        var alreadyAdded = 0.0
+    }
 
     inner class StocktakingViewHolder(v : View) : DocumentAdapter<T>.DocumentViewHolder(v){
         val editingLayout: LinearLayout = v.findViewById(R.id.save_changes_ll)
@@ -73,7 +75,7 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
             confirmButton.setOnClickListener {
                 if (listener != null){
-                    listener!!.editConfirmed(editedItem!!.item, editedItem!!.quantity)
+                    listener!!.editConfirmed(editedItem!!)
                 }
             }
         }
@@ -90,15 +92,30 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     fun acceptChanges(){
-        editedItem!!.item.ilosc = editedItem!!.quantity
+        val updatedItem = allItems.firstOrNull {
+            it.towID == editedItem!!.item.towID
+                    && it.ilosc != editedItem!!.item.ilosc
+        }
+
+        if (updatedItem != null){
+            editedItem!!.item.ilosc = editedItem!!.quantity + editedItem!!.alreadyAdded
+
+            allItems.remove(updatedItem)
+
+        }else{
+            editedItem!!.item.ilosc = editedItem!!.quantity + editedItem!!.alreadyAdded
+        }
+
+        editedItem!!.new = false
 
         editedItem = null
 
+        filter()
         notifyDataSetChanged()
     }
 
     override fun addItem(item : T){
-        editedItem = EditedItem(item)
+        editedItem = EditedItem(item, true)
         allItems.add(item)
 
         filter()
@@ -184,6 +201,6 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     interface OnEditConfirmedListener{
-        fun editConfirmed(item : DocumentItem, quantity: Double)
+        fun editConfirmed(item : EditedItem)
     }
 }

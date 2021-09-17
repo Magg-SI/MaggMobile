@@ -52,7 +52,7 @@
     <string name="error_couldnt_download_history">Nie udało się pobrać historii</string>
     <string name="ordering_err">Nie udało się zamówić towaru</string>
     <string name="err_couldnt_download_document">Nie udało się pobrać dokumentu</string>
-    <string name="couldnt_find_given_number_of_wares">Nie znaleziono w bazie %i towarów</string>
+    <string name="couldnt_find_given_number_of_wares">Nie znaleziono w bazie %1$d towarów</string>
     <string name="couldnt_find_wares_desc">W bazie towarów na urządzeniu nie ma wszystkich towarów występujących w tym dokumencie, więc nie zostają one wyświetlone. Możesz kontynuować pracę pomimo to.\n\nMożesz też upewnić się, czy aktualizacja bazy towarów jest zakończona lub wymusić aktualizację tej bazy.</string>
     <string name="err_add_ware_stocktaking">Podczas dodawania towaru do dokumentu wystąpił błąd.</string>
     <string name="connection_error_generic">Błąd połączenia</string>
