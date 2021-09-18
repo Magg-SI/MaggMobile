@@ -36,6 +36,7 @@ class StocktakingActivity : NewDocumentActivity(), StocktakingDocumentAdapter.On
 
         (application as MaggApp).appComponent.inject(this)
 
+        linearLayoutManager.stackFromEnd = true
 
         stocktakingViewModel.stocktakingDocument.observe(this@StocktakingActivity, Observer {
             documentID = it.documentID
@@ -125,6 +126,8 @@ class StocktakingActivity : NewDocumentActivity(), StocktakingDocumentAdapter.On
         val item = DocumentItem(ware)
 
         adapter.addItem(item)
+
+        wares_recycler.smoothScrollToPosition(adapter.itemCount)
     }
 
     override fun editConfirmed(item: StocktakingDocumentAdapter.EditedItem) {

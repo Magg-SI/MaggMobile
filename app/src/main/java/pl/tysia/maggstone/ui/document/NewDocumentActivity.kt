@@ -27,6 +27,7 @@ import javax.inject.Inject
 abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeListener {
     protected lateinit var adapter : DocumentAdapter<DocumentItem>
     protected var contractor : Contractor? = null
+    protected lateinit var linearLayoutManager: LinearLayoutManager
     @Inject lateinit var viewModel: DocumentViewModel
 
     companion object{
@@ -49,7 +50,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
 
         wares_recycler.addItemDecoration(
             pl.tysia.maggstone.ui.RecyclerMarginDecorator(
-                mTopFirst = 16, mBottomLast = 128, mTop = 8, mBottom = 8
+                mTopFirst = 16, mBottomLast = 186, mTop = 8, mBottom = 8
             )
         )
 
@@ -58,7 +59,7 @@ abstract class NewDocumentActivity : BaseActivity(), CatalogAdapter.ListChangeLi
 
         adapter.addChangeListener(this)
 
-        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         wares_recycler.layoutManager = linearLayoutManager
 
         viewModel.documentsError.observe(this@NewDocumentActivity, Observer {

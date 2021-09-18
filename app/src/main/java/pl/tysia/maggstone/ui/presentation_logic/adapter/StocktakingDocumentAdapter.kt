@@ -65,12 +65,7 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
         init{
             cancelButton.setOnClickListener {
-                if (editedItem!!.item.ilosc < 0){
-                    allItems.remove(editedItem!!.item)
-                }
-
-                editedItem = null
-                notifyDataSetChanged()
+               cancel()
             }
 
             confirmButton.setOnClickListener {
@@ -89,6 +84,18 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
 
             notifyDataSetChanged()
         }
+    }
+
+    private fun cancel(){
+        if (editedItem == null) return
+
+        if (editedItem!!.new){
+            allItems.remove(editedItem!!.item)
+        }
+
+        editedItem = null
+        filter()
+        notifyDataSetChanged()
     }
 
     fun acceptChanges(){
@@ -115,6 +122,8 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
     }
 
     override fun addItem(item : T){
+        cancel()
+
         editedItem = EditedItem(item, true)
         allItems.add(item)
 
