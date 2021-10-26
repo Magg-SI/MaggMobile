@@ -147,7 +147,7 @@ open class DocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
         changeListeners.forEach { it.onListChanged() }
     }
 
-    private fun showError(item: DocumentItem, view: EditText){
+    fun showError(item: DocumentItem, view: EditText){
         if (item.iloscOk!=0) {
             view.error = getErrorTx(item.iloscOk)
         }

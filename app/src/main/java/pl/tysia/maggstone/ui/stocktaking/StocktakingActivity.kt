@@ -30,7 +30,8 @@ class StocktakingActivity : NewDocumentActivity(), StocktakingDocumentAdapter.On
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_new_shift_document)
+        //setContentView(R.layout.activity_new_shift_document)
+        setContentView(R.layout.activity_stocktaking)
 
         super.onCreate(savedInstanceState)
 

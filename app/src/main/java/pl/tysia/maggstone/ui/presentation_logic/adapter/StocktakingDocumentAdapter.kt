@@ -38,6 +38,45 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
             }
 
             if (s.isNullOrBlank()){
+                editedItem!!.quantity=0.0
+                fixCount(item,1)
+                showError(item, numberET)
+            }
+            else{
+                try {
+                    val quantity = numberET.text.toString().replace(',', '.').toDouble()
+
+                    if (quantity >= 0) editedItem!!.quantity = quantity
+                    fixCount(item,0)
+                } catch (ex: NumberFormatException) {
+                    fixCount(item,-1)
+                    editedItem!!.quantity=0.0
+                } finally {
+                    showError(item, numberET)
+                }
+            }
+
+            editingLayout.visibility = View.VISIBLE
+            confirmButton.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
+            numberET.isEnabled = true
+            moreButton.isClickable = true
+            lessButton.isClickable = true
+
+            deleteButton.isClickable = true
+        }
+
+        /*
+        override fun afterTextChanged(s: Editable?) {
+            val item = shownItems[adapterPosition]
+
+            if (!numberET.hasFocus()) return
+
+            if (editedItem == null){
+                editedItem = EditedItem(item)
+            }
+
+            if (s.isNullOrBlank()){
                 numberET.setText("0.0")
                 editedItem!!.quantity = 0.0
             }
@@ -53,7 +92,7 @@ class StocktakingDocumentAdapter<T : DocumentItem>(items: ArrayList<T>) :
             lessButton.isClickable = true
 
             deleteButton.isClickable = true
-        }
+        }*/
 
         override fun onFocusChange(v: View?, hasFocus: Boolean) {
 
