@@ -48,7 +48,7 @@ class MainActivity : BaseActivity() {
     private fun addTile(type : AccessibleFunctionsTypes){
         when (type) {
             AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_SHIFT,
-            AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_RECEIVE,
+            //AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_RECEIVE,
             AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_PACKING,
             AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_ORDER,
             AccessibleFunctionsTypes.MENU_TILE_STOCKTAKING,
@@ -56,7 +56,8 @@ class MainActivity : BaseActivity() {
                 section_documents.addView(MenuTile(type, this))
             }
             AccessibleFunctionsTypes.MENU_TILE_CATALOG_WARES,
-            AccessibleFunctionsTypes.MENU_TILE_CATALOG_CONTACTORS-> {
+            AccessibleFunctionsTypes.MENU_TILE_CATALOG_CONTACTORS,
+            AccessibleFunctionsTypes.MENU_TILE_PRICE_LIST,-> {
                 section_catalogs.addView(MenuTile(type, this))
             }
             AccessibleFunctionsTypes.MENU_TILE_SCAN_WARE,

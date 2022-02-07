@@ -67,7 +67,7 @@ class WareDataSource @Inject constructor(val retrofit: Retrofit, val tokenProvid
         items.add(AddHoseRequest.RequestItem(hose.sleeve!!.hoseType!!, hose.sleeve!!.id!!, AddHoseRequest.SLEEVE_QUANTITY))
 
         val result = service.addHose(
-            AddHoseRequest(tokenProvider.getToken()!!, hose.code!!, hose.creator!!, hose.angle!!, items)
+            AddHoseRequest(tokenProvider.getToken()!!, hose.code!!, hose.creator!!, hose.angle!!, hose.ktrID, items)
         ).execute()
 
         return if (result.body()!!.retCode == APIResponse.RESPONSE_OK){

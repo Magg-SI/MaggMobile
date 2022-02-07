@@ -24,6 +24,7 @@ import pl.tysia.maggstone.ui.orders.OrdersActivity
 import pl.tysia.maggstone.ui.picture.PictureEditorActivity
 import pl.tysia.maggstone.ui.scanner.*
 import pl.tysia.maggstone.ui.service.ServiceActivity
+import pl.tysia.maggstone.ui.service.ServicePriceListActivity
 import pl.tysia.maggstone.ui.sign.SignActivity
 import pl.tysia.maggstone.ui.stocktaking.StocktakingActivity
 import pl.tysia.maggstone.ui.technicians.TechniciansActivity
@@ -55,6 +56,7 @@ interface ApplicationComponent {
     fun inject(activity: WareScannerActivity)
     fun inject(activity: WaresShelfScannerActivity)
     fun inject(activity: ServiceActivity)
+    fun inject(activity: ServicePriceListActivity)
     fun inject(activity: SignActivity)
     fun inject(activity: TechniciansActivity)
     fun inject(activity: OrderedWaresActivity)

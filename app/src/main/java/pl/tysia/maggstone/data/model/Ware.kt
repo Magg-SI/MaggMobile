@@ -41,6 +41,12 @@ open class Ware(@SerializedName("nazwa") var name: String) : Serializable, ICata
     var priceB : Double? = null
 
     @Ignore
+    var ilMin : Double? = null
+
+    @Ignore
+    var ilMax : Double? = null
+
+    @Ignore
     var availabilities : List<Availability>? = null
 
     @SerializedName("fotoID")

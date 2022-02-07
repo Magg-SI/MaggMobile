@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Zapisać zmiany?"
+                android:text="Zatwierdź"
                 android:textColor="?attr/colorControlNormal"
                 android:textSize="16sp" />
 

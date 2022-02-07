@@ -19,6 +19,7 @@ import pl.tysia.maggstone.ui.main.MainActivity
 import pl.tysia.maggstone.ui.orders.OrdersActivity
 import pl.tysia.maggstone.ui.scanner.ShelfScannerActivity
 import pl.tysia.maggstone.ui.scanner.WareScannerActivity
+import pl.tysia.maggstone.ui.service.ServicePriceListActivity
 import pl.tysia.maggstone.ui.stocktaking.StocktakingActivity
 import pl.tysia.maggstone.ui.wares.WareListActivity
 
@@ -44,6 +45,7 @@ class MenuTile(private val type : AccessibleFunctionsTypes, val activity : AppCo
             AccessibleFunctionsTypes.MENU_TILE_SCAN_WARE -> inflater.inflate(R.layout.tile_scan_ware, this)
             AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_ORDER -> inflater.inflate(R.layout.tile_document_order, this)
             AccessibleFunctionsTypes.MENU_TILE_STOCKTAKING -> inflater.inflate(R.layout.tile_stocktaking, this)
+            AccessibleFunctionsTypes.MENU_TILE_PRICE_LIST -> inflater.inflate(R.layout.tile_price_list, this)
         }
 
         setOnClickListener { onTileClicked() }
@@ -72,6 +74,7 @@ class MenuTile(private val type : AccessibleFunctionsTypes, val activity : AppCo
             AccessibleFunctionsTypes.MENU_TILE_SCAN_WARE -> onScanWareClicked()
             AccessibleFunctionsTypes.MENU_TILE_DOCUMENT_ORDER -> onOrderClicked()
             AccessibleFunctionsTypes.MENU_TILE_STOCKTAKING -> onStocktakingClicked()
+            AccessibleFunctionsTypes.MENU_TILE_PRICE_LIST -> onPriceListClicked()
         }
     }
 
@@ -83,6 +86,14 @@ class MenuTile(private val type : AccessibleFunctionsTypes, val activity : AppCo
         activity.startActivity(Intent(activity, WareListActivity::class.java).apply {
             putExtra(ListActivityMode.LIST_ACTIVITY_MODE_EXTRA, ListActivityMode.ORDER)
         })
+    }
+
+    private fun onPriceListClicked(){
+        if (NetworkChangeReceiver.internetConnection.value!!){
+            activity.startActivity(Intent(activity, ServicePriceListActivity::class.java))
+        }else {
+            okDialog("Brak internetu", "Cennik serwisu nie jest dostępny w trybie offline.", activity)
+        }
     }
 
     private fun onStocktakingClicked(){

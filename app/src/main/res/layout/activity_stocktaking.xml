@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:onClick="onScanClick"
-    app:layoutDescription="@xml/activity_new_document_scene2"
+    app:layoutDescription="@xml/activity_new_shift_document_scene"
     tools:context=".ui.document.NewDocumentActivity">
 
 
@@ -13,6 +13,7 @@
         android:id="@+id/wares_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,43 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/wares_recycler" />
-
-    <TextView
-        android:id="@+id/textView26"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@drawable/button_half_round_dark_right"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:onClick="onHoseClicked"
-        android:padding="0dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="16dp"
-        android:text="Wąż"
-        android:textColor="@color/lightGray"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/floatingActionButton6"
-        app:layout_constraintEnd_toEndOf="@id/floatingActionButton6"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButton6"
-        app:layout_constraintTop_toTopOf="@id/floatingActionButton6" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:onClick="onHoseClicked"
-        android:src="@drawable/ic_hose"
-        android:tint="@color/colorPrimaryDark"
-        android:visibility="visible"
-        app:backgroundTint="@color/colorAccentGreen"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3" />
 
     <TextView
         android:id="@+id/textView25"
@@ -87,40 +51,6 @@
         app:layout_constraintTop_toTopOf="@id/floatingActionButton5" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:clickable="true"
-        android:onClick="onServiceClick"
-        android:src="@drawable/ic_round_service"
-        android:tint="@color/colorPrimaryDark"
-        app:backgroundTint="@color/colorAccentBlue"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="@+id/textView26"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@drawable/button_half_round_dark_right"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:onClick="onServiceClick"
-        android:padding="0dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="16dp"
-        android:text="Serwis"
-        android:textColor="@color/lightGray"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/floatingActionButton9"
-        app:layout_constraintEnd_toEndOf="@id/floatingActionButton9"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButton9"
-        app:layout_constraintTop_toTopOf="@id/floatingActionButton9" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -128,16 +58,14 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:onClick="onWareFromListClick"
-        android:src="@drawable/ic_list"
         android:tint="@color/colorPrimaryDark"
         app:backgroundTint="@color/colorAccentOrange"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView26"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3"
+        app:srcCompat="@drawable/ic_list" />
 
     <TextView
         android:id="@+id/textView20"
@@ -166,14 +94,14 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:onClick="onScanClick"
-        android:src="@drawable/ic_qr_code_scanner"
         android:tint="@color/colorPrimaryDark"
-        app:backgroundTint="@color/colorAccentYellow"
+        app:backgroundTint="@color/colorAccentGreen"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton6"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3" />
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3"
+        app:srcCompat="@drawable/ic_qr_code_scanner" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton3"
@@ -182,11 +110,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:src="@drawable/round_add_24"
-        app:tint="@color/lightGray"
+        android:tint="@color/lightGray"
         app:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/round_add_24" />
 
     <LinearLayout
         android:id="@+id/editor_buttons"
@@ -195,6 +123,7 @@
         android:background="?colorPrimaryDark"
         android:elevation="6dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -218,5 +147,20 @@
             app:drawableTint="?attr/colorControlNormal" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/save_button"
+        style="@style/round_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="6dp"
+        android:enabled="false"
+        android:onClick="onSaveClick"
+        android:visibility="gone"
+        android:text="Zatwierdź"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

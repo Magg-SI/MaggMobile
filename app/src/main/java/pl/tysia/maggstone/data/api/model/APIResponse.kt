@@ -1,9 +1,7 @@
 package pl.tysia.maggstone.data.api.model
 
 import com.google.gson.annotations.SerializedName
-import org.json.JSONObject
 import pl.tysia.maggstone.data.model.*
-import retrofit2.Retrofit
 
 
 open class APIResponse {
@@ -23,6 +21,11 @@ open class APIResponse {
     class GetOrders : APIResponse() {
         @SerializedName("listaZamow")
         var orders : ArrayList<Order>? = null
+    }
+
+    class GetPriceList : APIResponse() {
+        @SerializedName("cennik")
+        var priceList : ArrayList<ServicePrice>? = null
     }
 
     class Stocktaking : APIResponse() {
@@ -118,6 +121,12 @@ open class APIResponse {
     class Availabilities : APIResponse(){
         @SerializedName("stanyMagaz")
         var availabilities : ArrayList<Availability>? = null
+
+        @SerializedName("ilMin")
+        var ilMin: Double? = null
+
+        @SerializedName("ilMax")
+        var ilMax: Double? = null
     }
 
     class Hose : APIResponse(){
