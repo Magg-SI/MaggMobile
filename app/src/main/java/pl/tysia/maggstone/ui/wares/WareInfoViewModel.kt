@@ -19,6 +19,12 @@ class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepo
     private val _result = MutableLiveData<Int>()
     val result: LiveData<Int> = _result
 
+    private val _ilMin  = MutableLiveData<Double>()
+    val ilMin: LiveData<Double> = _ilMin
+
+    private val _ilMax  = MutableLiveData<Double>()
+    val ilMax: LiveData<Double> = _ilMax
+
     private val _availability = MutableLiveData<ArrayList<Availability>>()
     val availability: LiveData<ArrayList<Availability>> = _availability
 
@@ -28,6 +34,9 @@ class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepo
     private val _orderResult = MutableLiveData<Boolean>()
     val orderResult: LiveData<Boolean> = _orderResult
 
+    private val _infoResult = MutableLiveData<String>()
+    val infoResult: LiveData<String> = _infoResult
+
     fun orderWare(id : Int, number : Double, comments : String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -36,7 +45,8 @@ class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepo
                 if (result is Result.Success) {
                     _orderResult.postValue(result.data)
                 } else if (result is Result.Error){
-                    _result.postValue(R.string.ordering_err)
+                    //_result.postValue(R.string.ordering_err)
+                    _infoResult.postValue(result.exception.message)
                 }
             }catch (ex : IOException){
                 _result.postValue(R.string.connection_error)
@@ -53,6 +63,8 @@ class WareInfoViewModel @Inject constructor(private val wareRepository: WareRepo
                 val result = wareRepository.getAvailabilities(index)
 
                 if (result is Result.Success) {
+                    _ilMin.postValue(result.data.ilMin)
+                    _ilMax.postValue(result.data.ilMax)
                     _availability.postValue(result.data.availabilities)
                 } else {
                     _result.postValue(R.string.availability_err)

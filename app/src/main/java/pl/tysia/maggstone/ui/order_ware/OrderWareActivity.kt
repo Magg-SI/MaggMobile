@@ -46,6 +46,14 @@ class OrderWareActivity : WareInfoActivity() {
             displayAvailability(false)
         }
 
+        viewModel.ilMin.observe(this, {
+            ware.ilMin = it
+        })
+
+        viewModel.ilMax.observe(this, {
+            ware.ilMax = it
+        })
+
         viewModel.orderResult.observe(this) {
             if (it) {
                 val intent = Intent(this@OrderWareActivity, MainActivity::class.java)
@@ -54,6 +62,11 @@ class OrderWareActivity : WareInfoActivity() {
 
                 Toast.makeText(this, "Przesłano zamówienie", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        viewModel.infoResult.observe(this) {
+            showBlockingLoading(false)
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
 
         viewModel.result.observe(this){

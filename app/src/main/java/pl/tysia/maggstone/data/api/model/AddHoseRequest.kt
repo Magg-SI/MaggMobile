@@ -6,6 +6,7 @@ class AddHoseRequest (val token: String,
                       val kodWeza: String,
                       val ktoWykonal: String,
                       val katSkrecenia: String,
+                      val ktrID: Int,
                       val pozy : List<RequestItem>){
     val func = "addWaz"
 

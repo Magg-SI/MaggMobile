@@ -33,6 +33,9 @@
             android:name=".ui.service.ServiceActivity"
             android:theme="@style/AppThemeBlue" />
         <activity
+            android:name=".ui.service.ServicePriceListActivity"
+            android:theme="@style/AppThemeOrange" />
+        <activity
             android:name=".ui.sign.SignActivity"
             android:theme="@style/AppThemeBlue" />
         <activity android:name=".ui.hose.HoseInfoActivity" />

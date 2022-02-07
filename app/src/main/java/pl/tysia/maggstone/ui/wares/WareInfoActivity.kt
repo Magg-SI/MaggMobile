@@ -62,6 +62,14 @@ open class WareInfoActivity : BaseActivity() {
             displayAvailability(true)
         })
 
+        viewModel.ilMin.observe(this, {
+            ware.ilMin = it
+        })
+
+        viewModel.ilMax.observe(this, {
+            ware.ilMax = it
+        })
+
         viewModel.photo.observe(this, {
             picture_image_view.scaleType = ImageView.ScaleType.FIT_XY
             picture_image_view.setImageBitmap(it)
@@ -83,11 +91,21 @@ open class WareInfoActivity : BaseActivity() {
             price_tv.text =
                 "netto:  ${ware.priceN.toString()}\n"+
                 "brutto: ${ware.priceB.toString()}"
+
+        /*if (ware.ilMin != null && ware.ilMax != null)
+            ilmax_tv.text =
+                "ilość minimalna:  ${ware.ilMin.toString()}\n"+
+                "ilość maksymalna: ${ware.ilMax.toString()}"*/
     }
 
     protected fun displayAvailability(withMargin: Boolean){
         availability_ll.removeAllViews()
         val stringBuilder = StringBuilder()
+
+        if (ware.ilMin != null && ware.ilMax != null)
+            ilmax_tv.text =
+                "ilość minimalna:  ${ware.ilMin.toString()}\n"+
+                "ilość maksymalna: ${ware.ilMax.toString()}"
 
         for (availability in ware.availabilities!!){
             val textView = TextView(this)

@@ -12,4 +12,5 @@ enum class AccessibleFunctionsTypes {
     MENU_TILE_FIND_HOSE,
     MENU_TILE_SCAN_WARE,
     MENU_TILE_STOCKTAKING,
+    MENU_TILE_PRICE_LIST,
 }
